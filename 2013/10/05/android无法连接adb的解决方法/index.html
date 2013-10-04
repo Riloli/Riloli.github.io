@@ -3,13 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>about | Riloli's Blog</title>
+  <title>Android无法连接adb的解决方法 | Riloli's Blog</title>
   <meta name="author" content="Riloli">
+  
+  <meta name="description" content="今天在折腾乐蛙时发现无法链接ADB了,但是手机却显示USB调试模式!
+然后想起了大蛋曾经告诉我CM的解决方法,于是你懂得,俺差点就把菊花给卖了呢(/Д`)~ﾟ｡">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="about"/>
+  <meta property="og:title" content="Android无法连接adb的解决方法"/>
   <meta property="og:site_name" content="Riloli's Blog"/>
 
   
@@ -45,26 +48,60 @@
 </nav>
 <div class="clearfix"></div></header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper"><article class="page">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
   
   <div class="post-content">
     <header>
       
+        <div class="icon"></div>
+        <time datetime="2013-10-04T16:07:58.000Z"><a href="/2013/10/05/android无法连接adb的解决方法/">10月 5 2013</a></time>
+      
       
   
-    <h1 class="title">about</h1>
+    <h1 class="title">Android无法连接adb的解决方法</h1>
   
 
     </header>
     <div class="entry">
       
-        
+        <p>今天在折腾乐蛙时发现无法链接ADB了,但是手机却显示USB调试模式!</p>
+<p>然后想起了大蛋曾经告诉我CM的解决方法,于是你懂得,俺差点就把菊花给卖了呢(/Д`)~ﾟ｡</p>
+<a id="more"></a>
+
+<pre><code><span class="title">adb</span> shell rm -r /<span class="typedef"><span class="keyword">data</span>/property</span></code></pre>
+<p>进REC干掉这个目录后,CM就可以正常连接了,可是尼玛我的乐蛙肿么还是不行啊!!!</p>
+<p>我的菊花白卖了啊!!!!魂淡!!!! （╯‵□′）╯︵┴─┴</p>
+<p>折腾的细节就不多说了,都是泪啊!!!</p>
+<p>经过俺不断的DEBUG…尼玛,终于给我找到了(;´༎ຶД༎ຶ`)</p>
+<p>原default.prop文件如下</p>
+<pre><code><span class="preprocessor">#</span>
+<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
+<span class="preprocessor">#</span>
+ro<span class="variable">.secure</span>=<span class="number">0</span>
+ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
+ro<span class="variable">.debuggable</span>=<span class="number">1</span>
+persist<span class="variable">.sys</span><span class="variable">.usb</span><span class="variable">.config</span>=mtp,diag,serial_smd,serial_tty,rmnet_smd,mass_storage,serial_smd,adb</code></pre>
+<p>妈蛋,直接干掉最后的那行就可以连接了!!!!!!!(ÒωÓױ)</p>
+<p>修改后的default.prop</p>
+<pre><code><span class="preprocessor">#</span>
+<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
+<span class="preprocessor">#</span>
+ro<span class="variable">.secure</span>=<span class="number">0</span>
+ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
+ro<span class="variable">.debuggable</span>=<span class="number">1</span></code></pre>
+<p>好吧,安卓是坑爹的,错了一个参数都要你的命啊!!!!!!!!!!!</p>
+
       
     </div>
     <footer>
       
         
         
+  
+  <div class="tags">
+    <a href="/tags/Android/">Android</a>
+  </div>
+
         <!-- Baidu Button BEGIN -->
         <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare">
         <a class="bds_tsina">新浪微博</a>

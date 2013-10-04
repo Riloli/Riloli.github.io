@@ -3,13 +3,48 @@
   <title><![CDATA[Riloli's Blog]]></title>
   <link href="http://riloli.github.io/atom.xml" rel="self"/>
   <link href="http://riloli.github.io"/>
-  <updated>2013-10-04T15:45:52.497Z</updated>
+  <updated>2013-10-04T16:12:03.846Z</updated>
   <id>http://riloli.github.io/</id>
   <author>
     <name><![CDATA[Riloli]]></name>
     <email><![CDATA[Riloli@mail.com]]></email>
   </author>
   <generator uri="http://zespia.tw/hexo">Hexo</generator>
+  <entry>
+    <title type="html"><![CDATA[Android无法连接adb的解决方法]]></title>
+    <link href="http://riloli.github.io/2013/10/05/android无法连接adb的解决方法/"/>
+    <id>http://riloli.github.io/2013/10/05/android无法连接adb的解决方法/</id>
+    <published>2013-10-04T16:07:58.000Z</published>
+    <updated>2013-10-04T16:11:56.000Z</updated>
+    <content type="html"><![CDATA[<p>今天在折腾乐蛙时发现无法链接ADB了,但是手机却显示USB调试模式!</p>
+<p>然后想起了大蛋曾经告诉我CM的解决方法,于是你懂得,俺差点就把菊花给卖了呢(/Д`)~ﾟ｡</p>
+<a id="more"></a>
+
+<pre><code><span class="title">adb</span> shell rm -r /<span class="typedef"><span class="keyword">data</span>/property</span></code></pre>
+<p>进REC干掉这个目录后,CM就可以正常连接了,可是尼玛我的乐蛙肿么还是不行啊!!!</p>
+<p>我的菊花白卖了啊!!!!魂淡!!!! （╯‵□′）╯︵┴─┴</p>
+<p>折腾的细节就不多说了,都是泪啊!!!</p>
+<p>经过俺不断的DEBUG…尼玛,终于给我找到了(;´༎ຶД༎ຶ`)</p>
+<p>原default.prop文件如下</p>
+<pre><code><span class="preprocessor">#</span>
+<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
+<span class="preprocessor">#</span>
+ro<span class="variable">.secure</span>=<span class="number">0</span>
+ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
+ro<span class="variable">.debuggable</span>=<span class="number">1</span>
+persist<span class="variable">.sys</span><span class="variable">.usb</span><span class="variable">.config</span>=mtp,diag,serial_smd,serial_tty,rmnet_smd,mass_storage,serial_smd,adb</code></pre>
+<p>妈蛋,直接干掉最后的那行就可以连接了!!!!!!!(ÒωÓױ)</p>
+<p>修改后的default.prop</p>
+<pre><code><span class="preprocessor">#</span>
+<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
+<span class="preprocessor">#</span>
+ro<span class="variable">.secure</span>=<span class="number">0</span>
+ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
+ro<span class="variable">.debuggable</span>=<span class="number">1</span></code></pre>
+<p>好吧,安卓是坑爹的,错了一个参数都要你的命啊!!!!!!!!!!!</p>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
+  </entry>
   <entry>
     <title type="html"><![CDATA[Archlinux 64位安装bcompare]]></title>
     <link href="http://riloli.github.io/2013/10/04/archlinux-64位安装bcompare/"/>
