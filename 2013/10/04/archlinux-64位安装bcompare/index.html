@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Archlinux 64位安装bcompare | Riloli's Blog</title>
+  <meta name="author" content="Riloli">
+  
+  <meta name="description" content="之前用Hexo搭建的Github博客没有备份博文的源文件。。
+结果悲剧了，编辑/更新不了，于是转战博客园ヽ(≧Д≦)ノ
+先说下如何安装bcompare(Beyond Compare)">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Archlinux 64位安装bcompare"/>
+  <meta property="og:site_name" content="Riloli's Blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Riloli's Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Riloli's Blog</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-10-04T14:43:16.000Z"><a href="/2013/10/04/archlinux-64位安装bcompare/">10月 4 2013</a></time>
+      
+      
+  
+    <h1 class="title">Archlinux 64位安装bcompare</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>之前用Hexo搭建的Github博客没有备份博文的源文件。。</p>
+<p>结果悲剧了，编辑/更新不了，于是转战博客园ヽ(≧Д≦)ノ</p>
+<p>先说下如何安装bcompare(Beyond Compare)</p>
+<a id="more"></a>
+
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>sudo yaourt -<span class="constant">S</span> bcompare</code></pre>
+<p>我们使用yaourt从强大的AUR仓库中安装packages，官方仓库没有收录</p>
+<p>安装好后却启动不了(因为我是64位)，还需要安装32位的库</p>
+<pre><code>[michellgaby@K-on ~]$ bcompare 
+Some Shared Libraries were not found
+    linux-gate<span class="preprocessor">.so</span><span class="number">.1</span> (<span class="number">0xf774e000</span>)
+    libz<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; /usr/lib32/libz<span class="preprocessor">.so</span><span class="number">.1</span> (<span class="number">0xf7722000</span>)
+    libqtc<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; /usr/lib32/beyondcompare/libqtc<span class="preprocessor">.so</span><span class="number">.1</span> (<span class="number">0xf720c000</span>)
+    libX11<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
+    librt<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; /usr/lib32/librt<span class="preprocessor">.so</span><span class="number">.1</span> (<span class="number">0xf7203000</span>)
+    libpthread<span class="preprocessor">.so</span><span class="number">.0</span> =&gt; /usr/lib32/libpthread<span class="preprocessor">.so</span><span class="number">.0</span> (<span class="number">0xf71e7000</span>)
+    libdl<span class="preprocessor">.so</span><span class="number">.2</span> =&gt; /usr/lib32/libdl<span class="preprocessor">.so</span><span class="number">.2</span> (<span class="number">0xf71e2000</span>)
+    libc<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; /usr/lib32/libc<span class="preprocessor">.so</span><span class="number">.6</span> (<span class="number">0xf7033000</span>)
+    libqt-mt<span class="preprocessor">.so</span><span class="number">.3</span> =&gt; /usr/lib32/beyondcompare/libqt-mt<span class="preprocessor">.so</span><span class="number">.3</span> (<span class="number">0xf6920000</span>)
+    libXext<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
+    libX11<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
+    libstdc++<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; /usr/lib32/libstdc++<span class="preprocessor">.so</span><span class="number">.6</span> (<span class="number">0xf6836000</span>)
+    libm<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; /usr/lib32/libm<span class="preprocessor">.so</span><span class="number">.6</span> (<span class="number">0xf67f3000</span>)
+    libgcc_s<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; /usr/lib32/libgcc_s<span class="preprocessor">.so</span><span class="number">.1</span> (<span class="number">0xf67d9000</span>)
+    /lib/<span class="keyword">ld</span>-linux<span class="preprocessor">.so</span><span class="number">.2</span> (<span class="number">0xf774f000</span>)
+    libXrender<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; not found
+    libXrandr<span class="preprocessor">.so</span><span class="number">.2</span> =&gt; not found
+    libXcursor<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; not found
+    libXinerama<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; not found
+    libXft<span class="preprocessor">.so</span><span class="number">.2</span> =&gt; not found
+    libfreetype<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
+    libfontconfig<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; not found
+    libXext<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
+    libX11<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
+    libSM<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
+    libICE<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found</code></pre>
+<p>这时要在/etc/pacman.conf开启multilib</p>
+<pre><code><span class="preprocessor">#[multilib]</span>
+<span class="preprocessor">#Include = /etc/pacman.d/mirrorlist</span></code></pre>
+<p>取消掉上面这两行的注释然后再强制更新所有软件包列表</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>sudo pacman -<span class="constant">Syy</span></code></pre>
+<p>接着安装上所缺少的库就行了</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>sudo pacman -<span class="constant">S</span> lib32-libx11  lib32-libxext lib32-libxrender lib32-libxrandr lib32-libice lib32-libsm lib32-libxft lib32-libxinerama lib32-libxcursor</code></pre>
+<p>这样就可以运行Beyond Compare了，最后附上一枚key</p>
+<pre><code><span class="attribute">jp1e8CgYjJ4zf0KhAe8QTR25SFOyWGshdxeqq1esijXleGGAT-Sr0LeFQTvBkeMSRfqNx32mm8oiqLyaoaV5R+</code></pre>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/Archlinux/">Archlinux</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Archlinux/">Archlinux</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 Riloli
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
