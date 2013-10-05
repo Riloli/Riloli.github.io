@@ -1,12 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://riloli.github.io/2013/10/05/android无法连接adb的解决方法/</loc>
-    <lastmod>2013-10-04T16:11:56.000Z</lastmod>
+    <loc>http://riloli.github.io/2013/10/05/conky,urxvt,vim-配置文件/</loc>
+    <lastmod>2013-10-05T09:16:52.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/内核的mei模块出现问题/</loc>
+    <lastmod>2013-10-05T09:11:18.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/archlinux-安装dwm/</loc>
+    <lastmod>2013-10-05T09:10:54.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/任务管理界面添加显示ram信息/</loc>
+    <lastmod>2013-10-05T09:06:26.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/解决unable-to-resolve-superclass的问题/</loc>
+    <lastmod>2013-10-05T09:01:54.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/转换framebuffer实现安卓截图/</loc>
+    <lastmod>2013-10-05T09:01:36.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/编译android程序时dex过程出现错误/</loc>
+    <lastmod>2013-10-05T09:01:34.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/mtk机子修复分区信息/</loc>
+    <lastmod>2013-10-05T08:57:58.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/android去除cpu占用过高时屏幕四周闪红框/</loc>
+    <lastmod>2013-10-05T08:54:14.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/qualcomm-device使用ion-memory-manager取代pmem/</loc>
+    <lastmod>2013-10-05T08:51:30.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/修改自动亮度下背光和按键的亮度/</loc>
+    <lastmod>2013-10-05T08:44:50.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/android触摸屏配置调试/</loc>
+    <lastmod>2013-10-05T08:38:18.000Z</lastmod>
   </url>
   <url>
     <loc>http://riloli.github.io/about/index.html</loc>
-    <lastmod>2013-10-04T15:40:58.000Z</lastmod>
+    <lastmod>2013-10-05T08:33:30.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/android无法连接adb的解决方法/</loc>
+    <lastmod>2013-10-04T16:11:56.000Z</lastmod>
   </url>
   <url>
     <loc>http://riloli.github.io/2013/10/04/archlinux-64位安装bcompare/</loc>

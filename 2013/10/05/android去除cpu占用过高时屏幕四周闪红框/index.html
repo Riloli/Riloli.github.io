@@ -3,16 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Android无法连接adb的解决方法 | Riloli's Blog</title>
+  <title>Android去除CPU占用过高时屏幕四周闪红框 | Riloli's Blog</title>
   <meta name="author" content="Riloli">
   
-  <meta name="description" content="今天在折腾乐蛙时发现无法链接ADB了,但是手机却显示USB调试模式!
-然后想起了大蛋曾经告诉我CM的解决方法,于是你懂得,俺差点就把菊花给卖了呢(/Д`)~ﾟ｡">
+  <meta name="description" content="话说有些时间没有更新博客了,今天正好解决这个问题,顺便把它记录下来..
+今天遇到的情况是这样的,当CPU占用过高时,屏幕四周会出现一个红框.
+闪一次两次算了,但是挺萌的(TMD)不停的闪,我的钛合金狗眼都受不了!!">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Android无法连接adb的解决方法"/>
+  <meta property="og:title" content="Android去除CPU占用过高时屏幕四周闪红框"/>
   <meta property="og:site_name" content="Riloli's Blog"/>
 
   
@@ -54,42 +55,28 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-10-04T16:07:58.000Z"><a href="/2013/10/05/android无法连接adb的解决方法/">10月 5 2013</a></time>
+        <time datetime="2013-10-05T08:53:46.000Z"><a href="/2013/10/05/android去除cpu占用过高时屏幕四周闪红框/">10月 5 2013</a></time>
       
       
   
-    <h1 class="title">Android无法连接adb的解决方法</h1>
+    <h1 class="title">Android去除CPU占用过高时屏幕四周闪红框</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>今天在折腾乐蛙时发现无法链接ADB了,但是手机却显示USB调试模式!</p>
-<p>然后想起了大蛋曾经告诉我CM的解决方法,于是你懂得,俺差点就把菊花给卖了呢(/Д`)~ﾟ｡</p>
+        <p>话说有些时间没有更新博客了,今天正好解决这个问题,顺便把它记录下来..</p>
+<p>今天遇到的情况是这样的,当CPU占用过高时,屏幕四周会出现一个红框.</p>
+<p>闪一次两次算了,但是挺萌的(TMD)不停的闪,我的钛合金狗眼都受不了!!</p>
 <a id="more"></a>
 
-<pre><code><span class="title">adb</span> shell rm -r /<span class="typedef"><span class="keyword">data</span>/property</span></code></pre>
-<p>进REC干掉这个目录后,CM就可以正常连接了,可是尼玛我的乐蛙肿么还是不行啊!!!</p>
-<p>我的菊花白卖了啊!!!!魂淡!!!! （╯‵□′）╯︵┴─┴</p>
-<p>折腾的细节就不多说了,都是泪啊!!!</p>
-<p>经过俺不断的DEBUG…尼玛,终于给我找到了(;´༎ຶД༎ຶ`)</p>
-<p>原default.prop文件如下</p>
-<pre><code><span class="preprocessor">#</span>
-<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
-<span class="preprocessor">#</span>
-ro<span class="variable">.secure</span>=<span class="number">0</span>
-ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
-ro<span class="variable">.debuggable</span>=<span class="number">1</span>
-persist<span class="variable">.sys</span><span class="variable">.usb</span><span class="variable">.config</span>=mtp,diag,serial_smd,serial_tty,rmnet_smd,mass_storage,serial_smd,adb</code></pre>
-<p>妈蛋,直接干掉最后的那行就可以连接了!!!!!!!(ÒωÓױ)</p>
-<p>修改后的default.prop</p>
-<pre><code><span class="preprocessor">#</span>
-<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
-<span class="preprocessor">#</span>
-ro<span class="variable">.secure</span>=<span class="number">0</span>
-ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
-ro<span class="variable">.debuggable</span>=<span class="number">1</span></code></pre>
-<p>好吧,安卓是坑爹的,错了一个参数都要你的命啊!!!!!!!!!!!</p>
+<p>首先我在“开发人员选项”,里面勾掉“严格模式”,闪屏有改善,但是还是存在啊~</p>
+<p>那该肿么办啊,请看下面讲解!!</p>
+<p>打开system/build.prop,加入下面的代码</p>
+<pre><code>persist<span class="variable">.sys</span><span class="variable">.strictmode</span><span class="variable">.visual</span>=<span class="number">0</span>
+persist<span class="variable">.sys</span><span class="variable">.strictmode</span><span class="variable">.disable</span>=<span class="number">1</span></code></pre>
+<p>然后保存重启,问题即可解决!! &gt;////&lt;</p>
+<p>话说大蛋一放假就去陪女朋友了,都不陪俺,俺桑心了..</p>
 
       
     </div>

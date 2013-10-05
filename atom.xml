@@ -3,13 +3,749 @@
   <title><![CDATA[Riloli's Blog]]></title>
   <link href="http://riloli.github.io/atom.xml" rel="self"/>
   <link href="http://riloli.github.io"/>
-  <updated>2013-10-04T16:12:03.846Z</updated>
+  <updated>2013-10-05T09:16:58.885Z</updated>
   <id>http://riloli.github.io/</id>
   <author>
     <name><![CDATA[Riloli]]></name>
     <email><![CDATA[Riloli@mail.com]]></email>
   </author>
   <generator uri="http://zespia.tw/hexo">Hexo</generator>
+  <entry>
+    <title type="html"><![CDATA[conky,urxvt,vim 配置文件]]></title>
+    <link href="http://riloli.github.io/2013/10/05/conky,urxvt,vim-配置文件/"/>
+    <id>http://riloli.github.io/2013/10/05/conky,urxvt,vim-配置文件/</id>
+    <published>2013-10-05T09:12:31.000Z</published>
+    <updated>2013-10-05T09:16:52.000Z</updated>
+    <content type="html"><![CDATA[<p>写点Archlinux下的软件配置，以后直接复制就行了，懒得重新配置！</p>
+<p><img src="http://images.cnitblog.com/blog/557234/201308/13192046-0d3629080d124cf48a3f68bdf8e2ea8c.png" alt=""></p>
+<a id="more"></a>
+
+<p><img src="http://images.cnitblog.com/blog/557234/201308/13192059-0351d46bf6f14579b05e02f0ca07d518.png" alt=""></p>
+<p>需要配置的软件有dwm, conky, urxvt, vim, acpi</p>
+<p>DWM的配置请看这里:<a href="https://docs.google.com/file/d/0B6L_eKOtMWLVaFNXMk5DeHk0b28/edit" target="_blank">Archlinux 安装dwm</a></p>
+<p>首先我们需要安装好这些软件！</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>sudo pacman -<span class="constant">S</span> conky rxvt-unicode vim acpi</code></pre>
+<p>Conky配置文件($HOME/.conkyrc)</p>
+<pre><code><span class="title">own_window</span> <span class="built_in">yes</span>
+own_window_type override
+own_window_colour <span class="number">000000</span>
+own_window_transparent <span class="built_in">no</span>
+own_window_hints undecorated below sticky skip_taskbar skip_pager
+double_buffer <span class="built_in">yes</span>
+cpu_avg_samples <span class="number">2</span>
+net_avg_samples <span class="number">2</span>
+use_xft <span class="built_in">no</span>
+xftfont Terminus:size=<span class="number">8</span>
+update_interval <span class="number">0</span>.<span class="number">1</span>
+minimum_size <span class="number">1680</span> <span class="number">10</span>
+maximum_width <span class="number">1680</span>
+border_width <span class="number">1</span>
+draw_outline <span class="built_in">no</span>
+default_color white
+alignment bottom_left
+use_spacer right
+no_buffers <span class="built_in">yes</span>
+uppercase <span class="built_in">no</span>
+TEXT
+<span class="variable">${alignc}</span><span class="variable">$nodename</span> <span class="variable">${color #0100ff}</span>Uptime:<span class="variable">${color white}</span> <span class="variable">$uptime</span> <span class="variable">${color #0077ff}</span>| CPU:<span class="variable">${color #0077ff}</span> <span class="variable">${color white}</span><span class="variable">${cpu}</span>%<span class="variable">${color #0077ff}</span> | FS: <span class="variable">${color lightgrey}</span><span class="variable">${fs_used /}</span>/<span class="variable">${fs_size /}</span><span class="variable">${color #0077ff}</span> | /home: <span class="variable">${color lightgrey}</span><span class="variable">${fs_used /home}</span>/<span class="variable">${fs_size /home}</span><span class="variable">${color #0077ff}</span> | RAM: <span class="variable">${color white}</span><span class="variable">$mem</span> <span class="variable">${color #0077ff}</span>| Network:<span class="variable">${color white}</span> <span class="variable">${wireless_essid wlp16s0}</span> <span class="variable">${color #0077ff}</span>| Down: <span class="variable">${color white}</span><span class="variable">${downspeed wlp16s0}</span> <span class="variable">${color #0077ff}</span>| Up: <span class="variable">${color white}</span><span class="variable">${upspeed wlp16s0}</span> <span class="variable">${color #0077ff}</span>| Battery: <span class="variable">${color white}</span> <span class="variable">${exec acpi |cut -d " " -f4}</span> <span class="variable">${color #0077ff}</span>| Volume:<span class="variable">${color white}</span> <span class="variable">${exec amixer get Master | egrep -o "[0-9]+%" | head -1 | egrep -o "[0-9]*"}</span>%</code></pre>
+<p>urxvt配置文件($HOME/.Xdefaults)</p>
+<pre><code>!!<span class="char">$H</span>OME/.<span class="class">Xdefaults</span>
+<span class="class">URxvt</span>.<span class="method">preeditType:</span><span class="class">Root</span>
+!!调整此处设置输入法
+<span class="class">URxvt</span>.<span class="method">inputMethod:</span>ibus
+!!颜色设置
+<span class="class">URxvt</span>.<span class="method">depth:</span><span class="number">32</span>
+!!中括号内数表示透明度
+<span class="class">URxvt</span>.<span class="method">background:</span>[<span class="number">90</span>]#<span class="number">000000</span>
+<span class="class">URxvt</span>.<span class="method">foreground:</span><span class="symbol">#ffffff</span>
+<span class="class">URxvt</span>.<span class="method">colorBD:</span><span class="class">Gray95</span>
+<span class="class">URxvt</span>.<span class="method">colorUL:</span><span class="class">Green</span>
+<span class="class">URxvt</span>.<span class="method">color1:</span><span class="class">Red2</span>
+<span class="class">URxvt</span>.<span class="method">color4:</span><span class="class">RoyalBlue</span>
+<span class="class">URxvt</span>.<span class="method">color5:</span><span class="class">Magenta2</span>
+<span class="class">URxvt</span>.<span class="method">color8:</span><span class="class">Gray50</span>
+<span class="class">URxvt</span>.<span class="method">color10:</span><span class="class">Green2</span>
+<span class="class">URxvt</span>.<span class="method">color12:</span><span class="class">DodgerBlue</span>
+<span class="class">URxvt</span>.<span class="method">color14:</span><span class="class">Cyan2</span>
+<span class="class">URxvt</span>.<span class="method">color15:</span><span class="class">Gray95</span>
+!!<span class="class">URL</span>操作
+<span class="class">URxvt</span>.<span class="method">urlLauncher:</span>chromium
+<span class="class">URxvt</span>.matcher.<span class="method">button:</span><span class="number">1</span>
+<span class="class">Urxvt</span>.perl-ext-<span class="method">common:</span>matcher
+!!滚动条设置
+<span class="class">URxvt</span>.<span class="method">scrollBar:</span><span class="class">True</span>
+<span class="class">URxvt</span>.<span class="method">scrollBar_right:</span><span class="class">True</span>
+<span class="class">URxvt</span>.<span class="method">scrollBar_floating:</span><span class="class">False</span>
+<span class="class">URxvt</span>.<span class="method">scrollstyle:</span>plain
+!!滚屏设置
+<span class="class">URxvt</span>.<span class="method">mouseWheelScrollPage:</span><span class="class">True</span>
+<span class="class">URxvt</span>.<span class="method">scrollTtyOutput:</span><span class="class">False</span>
+<span class="class">URxvt</span>.<span class="method">scrollWithBuffer:</span><span class="class">True</span>
+<span class="class">URxvt</span>.<span class="method">scrollTtyKeypress:</span><span class="class">True</span>
+!!光标闪烁
+<span class="class">URxvt</span>.<span class="method">cursorBlink:</span><span class="class">True</span>
+<span class="class">URxvt</span>.<span class="method">saveLines:</span><span class="number">3000</span>
+!!边框
+<span class="class">URxvt</span>.<span class="method">borderLess:</span><span class="class">False</span>
+!!字体设置
+<span class="class">Xft</span>.<span class="method">dpi:</span><span class="number">96</span>
+<span class="class">URxvt</span>.<span class="method">font:</span><span class="method">xft:</span>文泉驿等宽微米黑:size=<span class="number">9</span>:style=<span class="class">Regular</span>:antialias=<span class="keyword">true</span>,<span class="method">xft:</span>文泉驿等宽微米黑:size=<span class="number">8</span>:style=<span class="class">Regular</span>:antialias=<span class="keyword">true</span>
+<span class="class">URxvt</span>.<span class="method">boldfont:</span><span class="method">xft:</span>文泉驿等宽微米黑:size=<span class="number">9</span>:style=<span class="class">BOld</span>:antialias=<span class="keyword">true</span>,<span class="method">xft:</span>文泉驿等宽微米黑:size=<span class="number">8</span>:style=<span class="class">Bold</span>:antialias=<span class="keyword">true</span></code></pre>
+<p>VIM配置文件($HOME/.vimrc)</p>
+<pre><code><span class="operator"><span class="keyword">set</span> fileencodings=utf-<span class="number">8</span>,ucs-bom,gb18030,gbk,gb2312,cp936
+<span class="keyword">set</span> bg=dark
+colorscheme lucius
+<span class="keyword">set</span> nu
+<span class="keyword">set</span> hlsearch
+<span class="keyword">set</span> backspace=<span class="number">2</span>
+<span class="keyword">set</span> autoindent
+<span class="keyword">set</span> ruler
+<span class="keyword">set</span> showmode
+syntax <span class="keyword">on</span>
+<span class="keyword">set</span> tabstop=<span class="number">4</span>
+<span class="keyword">set</span> history=<span class="number">50</span>
+<span class="keyword">set</span> nolinebreak
+<span class="keyword">set</span> backspace=indent,eol,<span class="keyword">start</span>
+<span class="keyword">set</span> t_Co=<span class="number">256</span></code></pre>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Archlinux/" term="Archlinux"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[Archlinux 安装dwm]]></title>
+    <link href="http://riloli.github.io/2013/10/05/archlinux-安装dwm/"/>
+    <id>http://riloli.github.io/2013/10/05/archlinux-安装dwm/</id>
+    <published>2013-10-05T09:08:10.000Z</published>
+    <updated>2013-10-05T09:10:54.000Z</updated>
+    <content type="html"><![CDATA[<p>用过KDE,Gnome,Lxde,但对我这种只需要终端和浏览器的人未免有点繁琐了！于是换了个平铺式WM，对我来说感觉非常棒！！</p>
+<p>DWM非常轻，整个WM一个就两个源码文件，而且自己修改源码定制也非常容易！</p>
+<p>Archlinux通过ABS来获取源码安装还是很简单的，我们先来安装ABS和dmenu(这货是X下的轻量菜单)</p>
+<a id="more"></a>
+
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>sudo pacman -<span class="constant">S</span> base-devel abs dmenu</code></pre>
+<p>准备好后就可以用ABS从仓库获取DWM最新的源码了</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>abs community/dwm</code></pre>
+<p>我们需要把源码拷贝的一个地方，方便修改，如$HOME目录</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>cp -r /var/abs/community/dwm ~<span class="regexp">/dwm</code></pre>
+<p>接下来就是修改了，我们要让他支持中文，所以需要打xft补丁</p>
+<pre><code>[michellgaby<span class="property">@K</span>-<span class="literal">on</span> ~]$ cd ~<span class="regexp">/dwm/src/</span>dwm-<span class="number">6.0</span>
+[michellgaby<span class="property">@K</span>-<span class="literal">on</span> ~]$ patch &lt;dwm-<span class="number">6.0</span>-xft.diff</code></pre>
+<p>这个补丁谷歌一下就能找到了！</p>
+<p>我打完补丁还需要修改一下config.mk，分别在INCS后面加上-I/usr/include/freetype2以及在LIBS后面加上-lfreetype -lXft</p>
+<p>我们打完补丁了，接下来就是定制自己的WM了，先回到源码目录</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>cd ~<span class="regexp">/dwm</code></pre>
+<p>然后再编辑config.h文件，下面是我的config.h文件(仅供参考)</p>
+<pre><code>/* See LICENSE file <span class="keyword">for</span> copyright <span class="keyword">and</span> license details. */
+/* appearance */
+static const char font[]            = <span class="string">"WenQuanYi Micro Hei"</span>;
+static const char normbordercolor[] = <span class="string">"#333333"</span>;
+static const char normbgcolor[]     = <span class="string">"#051121"</span>;
+static const char normfgcolor[]     = <span class="string">"#FFFFFF"</span>;
+static const char selbordercolor[]  = <span class="string">"#1793D1"</span>;
+static const char selbgcolor[]      = <span class="string">"#1793D1"</span>;
+static const char selfgcolor[]      = <span class="string">"#FFFFFF"</span>;
+static const unsigned int borderpx  = <span class="number">1</span>;        /* border pixel of windows */
+static const unsigned int snap      = <span class="number">32</span>;       /* snap pixel */
+static const Bool showbar           = True;     /* False means no bar */
+static const Bool topbar            = True;     /* False means bottom bar */
+/* tagging */
+static const char *tags[] = { <span class="string">"网络"</span>, <span class="string">"聊天"</span>, <span class="string">"工作"</span>, <span class="string">"系统"</span>, <span class="string">"杂项"</span> };
+static const Rule rules[] = {
+    /* class      instance    title       tags mask     isfloating   monitor */
+    { <span class="string">"Gimp"</span>,     NULL,       NULL,       <span class="number">0</span>,            True,        -<span class="number">1</span> },
+    { <span class="string">"Firefox"</span>,  NULL,       NULL,       <span class="number">1</span> &lt;&lt; <span class="number">8</span>,       False,       -<span class="number">1</span> },
+};
+/* layout(s) */
+static const float mfact      = <span class="number">0.55</span>; /* factor of master area size [<span class="number">0.05</span>.<span class="number">.0</span><span class="number">.95</span>] */
+static const int nmaster      = <span class="number">1</span>;    /* number of clients <span class="keyword">in</span> master area */
+static const Bool resizehints = True; /* True means respect size hints <span class="keyword">in</span> tiled resizals */
+static const Layout layouts[] = {
+    /* symbol     arrange <span class="function"><span class="keyword">function</span> */
+    { "[<span class="title">T</span>]",      <span class="title">tile</span> },    /* <span class="title">first</span> <span class="title">entry</span> <span class="title">is</span> <span class="title">default</span> */
+    { "[<span class="title">F</span>]",      <span class="title">NULL</span> },    /* <span class="title">no</span> <span class="title">layout</span> <span class="title">function</span> <span class="title">means</span> <span class="title">floating</span> <span class="title">behavior</span> */
+    { "[<span class="title">M</span>]",      <span class="title">monocle</span> },
+};
+/* <span class="title">key</span> <span class="title">definitions</span> */
+#<span class="title">define</span> <span class="title">MODKEY</span> <span class="title">Mod1Mask</span>
+#<span class="title">define</span> <span class="title">TAGKEYS</span><span class="params">(KEY,TAG)</span></span> \
+    { MODKEY,                       KEY,      view,           {.ui = <span class="number">1</span> &lt;&lt; TAG} }, \
+    { MODKEY|ControlMask,           KEY,      toggleview,     {.ui = <span class="number">1</span> &lt;&lt; TAG} }, \
+    { MODKEY|ShiftMask,             KEY,      tag,            {.ui = <span class="number">1</span> &lt;&lt; TAG} }, \
+    { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = <span class="number">1</span> &lt;&lt; TAG} },
+/* helper <span class="keyword">for</span> spawning shell commands <span class="keyword">in</span> the pre dwm-<span class="number">5.0</span> fashion */
+#define SHCMD(cmd) { .v = (const char*[]){ <span class="string">"/bin/sh"</span>, <span class="string">"-c"</span>, cmd, NULL } }
+/* commands */
+static const char *dmenucmd[] = { <span class="string">"dmenu_run"</span>, <span class="string">"-fn"</span>, font, <span class="string">"-nb"</span>, normbgcolor, <span class="string">"-nf"</span>, normfgcolor, <span class="string">"-sb"</span>, selbgcolor, <span class="string">"-sf"</span>, selfgcolor, NULL };
+static const char *termcmd[]  = { <span class="string">"urxvt"</span>, NULL };
+static Key keys[] = {
+    /* modifier                     key        <span class="function"><span class="keyword">function</span>        <span class="title">argument</span> */
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_p</span>,      <span class="title">spawn</span>,          {.<span class="title">v</span> = <span class="title">dmenucmd</span> } },
+    { <span class="title">MODKEY</span>|<span class="title">ShiftMask</span>,             <span class="title">XK_Return</span>, <span class="title">spawn</span>,          {.<span class="title">v</span> = <span class="title">termcmd</span> } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_b</span>,      <span class="title">togglebar</span>,      {0} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_j</span>,      <span class="title">focusstack</span>,     {.<span class="title">i</span> = +1 } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_k</span>,      <span class="title">focusstack</span>,     {.<span class="title">i</span> = -1 } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_i</span>,      <span class="title">incnmaster</span>,     {.<span class="title">i</span> = +1 } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_d</span>,      <span class="title">incnmaster</span>,     {.<span class="title">i</span> = -1 } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_h</span>,      <span class="title">setmfact</span>,       {.<span class="title">f</span> = -0.05} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_l</span>,      <span class="title">setmfact</span>,       {.<span class="title">f</span> = +0.05} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_Return</span>, <span class="title">zoom</span>,           {0} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_Tab</span>,    <span class="title">view</span>,           {0} },
+    { <span class="title">MODKEY</span>|<span class="title">ShiftMask</span>,             <span class="title">XK_c</span>,      <span class="title">killclient</span>,     {0} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_t</span>,      <span class="title">setlayout</span>,      {.<span class="title">v</span> = &amp;<span class="title">layouts</span>[0]} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_f</span>,      <span class="title">setlayout</span>,      {.<span class="title">v</span> = &amp;<span class="title">layouts</span>[1]} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_m</span>,      <span class="title">setlayout</span>,      {.<span class="title">v</span> = &amp;<span class="title">layouts</span>[2]} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_space</span>,  <span class="title">setlayout</span>,      {0} },
+    { <span class="title">MODKEY</span>|<span class="title">ShiftMask</span>,             <span class="title">XK_space</span>,  <span class="title">togglefloating</span>, {0} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_0</span>,      <span class="title">view</span>,           {.<span class="title">ui</span> = ~0 } },
+    { <span class="title">MODKEY</span>|<span class="title">ShiftMask</span>,             <span class="title">XK_0</span>,      <span class="title">tag</span>,            {.<span class="title">ui</span> = ~0 } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_comma</span>,  <span class="title">focusmon</span>,       {.<span class="title">i</span> = -1 } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_period</span>, <span class="title">focusmon</span>,       {.<span class="title">i</span> = +1 } },
+    { <span class="title">MODKEY</span>|<span class="title">ShiftMask</span>,             <span class="title">XK_comma</span>,  <span class="title">tagmon</span>,         {.<span class="title">i</span> = -1 } },
+    { <span class="title">MODKEY</span>|<span class="title">ShiftMask</span>,             <span class="title">XK_period</span>, <span class="title">tagmon</span>,         {.<span class="title">i</span> = +1 } },
+    <span class="title">TAGKEYS</span><span class="params">(                        XK_1,                      0)</span></span>
+    TAGKEYS(                        XK_2,                      <span class="number">1</span>)
+    TAGKEYS(                        XK_3,                      <span class="number">2</span>)
+    TAGKEYS(                        XK_4,                      <span class="number">3</span>)
+    TAGKEYS(                        XK_5,                      <span class="number">4</span>)
+    TAGKEYS(                        XK_6,                      <span class="number">5</span>)
+    TAGKEYS(                        XK_7,                      <span class="number">6</span>)
+    TAGKEYS(                        XK_8,                      <span class="number">7</span>)
+    TAGKEYS(                        XK_9,                      <span class="number">8</span>)
+    { MODKEY|ShiftMask,             XK_q,      quit,           {<span class="number">0</span>} },
+};
+/* button definitions */
+/* click can be ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, <span class="keyword">or</span> ClkRootWin */
+static Button buttons[] = {
+    /* click                event mask      button          <span class="function"><span class="keyword">function</span>        <span class="title">argument</span> */
+    { <span class="title">ClkLtSymbol</span>,          0,              <span class="title">Button1</span>,        <span class="title">setlayout</span>,      {0} },
+    { <span class="title">ClkLtSymbol</span>,          0,              <span class="title">Button3</span>,        <span class="title">setlayout</span>,      {.<span class="title">v</span> = &amp;<span class="title">layouts</span>[2]} },
+    { <span class="title">ClkWinTitle</span>,          0,              <span class="title">Button2</span>,        <span class="title">zoom</span>,           {0} },
+    { <span class="title">ClkStatusText</span>,        0,              <span class="title">Button2</span>,        <span class="title">spawn</span>,          {.<span class="title">v</span> = <span class="title">termcmd</span> } },
+    { <span class="title">ClkClientWin</span>,         <span class="title">MODKEY</span>,         <span class="title">Button1</span>,        <span class="title">movemouse</span>,      {0} },
+    { <span class="title">ClkClientWin</span>,         <span class="title">MODKEY</span>,         <span class="title">Button2</span>,        <span class="title">togglefloating</span>, {0} },
+    { <span class="title">ClkClientWin</span>,         <span class="title">MODKEY</span>,         <span class="title">Button3</span>,        <span class="title">resizemouse</span>,    {0} },
+    { <span class="title">ClkTagBar</span>,            0,              <span class="title">Button1</span>,        <span class="title">view</span>,           {0} },
+    { <span class="title">ClkTagBar</span>,            0,              <span class="title">Button3</span>,        <span class="title">toggleview</span>,     {0} },
+    { <span class="title">ClkTagBar</span>,            <span class="title">MODKEY</span>,         <span class="title">Button1</span>,        <span class="title">tag</span>,            {0} },
+    { <span class="title">ClkTagBar</span>,            <span class="title">MODKEY</span>,         <span class="title">Button3</span>,        <span class="title">toggletag</span>,      {0} },
+};</code></pre>
+<p>修改完成后那就开始编译吧</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>makepkg -g &gt;&gt;<span class="constant">PKGBUILD</span>
+[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>makepkg -efi</code></pre>
+<p>最后修改下X的配置文件($HOME/.xinitrc)就OK了</p>
+<pre><code><span class="shebang">#!/bin/sh</span>
+<span class="comment">#</span>
+<span class="comment"># ~/.xinitrc</span>
+<span class="comment">#</span>
+<span class="comment"># Executed by startx (run your window manager from here)</span>
+feh --bg-scale /home/michellgaby/img/arch.png
+conky -x 0 -y 0 -d
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=<span class="string">"@im=fcitx"</span>
+fcitx &amp;
+<span class="keyword">while</span> <span class="literal">true</span> 
+<span class="keyword">do</span>
+    xsetroot -name  <span class="string">"$(date -u +"</span>%a %b %d %r<span class="string">")"</span>
+    sleep 1s
+<span class="keyword">done</span> &amp;
+exec dwm</code></pre>
+<p>大功搞成，以后输出startx就是dwm了！</p>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Archlinux/" term="Archlinux"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[内核的mei模块出现问题]]></title>
+    <link href="http://riloli.github.io/2013/10/05/内核的mei模块出现问题/"/>
+    <id>http://riloli.github.io/2013/10/05/内核的mei模块出现问题/</id>
+    <published>2013-10-05T09:07:12.000Z</published>
+    <updated>2013-10-05T09:11:18.000Z</updated>
+    <content type="html"><![CDATA[<p>之前装完Archlinux就有了，一直没管，今天闲得也是闲，于是把他给解决了！</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>dmesg | grep -i mei</code></pre>
+<p>看了下内核处mei模块的LOG</p>
+<a id="more"></a>
+
+<pre><code><span class="matrix">[    <span class="number">6.499247</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: setting latency timer to <span class="number">64</span>
+<span class="matrix">[    <span class="number">6.499305</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: irq <span class="number">46</span> <span class="keyword">for</span> MSI/MSI-X
+<span class="matrix">[   <span class="number">11.516758</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span>
+<span class="matrix">[   <span class="number">11.516861</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: unexpected reset: dev_state = RESETTING
+<span class="matrix">[   <span class="number">17.536765</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span>
+<span class="matrix">[   <span class="number">17.536866</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: unexpected reset: dev_state = RESETTING
+<span class="matrix">[   <span class="number">23.556767</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span>
+<span class="matrix">[   <span class="number">23.556867</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: unexpected reset: dev_state = RESETTING
+<span class="matrix">[   <span class="number">29.576765</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span></code></pre>
+<p>发现根本就起不来，一直在复位！！无路赛！！</p>
+<p>你起不来别在屏幕上打印消息啊！魂淡o(｀ω´*)o，我可是有强迫症啊！</p>
+<p>把心一忍，让kernel不加载这模块了！！</p>
+<pre><code>[michellgaby<span class="property">@K</span>-<span class="literal">on</span> ~]<span class="comment"># echo -e "blacklist mei\ninstall mei /bin/true" &gt; /etc/modprobe.d/mei.conf</span>
+[michellgaby<span class="property">@K</span>-<span class="literal">on</span> ~]<span class="comment"># reboot</span></code></pre>
+<p>搞定重启后发现世界原来是那么美～空气是如此的清新～</p>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Archlinux/" term="Archlinux"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[任务管理界面添加显示RAM信息]]></title>
+    <link href="http://riloli.github.io/2013/10/05/任务管理界面添加显示ram信息/"/>
+    <id>http://riloli.github.io/2013/10/05/任务管理界面添加显示ram信息/</id>
+    <published>2013-10-05T09:02:36.000Z</published>
+    <updated>2013-10-05T09:06:26.000Z</updated>
+    <content type="html"><![CDATA[<p>显示RAM信息的核心代码是大蛋的,我只不过是整理下教程而已!</p>
+<p>大蛋应该不会介意的吧,首先你需要apktool和SystemUI.apk,framework-res.apk</p>
+<p>然后开始加载框架和反编译…</p>
+<a id="more"></a>
+
+<pre><code><span class="variable">$ </span>apktool <span class="keyword">if</span> framework-res.apk
+<span class="variable">$ </span>apktool d <span class="constant">SystemUI</span>.apk</code></pre>
+<p>然后把附件里的东西直接解压进去,<a href="https://docs.google.com/file/d/0B6L_eKOtMWLVaFNXMk5DeHk0b28/edit" target="_blank">附件点我</a></p>
+<p>然后添加ID,打开res/values/public.xml,增加下面的ID</p>
+<pre><code><span class="title">memory_info_total</span>
+<span class="title">memory_info_free</span>
+<span class="title">memory_info_buffers</span>
+<span class="title">memory_info_cached</span>
+<span class="title">memory_info_swapcached</span></code></pre>
+<p>然后也在res/values/ids.xml也加入上面的ID</p>
+<p>最后修改smali/com/android/systemui/recent/MemoryInfoLayout.smali里的ID为你增加的对应ID即可!</p>
+<p>接着在res/layout-land/下的Recent panel布局文件中加入以下内容</p>
+<pre><code><span class="tag">&lt;<span class="title">com.android.systemui.recent.MemoryInfoLayout</span> <span class="attribute">android:gravity</span>=<span class="value">"center_vertical"</span> <span class="attribute">android:layout_gravity</span>=<span class="value">"bottom"</span> <span class="attribute">android:clickable</span>=<span class="value">"true"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"30.0dip"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">View</span> <span class="attribute">android:visibility</span>=<span class="value">"invisible"</span> <span class="attribute">android:layout_width</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">ImageView</span> <span class="attribute">android:background</span>=<span class="value">"#ff04ff11"</span> <span class="attribute">android:layout_width</span>=<span class="value">"12.0dip"</span> <span class="attribute">android:layout_height</span>=<span class="value">"12.0dip"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:textSize</span>=<span class="value">"12.0dip"</span> <span class="attribute">android:textColor</span>=<span class="value">"@color/status_bar_recents_app_label_color"</span> <span class="attribute">android:ellipsize</span>=<span class="value">"marquee"</span> <span class="attribute">android:id</span>=<span class="value">"@id/memory_info_total"</span> <span class="attribute">android:paddingLeft</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:paddingRight</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">ImageView</span> <span class="attribute">android:background</span>=<span class="value">"#ff061ef2"</span> <span class="attribute">android:layout_width</span>=<span class="value">"12.0dip"</span> <span class="attribute">android:layout_height</span>=<span class="value">"12.0dip"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:textSize</span>=<span class="value">"12.0dip"</span> <span class="attribute">android:textColor</span>=<span class="value">"@color/status_bar_recents_app_label_color"</span> <span class="attribute">android:ellipsize</span>=<span class="value">"marquee"</span> <span class="attribute">android:id</span>=<span class="value">"@id/memory_info_free"</span> <span class="attribute">android:paddingLeft</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:paddingRight</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">ImageView</span> <span class="attribute">android:background</span>=<span class="value">"#fff901e4"</span> <span class="attribute">android:layout_width</span>=<span class="value">"12.0dip"</span> <span class="attribute">android:layout_height</span>=<span class="value">"12.0dip"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:textSize</span>=<span class="value">"12.0dip"</span> <span class="attribute">android:textColor</span>=<span class="value">"@color/status_bar_recents_app_label_color"</span> <span class="attribute">android:ellipsize</span>=<span class="value">"marquee"</span> <span class="attribute">android:id</span>=<span class="value">"@id/memory_info_buffers"</span> <span class="attribute">android:paddingLeft</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:paddingRight</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">ImageView</span> <span class="attribute">android:background</span>=<span class="value">"#fffae602"</span> <span class="attribute">android:layout_width</span>=<span class="value">"12.0dip"</span> <span class="attribute">android:layout_height</span>=<span class="value">"12.0dip"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:textSize</span>=<span class="value">"12.0dip"</span> <span class="attribute">android:textColor</span>=<span class="value">"@color/status_bar_recents_app_label_color"</span> <span class="attribute">android:ellipsize</span>=<span class="value">"marquee"</span> <span class="attribute">android:id</span>=<span class="value">"@id/memory_info_cached"</span> <span class="attribute">android:paddingLeft</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:paddingRight</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">ImageView</span> <span class="attribute">android:background</span>=<span class="value">"#fffd1505"</span> <span class="attribute">android:layout_width</span>=<span class="value">"12.0dip"</span> <span class="attribute">android:layout_height</span>=<span class="value">"12.0dip"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:textSize</span>=<span class="value">"12.0dip"</span> <span class="attribute">android:textColor</span>=<span class="value">"@color/status_bar_recents_app_label_color"</span> <span class="attribute">android:ellipsize</span>=<span class="value">"marquee"</span> <span class="attribute">android:id</span>=<span class="value">"@id/memory_info_swapcached"</span> <span class="attribute">android:paddingLeft</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> /&gt;</span>
+<span class="tag">&lt;/<span class="title">com.android.systemui.recent.MemoryInfoLayout</span>&gt;</span></code></pre>
+<p>还需要在res/layout/或者res/layout-port/里的Recent panel布局文件里加入以下内容</p>
+<pre><code><span class="tag">&lt;<span class="title">com.android.systemui.recent.MemoryInfoLayout</span> <span class="attribute">android:gravity</span>=<span class="value">"center_vertical"</span> <span class="attribute">android:layout_gravity</span>=<span class="value">"bottom"</span> <span class="attribute">android:clickable</span>=<span class="value">"true"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"30.0dip"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">View</span> <span class="attribute">android:visibility</span>=<span class="value">"invisible"</span> <span class="attribute">android:layout_width</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">ImageView</span> <span class="attribute">android:background</span>=<span class="value">"#ff04ff11"</span> <span class="attribute">android:layout_width</span>=<span class="value">"10.0dip"</span> <span class="attribute">android:layout_height</span>=<span class="value">"10.0dip"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:textSize</span>=<span class="value">"10.0dip"</span> <span class="attribute">android:textColor</span>=<span class="value">"@color/status_bar_recents_app_label_color"</span> <span class="attribute">android:ellipsize</span>=<span class="value">"marquee"</span> <span class="attribute">android:id</span>=<span class="value">"@id/memory_info_total"</span> <span class="attribute">android:paddingLeft</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:paddingRight</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">ImageView</span> <span class="attribute">android:background</span>=<span class="value">"#ff061ef2"</span> <span class="attribute">android:layout_width</span>=<span class="value">"10.0dip"</span> <span class="attribute">android:layout_height</span>=<span class="value">"10.0dip"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:textSize</span>=<span class="value">"10.0dip"</span> <span class="attribute">android:textColor</span>=<span class="value">"@color/status_bar_recents_app_label_color"</span> <span class="attribute">android:ellipsize</span>=<span class="value">"marquee"</span> <span class="attribute">android:id</span>=<span class="value">"@id/memory_info_free"</span> <span class="attribute">android:paddingLeft</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:paddingRight</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:textSize</span>=<span class="value">"10.0dip"</span> <span class="attribute">android:textColor</span>=<span class="value">"@color/status_bar_recents_app_label_color"</span> <span class="attribute">android:ellipsize</span>=<span class="value">"marquee"</span> <span class="attribute">android:id</span>=<span class="value">"@id/memory_info_buffers"</span> <span class="attribute">android:visibility</span>=<span class="value">"gone"</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">ImageView</span> <span class="attribute">android:background</span>=<span class="value">"#fffae602"</span> <span class="attribute">android:layout_width</span>=<span class="value">"10.0dip"</span> <span class="attribute">android:layout_height</span>=<span class="value">"10.0dip"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:textSize</span>=<span class="value">"10.0dip"</span> <span class="attribute">android:textColor</span>=<span class="value">"@color/status_bar_recents_app_label_color"</span> <span class="attribute">android:ellipsize</span>=<span class="value">"marquee"</span> <span class="attribute">android:id</span>=<span class="value">"@id/memory_info_cached"</span> <span class="attribute">android:paddingLeft</span>=<span class="value">"5.0dip"</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:textSize</span>=<span class="value">"10.0dip"</span> <span class="attribute">android:textColor</span>=<span class="value">"@color/status_bar_recents_app_label_color"</span> <span class="attribute">android:ellipsize</span>=<span class="value">"marquee"</span> <span class="attribute">android:id</span>=<span class="value">"@id/memory_info_swapcached"</span> <span class="attribute">android:visibility</span>=<span class="value">"gone"</span> <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> /&gt;</span>
+<span class="tag">&lt;/<span class="title">com.android.systemui.recent.MemoryInfoLayout</span>&gt;</span></code></pre>
+<p>然后重新编译并替换dex跟布局文件就好了</p>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[编译android程序时DEX过程出现错误]]></title>
+    <link href="http://riloli.github.io/2013/10/05/编译android程序时dex过程出现错误/"/>
+    <id>http://riloli.github.io/2013/10/05/编译android程序时dex过程出现错误/</id>
+    <published>2013-10-05T09:00:08.000Z</published>
+    <updated>2013-10-05T09:01:34.000Z</updated>
+    <content type="html"><![CDATA[<p>今天编译高级设置时出现了错误,这好坑爹啊~</p>
+<p>于是我开始检查代码,发现代码没有错误啊,然后观察MAKE的步骤才发现是DEX时出现了问题!!</p>
+<p>下面是错误的LOG:</p>
+<a id="more"></a>
+
+<pre><code><span class="label">Information:</span>Using javac <span class="number">1.7</span><span class="number">.0</span>_25 to compile java sources
+<span class="label">Information:</span>Module <span class="string">"AdvanceSettings"</span> was fully rebuilt due to project configuration/dependencies changes
+<span class="label">Information:</span>Compilation completed with <span class="number">22</span> errors <span class="keyword">and</span> <span class="number">0</span> warnings <span class="keyword">in</span> <span class="number">17</span> <span class="keyword">sec</span>
+<span class="label">Information:</span><span class="number">22</span> errors
+<span class="label">Information:</span><span class="number">0</span> warnings
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] UNEXPECTED TOP-LEVEL EXCEPTION:
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] java<span class="preprocessor">.lang</span><span class="preprocessor">.IllegalArgumentException</span>: already added: Landroid/support/v4/accessibilityservice/AccessibilityServiceInfoCompat<span class="comment">;</span>
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.dex</span><span class="preprocessor">.file</span><span class="preprocessor">.ClassDefsSection</span><span class="preprocessor">.add</span>(ClassDefsSection<span class="preprocessor">.java</span>:<span class="number">123</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.dex</span><span class="preprocessor">.file</span><span class="preprocessor">.DexFile</span><span class="preprocessor">.add</span>(DexFile<span class="preprocessor">.java</span>:<span class="number">163</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span><span class="preprocessor">.processClass</span>(Main<span class="preprocessor">.java</span>:<span class="number">490</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span><span class="preprocessor">.processFileBytes</span>(Main<span class="preprocessor">.java</span>:<span class="number">459</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span><span class="preprocessor">.access</span>$400(Main<span class="preprocessor">.java</span>:<span class="number">67</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span>$1<span class="preprocessor">.processFileBytes</span>(Main<span class="preprocessor">.java</span>:<span class="number">398</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.cf</span><span class="preprocessor">.direct</span><span class="preprocessor">.ClassPathOpener</span><span class="preprocessor">.processArchive</span>(ClassPathOpener<span class="preprocessor">.java</span>:<span class="number">245</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.cf</span><span class="preprocessor">.direct</span><span class="preprocessor">.ClassPathOpener</span><span class="preprocessor">.processOne</span>(ClassPathOpener<span class="preprocessor">.java</span>:<span class="number">131</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.cf</span><span class="preprocessor">.direct</span><span class="preprocessor">.ClassPathOpener</span><span class="preprocessor">.process</span>(ClassPathOpener<span class="preprocessor">.java</span>:<span class="number">109</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span><span class="preprocessor">.processOne</span>(Main<span class="preprocessor">.java</span>:<span class="number">422</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span><span class="preprocessor">.processAllFiles</span>(Main<span class="preprocessor">.java</span>:<span class="number">333</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span><span class="preprocessor">.run</span>(Main<span class="preprocessor">.java</span>:<span class="number">209</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at sun<span class="preprocessor">.reflect</span><span class="preprocessor">.NativeMethodAccessorImpl</span><span class="preprocessor">.invoke</span>0(Native Method)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at sun<span class="preprocessor">.reflect</span><span class="preprocessor">.NativeMethodAccessorImpl</span><span class="preprocessor">.invoke</span>(NativeMethodAccessorImpl<span class="preprocessor">.java</span>:<span class="number">57</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at sun<span class="preprocessor">.reflect</span><span class="preprocessor">.DelegatingMethodAccessorImpl</span><span class="preprocessor">.invoke</span>(DelegatingMethodAccessorImpl<span class="preprocessor">.java</span>:<span class="number">43</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at java<span class="preprocessor">.lang</span><span class="preprocessor">.reflect</span><span class="preprocessor">.Method</span><span class="preprocessor">.invoke</span>(Method<span class="preprocessor">.java</span>:<span class="number">606</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at org<span class="preprocessor">.jetbrains</span><span class="preprocessor">.android</span><span class="preprocessor">.compiler</span><span class="preprocessor">.tools</span><span class="preprocessor">.AndroidDxRunner</span><span class="preprocessor">.runDex</span>(AndroidDxRunner<span class="preprocessor">.java</span>:<span class="number">139</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at org<span class="preprocessor">.jetbrains</span><span class="preprocessor">.android</span><span class="preprocessor">.compiler</span><span class="preprocessor">.tools</span><span class="preprocessor">.AndroidDxRunner</span><span class="preprocessor">.main</span>(AndroidDxRunner<span class="preprocessor">.java</span>:<span class="number">261</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.intellij</span><span class="preprocessor">.rt</span><span class="preprocessor">.execution</span><span class="preprocessor">.CommandLineWrapper</span><span class="preprocessor">.main</span>(CommandLineWrapper<span class="preprocessor">.java</span>:<span class="number">121</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] <span class="number">1</span> error<span class="comment">; aborting</span></code></pre>
+<p>于是我就去谷歌,得出:因为有重复的包添加了,只要把重复的包从BuildPath中移除就行了..</p>
+<p>我就去看了下BuildPath,发现有两个外部jar,一个是android-support-v13.jar,还有一个是android-support-v4.jar</p>
+<p>然后我把android-support-v4.jar给移除,重新编译!!!欧耶,一次通过~~~</p>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[解决Unable to resolve superclass的问题]]></title>
+    <link href="http://riloli.github.io/2013/10/05/解决unable-to-resolve-superclass的问题/"/>
+    <id>http://riloli.github.io/2013/10/05/解决unable-to-resolve-superclass的问题/</id>
+    <published>2013-10-05T08:59:06.000Z</published>
+    <updated>2013-10-05T09:01:54.000Z</updated>
+    <content type="html"><![CDATA[<p>之前在GITHUB上看到大蛋的高级设置,昨晚于是就拿来编译..</p>
+<p>结果真是个悲伤的故事,放手机上居然运行不了,这种时候只能看LOG了!</p>
+<p>看LOG得出的信息如下:</p>
+<a id="more"></a>
+
+<pre><code><span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.438</span>: D/dalvikvm(<span class="number">2286</span>): threadid=<span class="number">10</span>: interp stack <span class="keyword">at</span> <span class="number">0x5d2bb000</span>
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.438</span>: D/jdwp(<span class="number">2286</span>): sendBufferedRequest : len=<span class="number">0x2B</span>
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.455</span>: E/Trace(<span class="number">2286</span>): <span class="keyword">error</span> opening trace <span class="type">file</span>: No such <span class="type">file</span> <span class="keyword">or</span> directory (<span class="number">2</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.457</span>: D/jdwp(<span class="number">2286</span>): sendBufferedRequest : len=<span class="number">0x45</span>
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.470</span>: D/dalvikvm(<span class="number">2286</span>): open_cached_dex_file : /data/app/com.focus.advsettings-<span class="number">1.</span>apk /data/dalvik-cache/data@app@com.focus.advsettings-<span class="number">1.</span>apk@classes.dex
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.473</span>: W/dalvikvm(<span class="number">2286</span>): Unable <span class="keyword">to</span> resolve superclass <span class="keyword">of</span> Lcom/android/settings/focus/DeviceSettings; (<span class="number">47</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.473</span>: W/dalvikvm(<span class="number">2286</span>): Link <span class="keyword">of</span> <span class="type">class</span> 'Lcom/android/settings/focus/DeviceSettings;' failed
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.474</span>: D/AndroidRuntime(<span class="number">2286</span>): Shutting down VM
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.475</span>: W/dalvikvm(<span class="number">2286</span>): threadid=<span class="number">1</span>: thread exiting <span class="keyword">with</span> uncaught exception (group=<span class="number">0x412d69f0</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): FATAL EXCEPTION: main
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): java.lang.RuntimeException: Unable <span class="keyword">to</span> instantiate activity ComponentInfo{com.focus.advsettings/com.android.settings.focus.DeviceSettings}: java.lang.ClassNotFoundException: Didn't find <span class="type">class</span> <span class="string">"com.android.settings.focus.DeviceSettings"</span> <span class="function_start"><span class="keyword">on</span> <span class="title">path</span></span>: DexPathList[dexElements=[zip <span class="type">file</span> <span class="string">"/data/app/com.focus.advsettings-1.apk"</span>],nativeLibraryDirectories=[/data/app-lib/com.focus.advsettings-<span class="number">1</span>, /vendor/lib, /system/lib]]
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> android.app.ActivityThread.performLaunchActivity(ActivityThread.java:<span class="number">2236</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:<span class="number">2362</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> android.app.ActivityThread.access$<span class="number">600</span>(ActivityThread.java:<span class="number">160</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> android.app.ActivityThread$H.handleMessage(ActivityThread.java:<span class="number">1344</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> android.os.Handler.dispatchMessage(Handler.java:<span class="number">99</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> android.os.Looper.loop(Looper.java:<span class="number">153</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> android.app.ActivityThread.main(ActivityThread.java:<span class="number">5317</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> java.lang.reflect.Method.invokeNative(Native Method)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> java.lang.reflect.Method.invoke(Method.java:<span class="number">511</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> com.android.internal.os.ZygoteInit$MethodAndArgsCaller.<span class="command">run</span>(ZygoteInit.java:<span class="number">833</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> com.android.internal.os.ZygoteInit.main(ZygoteInit.java:<span class="number">600</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> dalvik.system.NativeStart.main(Native Method)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): Caused <span class="keyword">by</span>: java.lang.ClassNotFoundException: Didn't find <span class="type">class</span> <span class="string">"com.android.settings.focus.DeviceSettings"</span> <span class="function_start"><span class="keyword">on</span> <span class="title">path</span></span>: DexPathList[dexElements=[zip <span class="type">file</span> <span class="string">"/data/app/com.focus.advsettings-1.apk"</span>],nativeLibraryDirectories=[/data/app-lib/com.focus.advsettings-<span class="number">1</span>, /vendor/lib, /system/lib]]
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:<span class="number">53</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> java.lang.ClassLoader.loadClass(ClassLoader.java:<span class="number">501</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> java.lang.ClassLoader.loadClass(ClassLoader.java:<span class="number">461</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> android.app.Instrumentation.newActivity(Instrumentation.java:<span class="number">1054</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): <span class="keyword">at</span> android.app.ActivityThread.performLaunchActivity(ActivityThread.java:<span class="number">2227</span>)
+<span class="number">07</span>-<span class="number">01</span> <span class="number">13</span>:<span class="number">35</span>:<span class="number">47.477</span>: E/AndroidRuntime(<span class="number">2286</span>): ... <span class="number">11</span> more</code></pre>
+<p>谷歌后才知道ADT 17以上如果引用Jar文件就需要放在libs目录上…</p>
+<p>可是大蛋已经放好了啊.我就奇怪了~这尼玛是神马回事!!</p>
+<p>琢磨了一番后才发现我没有勾上编译libs目录的选项!233333</p>
+<p>开启的具体步骤如下:</p>
+<pre><code><span class="bullet">1. </span>右键项目,选择属性
+<span class="bullet">2. </span>Java Build Patch -&gt; Order and Export
+<span class="bullet">3. </span>勾上 Android Private Libraries
+<span class="bullet">4. </span>重新编译即可</code></pre>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[转换framebuffer实现安卓截图]]></title>
+    <link href="http://riloli.github.io/2013/10/05/转换framebuffer实现安卓截图/"/>
+    <id>http://riloli.github.io/2013/10/05/转换framebuffer实现安卓截图/</id>
+    <published>2013-10-05T08:58:19.000Z</published>
+    <updated>2013-10-05T09:01:36.000Z</updated>
+    <content type="html"><![CDATA[<p>编译出了RECOVERY肯定需要截图分享的啦,可是又不能通过DDMS截图~</p>
+<p>那就只好通过提取手机的fb0文件来实现截图.</p>
+<p>首先你需要ADB~ 嗯,这个都没有的话你就别看下去了…</p>
+<a id="more"></a>
+
+<p>还需要ffmpeg,我们需要使用他进行转码,不转码你怎么看图片啊</p>
+<p>就犹如AV一样,不转码肿么放手机上看啊,魂淡!!!咳咳,扯远了</p>
+<p>首先我们把fb0文件提取出来先</p>
+<pre><code><span class="title">adb</span> pull /dev/graphics/fb0 fb0.raw</code></pre>
+<p>然后通过ffmpeg进行转码,那个“480x800”是你的手机分辨率,记得修改啊</p>
+<pre><code><span class="comment">ffmpeg</span> <span class="literal">-</span><span class="comment">vframes</span> <span class="comment">1</span> <span class="literal">-</span><span class="comment">vcodec</span> <span class="comment">rawvideo</span> <span class="literal">-</span><span class="comment">f</span> <span class="comment">rawvideo</span> <span class="literal">-</span><span class="comment">pix_fmt</span> <span class="comment">rgb565le</span> <span class="literal">-</span><span class="comment">s</span> <span class="comment">480x800</span> <span class="literal">-</span><span class="comment">i</span> <span class="comment">fb0</span>.<span class="comment">raw</span> <span class="literal">-</span><span class="comment">f</span> <span class="comment">image2</span> <span class="literal">-</span><span class="comment">vcodec</span> <span class="comment">png</span> <span class="comment">fb0</span>.<span class="comment">png</code></pre>
+<p>嗯,然后你会发现在当前目录下生产了一个fb0.png文件,那就是截图啦~</p>
+<p>此方法你也可以在开机状态下使用哦~</p>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[MTK机子修复分区信息]]></title>
+    <link href="http://riloli.github.io/2013/10/05/mtk机子修复分区信息/"/>
+    <id>http://riloli.github.io/2013/10/05/mtk机子修复分区信息/</id>
+    <published>2013-10-05T08:57:03.000Z</published>
+    <updated>2013-10-05T08:57:58.000Z</updated>
+    <content type="html"><![CDATA[<p>这是前一个星期的事了,最近一直懒得写博客~</p>
+<p>此事是由于我误刷了内核,然后导致分区信息出错…</p>
+<p>内置存储挂载不上,也找不到内置存储的分区!</p>
+<p>如果不是star的帮助.估计俺的爪机就要返厂了!!</p>
+<a id="more"></a>
+
+<p>接下来说下我的修复方法,可能会对你们有帮助</p>
+<p>首先叫别人从没有问题的机子中提取ebr文件.</p>
+<p>提取命令(仅适用MTK机子,并且需要ROOT):</p>
+<pre><code><span class="variable">$ </span>adb shell
+<span class="variable">$ </span>su
+<span class="comment"># dd if=/dev/ebr1 /sdcard/ebr1</span>
+<span class="comment"># dd if=/dev/ebr2 /sdcard/ebr2</span>
+<span class="comment"># exit</span>
+<span class="variable">$ </span>exit
+<span class="variable">$ </span>adb pull /sdcard/ebr1
+<span class="variable">$ </span>adb pull /sdcard/ebr2</code></pre>
+<p>这样你的目录下就会出现两个文件,分别是ebr1和ebr2</p>
+<p>提取出来了,那该怎么刷回去呢??原理就是反过来!</p>
+<pre><code><span class="variable">$ </span>adb push ebr1 /data/local/tmp/
+<span class="variable">$ </span>adb push ebr2 /data/local/tmp/
+<span class="variable">$ </span>adb shell su -c <span class="string">"dd if=/data/local/tmp/ebr1 of=/dev/ebr1"</span>
+<span class="variable">$ </span>adb shell su -c <span class="string">"dd if=/data/local/tmp/ebr2 of=/dev/ebr2"</span>
+<span class="variable">$ </span>adb reboot</code></pre>
+<p>重启后内置存储就恢复了!如果你们分区有问题可以试试这个办法!</p>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[Android去除CPU占用过高时屏幕四周闪红框]]></title>
+    <link href="http://riloli.github.io/2013/10/05/android去除cpu占用过高时屏幕四周闪红框/"/>
+    <id>http://riloli.github.io/2013/10/05/android去除cpu占用过高时屏幕四周闪红框/</id>
+    <published>2013-10-05T08:53:46.000Z</published>
+    <updated>2013-10-05T08:54:14.000Z</updated>
+    <content type="html"><![CDATA[<p>话说有些时间没有更新博客了,今天正好解决这个问题,顺便把它记录下来..</p>
+<p>今天遇到的情况是这样的,当CPU占用过高时,屏幕四周会出现一个红框.</p>
+<p>闪一次两次算了,但是挺萌的(TMD)不停的闪,我的钛合金狗眼都受不了!!</p>
+<a id="more"></a>
+
+<p>首先我在“开发人员选项”,里面勾掉“严格模式”,闪屏有改善,但是还是存在啊~</p>
+<p>那该肿么办啊,请看下面讲解!!</p>
+<p>打开system/build.prop,加入下面的代码</p>
+<pre><code>persist<span class="variable">.sys</span><span class="variable">.strictmode</span><span class="variable">.visual</span>=<span class="number">0</span>
+persist<span class="variable">.sys</span><span class="variable">.strictmode</span><span class="variable">.disable</span>=<span class="number">1</span></code></pre>
+<p>然后保存重启,问题即可解决!! &gt;////&lt;</p>
+<p>话说大蛋一放假就去陪女朋友了,都不陪俺,俺桑心了..</p>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[Qualcomm device使用ION memory manager取代PMEM]]></title>
+    <link href="http://riloli.github.io/2013/10/05/qualcomm-device使用ion-memory-manager取代pmem/"/>
+    <id>http://riloli.github.io/2013/10/05/qualcomm-device使用ion-memory-manager取代pmem/</id>
+    <published>2013-10-05T08:49:46.000Z</published>
+    <updated>2013-10-05T08:51:30.000Z</updated>
+    <content type="html"><![CDATA[<p>今天写好device,成功编译出CM,接下来肯定是调戏啦(你什么都没看到)~</p>
+<p>BUG肯定也是一堆堆的!一开机,果然一堆error~可是尼玛,大蛋一放假就不见人了!!!</p>
+<p>我自己折腾几个小时容易么我,我谷歌了几个小时容易么我ヽ(｀д´)ﾉ</p>
+<a id="more"></a>
+
+<pre><code><span class="number">06</span>-<span class="number">09</span> <span class="number">17</span>:<span class="number">15</span>:<span class="number">48.570</span>: D/memalloc(<span class="number">138</span>): init_pmem_area: Initializing pmem area
+<span class="number">06</span>-<span class="number">09</span> <span class="number">17</span>:<span class="number">15</span>:<span class="number">48.570</span>: D/memalloc(<span class="number">138</span>): init_pmem_area_locked: Opening master pmem FD
+<span class="number">06</span>-<span class="number">09</span> <span class="number">17</span>:<span class="number">15</span>:<span class="number">48.570</span>: E/memalloc(<span class="number">138</span>): <span class="regexp">/dev/</span>pmem: Failed to open pmem device: No such file or directory
+<span class="number">06</span>-<span class="number">09</span> <span class="number">17</span>:<span class="number">15</span>:<span class="number">48.570</span>: E/memalloc(<span class="number">138</span>): <span class="regexp">/dev/</span>pmem: failed to initialize pmem area
+<span class="number">06</span>-<span class="number">09</span> <span class="number">17</span>:<span class="number">15</span>:<span class="number">48.570</span>: E/gralloc(<span class="number">138</span>): gralloc failed err=No such file or directory
+<span class="number">06</span>-<span class="number">09</span> <span class="number">17</span>:<span class="number">15</span>:<span class="number">48.570</span>: W/GraphicBufferAllocator(<span class="number">138</span>): WOW! gralloc alloc failed, waiting <span class="keyword">for</span> pending frees!
+<span class="number">06</span>-<span class="number">09</span> <span class="number">17</span>:<span class="number">15</span>:<span class="number">48.570</span>: E/gralloc(<span class="number">138</span>): gralloc failed err=No such file or directory
+<span class="number">06</span>-<span class="number">09</span> <span class="number">17</span>:<span class="number">15</span>:<span class="number">48.570</span>: W/GraphicBufferAllocator(<span class="number">138</span>): alloc(<span class="number">480</span>, <span class="number">800</span>, <span class="number">2</span>, <span class="number">00000</span>b03, ...) failed -<span class="number">2</span> (No such file or directory)
+<span class="number">06</span>-<span class="number">09</span> <span class="number">17</span>:<span class="number">15</span>:<span class="number">48.570</span>: E/SurfaceFlinger(<span class="number">138</span>): GraphicBufferAlloc::createGraphicBuffer(w=<span class="number">480</span>, h=<span class="number">800</span>) failed (No such file or directory), handle=<span class="number">0x0</span>
+<span class="number">06</span>-<span class="number">09</span> <span class="number">17</span>:<span class="number">15</span>:<span class="number">48.570</span>: E/BufferQueue(<span class="number">138</span>): [BootAnimation] dequeueBuffer: SurfaceComposer::createGraphicBuffer failed
+<span class="number">06</span>-<span class="number">09</span> <span class="number">17</span>:<span class="number">15</span>:<span class="number">48.570</span>: W/Adreno200-EGLSUB(<span class="number">412</span>): <span class="xml"><span class="tag">&lt;<span class="title">DequeueBuffer:420</span>&gt;</span>: dequeue native buffer fail: No such file or directory
+06-09 17:15:48.580: W/Adreno200-EGL(412): <span class="tag">&lt;<span class="title">qeglDrvAPI_eglMakeCurrent:2855</span>&gt;</span>: EGL_BAD_ALLOC
+06-09 17:15:48.580: E/libEGL(412): eglMakeCurrent:593 error 3003 (EGL_BAD_ALLOC)
+06-09 17:15:48.580: E/SurfaceFlinger(138): GL error 0x0505
+06-09 17:15:48.580: W/Adreno200-EGLSUB(138): <span class="tag">&lt;<span class="title">GetBackBuffer:2181</span>&gt;</span>: handle base address is NULL
+06-09 17:15:48.580: W/Adreno200-ES20(138): <span class="tag">&lt;<span class="title">gl2_surface_swap:43</span>&gt;</span>: GL_OUT_OF_MEMORY
+06-09 17:15:48.580: W/Adreno200-EGL(138): <span class="tag">&lt;<span class="title">qeglDrvAPI_eglSwapBuffers:3482</span>&gt;</span>: EGL_BAD_ALLOC</span></code></pre>
+<p>上面就是错误信息啦,一眼看过去就看出了pmem驱动无法打开</p>
+<p>What,为神马打不开啊???因为文件不存在啊,魂淡!</p>
+<p>然后我就把kernel的config给提取出来看了下</p>
+<pre><code><span class="variable">$ </span>adb pull /proc/config.gz
+<span class="constant">KB</span>/s (<span class="number">20151</span> bytes <span class="keyword">in</span> <span class="number">0</span>.080s)
+<span class="variable">$ </span>gunzip -c config.gz |grep <span class="constant">PMEM</span>
+<span class="constant">CONFIG_ANDROID_PMEM</span>=y</code></pre>
+<p>次奥,内核都开启了PMEM为神马还是不行啊!!!(つД`)</p>
+<p>好吧,接着我就去看dmesg,看看到底是神马回事…</p>
+<pre><code><span class="tag">&lt;<span class="title">6</span>&gt;</span>[ 2.445319] loop: module loaded
+<span class="tag">&lt;<span class="title">1</span>&gt;</span>[ 2.447678] pmem: pmem_setup: unable to register pmem driver(pmem) - zero size passed in!
+<span class="tag">&lt;<span class="title">4</span>&gt;</span>[ 2.455961] android_pmem: probe of android_pmem.0 failed with error -1
+<span class="tag">&lt;<span class="title">1</span>&gt;</span>[ 2.462321] pmem: pmem_setup: unable to register pmem driver(pmem_adsp) - zero size passed in!
+<span class="tag">&lt;<span class="title">4</span>&gt;</span>[ 2.471003] android_pmem: probe of android_pmem.1 failed with error -1
+<span class="tag">&lt;<span class="title">1</span>&gt;</span>[ 2.477379] pmem: pmem_setup: unable to register pmem driver(pmem_audio) - zero size passed in!
+<span class="tag">&lt;<span class="title">4</span>&gt;</span>[ 2.486199] android_pmem: probe of android_pmem.2 failed with error -1</code></pre>
+<p>好吧,pmem都起不来了,怪不得找不到驱动…</p>
+<p>个人感觉那货需要从内核源码搞了,但是没有源码啊,肿么破???</p>
+<p>那俺就只好用ION取代PMEM了,pougai!!!!</p>
+<p>打开device/{manufacturer}/{device}/BoardConfig.mk,添加下面的代码</p>
+<pre><code><span class="comment"># Uses ION memory manager,Renounce the use of PMEM</span>
+<span class="title">TARGET_USES_ION</span> := <span class="built_in">true</span></code></pre>
+<p>然后重新编译,你也可以用mmm单独编译模块~</p>
+<p>刷进手机,重启,看log!!欧耶,这个BUG没有了,但是剩下的BUG还有一堆堆…</p>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[修改自动亮度下背光和按键的亮度]]></title>
+    <link href="http://riloli.github.io/2013/10/05/修改自动亮度下背光和按键的亮度/"/>
+    <id>http://riloli.github.io/2013/10/05/修改自动亮度下背光和按键的亮度/</id>
+    <published>2013-10-05T08:39:27.000Z</published>
+    <updated>2013-10-05T08:44:50.000Z</updated>
+    <content type="html"><![CDATA[<p>乐蛙又出现BUG了,高通拼包的BUG就是多!设置自动亮度后,按住光感器,屏幕会一片黑..</p>
+<p>第一感觉就是去看Log….Log如下~</p>
+<pre><code>E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">34</span>
+E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">33</span>
+E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">32</span>
+E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">31</span>
+E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">32</span></code></pre>
+<a id="more"></a>
+
+<pre><code>E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">30</span>
+E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">29</span>
+E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">28</span>
+E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">26</span>
+E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">23</span>
+E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">19</span>
+E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">16</span>
+E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">12</span>
+E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">10</span></code></pre>
+<p>从此可以看到,屏幕亮度降到10后,屏幕就黑了,那我们就需要把最低亮度调高!</p>
+<p>感谢大蛋的指导,让我们一起大喊:&quot;大蛋教万岁,大蛋教武运长久!!!&quot;</p>
+<p>首先我们需要加载和反编译framework-res.apk</p>
+<pre><code><span class="comment">$</span> <span class="comment">apktool</span> <span class="comment">if</span> <span class="comment">framework</span>-<span class="comment">res</span>.<span class="comment">apk</span>
+<span class="comment">I:</span> <span class="comment">Framework</span> <span class="comment">installed</span> <span class="comment">to:</span> <span class="comment">/home/michellgaby/apktool/framework/1</span>.<span class="comment">apk</span>
+<span class="comment">$</span> <span class="comment">apktool</span> <span class="comment">d</span> <span class="comment">framework</span>-<span class="comment">res</span>.<span class="comment">apk</span> 
+<span class="comment">I:</span> <span class="comment">Loading</span> <span class="comment">resource</span> <span class="comment">table</span>.<span class="string">.</span><span class="string">.</span>
+<span class="comment">I:</span> <span class="comment">Loaded</span>.
+<span class="comment">I:</span> <span class="comment">Decoding</span> <span class="comment">AndroidManifest</span>.<span class="comment">xml</span> <span class="comment">with</span> <span class="comment">resources</span>.<span class="string">.</span><span class="string">.</span>
+<span class="comment">I:</span> <span class="comment">Regular</span> <span class="comment">manifest</span> <span class="comment">package</span>.<span class="string">.</span><span class="string">.</span>
+<span class="comment">I:</span> <span class="comment">Decoding</span> <span class="comment">file</span>-<span class="comment">resources</span>.<span class="string">.</span><span class="string">.</span>
+<span class="comment">I:</span> <span class="comment">Decoding</span> <span class="comment">values</span> <span class="comment">*/*</span> <span class="comment">XMLs</span>.<span class="string">.</span><span class="string">.</span>
+<span class="comment">I:</span> <span class="comment">Done</span>.
+<span class="comment">I:</span> <span class="comment">Copying</span> <span class="comment">assets</span> <span class="comment">and</span> <span class="comment">libs</span>.<span class="string">.</span><span class="string">.</span></code></pre>
+<p>然后编辑framework-res_apk/res/values/arrays.xml文件~</p>
+<p>如果framework-res_apk/res/values-zh-rCN/arrays.xml里面也有对应项的话,那就修改,没有就不需要修改!</p>
+<p>接着定位为下面代码的位置</p>
+<pre><code><span class="tag">&lt;<span class="title">integer-array</span> <span class="attribute">name</span>=<span class="value">"config_autoBrightnessLevels"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>7<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>94<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>208<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>458<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>2223<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">integer-array</span>&gt;</span>
+<span class="tag">&lt;<span class="title">integer-array</span> <span class="attribute">name</span>=<span class="value">"config_autoBrightnessLcdBacklightValues"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>10<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>35<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>55<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>70<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>70<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>250<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">integer-array</span>&gt;</span>
+<span class="tag">&lt;<span class="title">integer-array</span> <span class="attribute">name</span>=<span class="value">"config_autoBrightnessButtonBacklightValues"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>255<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>255<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>255<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>0<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>0<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>0<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">integer-array</span>&gt;</span></code></pre>
+<p>我先来讲解下上面代码的含义吧</p>
+<p>config_autoBrightnessLevels：手机检测到的光亮度</p>
+<p>config_autoBrightnessLcdBacklightValues：对应需要设定的背光亮度</p>
+<p>config_autoBrightnessButtonBacklightValues：对应需要设定的按键灯亮度</p>
+<p>如:当检测到的光亮度低于7时，设置背光亮度为10，按键灯亮度为255。(255是最大亮度,0代表关闭灯源)</p>
+<p>我们需要修改的就是“10”这个数值,我修改为“25”,亮度太暗看手机会不习惯~</p>
+<p>修改后的代码如下</p>
+<pre><code><span class="tag">&lt;<span class="title">integer-array</span> <span class="attribute">name</span>=<span class="value">"config_autoBrightnessLevels"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>7<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>94<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>208<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>458<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>2223<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">integer-array</span>&gt;</span>
+<span class="tag">&lt;<span class="title">integer-array</span> <span class="attribute">name</span>=<span class="value">"config_autoBrightnessLcdBacklightValues"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>25<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>35<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>55<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>70<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>70<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>250<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">integer-array</span>&gt;</span>
+<span class="tag">&lt;<span class="title">integer-array</span> <span class="attribute">name</span>=<span class="value">"config_autoBrightnessButtonBacklightValues"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>255<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>255<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>255<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>0<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>0<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;<span class="title">item</span>&gt;</span>0<span class="tag">&lt;/<span class="title">item</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">integer-array</span>&gt;</span></code></pre>
+<p>然后我们回编译,出现警告不管他,我们只需要回编译后的resources.arsc文件</p>
+<pre><code>$ apktool b framework-res
+W: Could <span class="keyword">not</span> find sources
+I: Checking whether resources has changed...
+I: Building resources...
+aapt: warning: <span class="typename">string</span> <span class="attribute">'url_dialog_choice_message</span>' has no <span class="keyword">default</span> translation <span class="keyword">in</span> /home/michellgaby/tmp/framework-res/res; found: zh_CN
+aapt: warning: <span class="typename">string</span> <span class="attribute">'url_dialog_choice_title</span>' has no <span class="keyword">default</span> translation <span class="keyword">in</span> /home/michellgaby/tmp/framework-res/res; found: zh_CN
+I: Building apk <span class="keyword">file</span>...</code></pre>
+<p>把原来的framework-res.apk复制到frameowrk-res/build/apk文件夹里</p>
+<p>接着把resources.arsc打包进framework-res.apk</p>
+<pre><code>$ zip framework-res<span class="variable">.apk</span> resources<span class="variable">.arsc</span></code></pre>
+<p>用ADB传送到手机并修改权限,然后重启即可!!!</p>
+<pre><code>$ adb <span class="keyword">push</span> framework-res.apk /<span class="keyword">system</span>/framework/
+$ adb shell <span class="keyword">chmod</span> <span class="number">644</span> /<span class="keyword">system</span>/framework/framework-res.apk
+$ adb reboot</code></pre>
+<p>看看你的手机,背光是不是修改好了~欧耶!!! ヽ( ^∀^)ﾉ</p>
+<p>修改按键亮度同理,不过是修改&quot;config_autoBrightnessButtonBacklightValues&quot;下的参数!</p>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[Android触摸屏配置调试]]></title>
+    <link href="http://riloli.github.io/2013/10/05/android触摸屏配置调试/"/>
+    <id>http://riloli.github.io/2013/10/05/android触摸屏配置调试/</id>
+    <published>2013-10-05T08:35:41.000Z</published>
+    <updated>2013-10-05T08:38:18.000Z</updated>
+    <content type="html"><![CDATA[<p>前几天搞乐蛙时,进入后是鼠标模式,好坑爹的模式有木有~~</p>
+<p>但是大蛋给出了解决方法,我不怕不怕啦~让我们向大牛致敬!!!</p>
+<p>首先输入Command查看你的input配置~</p>
+<pre><code><span class="title">adb</span> shell dumpsys input</code></pre>
+<a id="more"></a>
+
+<p>下面给出我设备输出的一部分!!</p>
+<pre><code>INPUT MANAGER (dumpsys input)
+Event Hub State:
+<span class="label">BuiltInKeyboardId:</span> -<span class="number">2</span>
+<span class="label">Devices:</span>
+-<span class="number">1</span>: Virtual
+<span class="label">Classes:</span> <span class="number">0x40000023</span>
+<span class="label">Path:</span> &lt;virtual&gt;
+<span class="label">Descriptor:</span> a718a782d34bc767f4689c232d64d527998ea7fd
+<span class="label">Location:</span> 
+<span class="label">UniqueId:</span> &lt;virtual&gt;
+<span class="label">Identifier:</span> bus=<span class="number">0x0000</span>, vendor=<span class="number">0x0000</span>, product=<span class="number">0x0000</span>, version=<span class="number">0x0000</span>
+<span class="label">KeyLayoutFile:</span> /system/usr/keylayout/Generic<span class="preprocessor">.kl</span>
+<span class="label">KeyCharacterMapFile:</span> /system/usr/keychars/Virtual<span class="preprocessor">.kcm</span>
+<span class="label">ConfigurationFile:</span> 
+<span class="label">HaveKeyboardLayoutOverlay:</span> false
+<span class="number">2</span>: <span class="number">7</span>k_handset
+<span class="label">Classes:</span> <span class="number">0x00000081</span>
+<span class="label">Path:</span> /dev/input/event3
+<span class="label">Descriptor:</span> <span class="number">485</span>d69228e24f5e46da1598745890b214130dbc4
+<span class="label">Location:</span> 
+<span class="label">UniqueId:</span> 
+<span class="label">Identifier:</span> bus=<span class="number">0x0000</span>, vendor=<span class="number">0x0001</span>, product=<span class="number">0x0001</span>, version=<span class="number">0x0001</span>
+<span class="label">KeyLayoutFile:</span> /system/usr/keylayout/<span class="number">7</span>k_handset<span class="preprocessor">.kl</span>
+<span class="label">KeyCharacterMapFile:</span> /system/usr/keychars/Generic<span class="preprocessor">.kcm</span>
+<span class="label">ConfigurationFile:</span> 
+<span class="label">HaveKeyboardLayoutOverlay:</span> false
+<span class="number">3</span>: <span class="number">7</span>x27a_kp
+<span class="label">Classes:</span> <span class="number">0x00000001</span>
+<span class="label">Path:</span> /dev/input/event2
+<span class="label">Descriptor:</span> <span class="number">69</span>d9f17876369ab4fac2735426d3bc23660247c4
+<span class="label">Location:</span> 
+<span class="label">UniqueId:</span> 
+<span class="label">Identifier:</span> bus=<span class="number">0x0000</span>, vendor=<span class="number">0x0000</span>, product=<span class="number">0x0000</span>, version=<span class="number">0x0000</span>
+<span class="label">KeyLayoutFile:</span> /system/usr/keylayout/<span class="number">7</span>x27a_kp<span class="preprocessor">.kl</span>
+<span class="label">KeyCharacterMapFile:</span> /system/usr/keychars/<span class="number">7</span>x27a_kp<span class="preprocessor">.kcm</span>
+<span class="label">ConfigurationFile:</span> 
+<span class="label">HaveKeyboardLayoutOverlay:</span> false
+<span class="number">4</span>: Fts-touchscreen
+<span class="label">Classes:</span> <span class="number">0x00000015</span>
+<span class="label">Path:</span> /dev/input/event1
+<span class="label">Descriptor:</span> af69cada3c01369f38b564c8bd34be115723d040
+<span class="label">Location:</span> 
+<span class="label">UniqueId:</span> 
+<span class="label">Identifier:</span> bus=<span class="number">0x0000</span>, vendor=<span class="number">0x0000</span>, product=<span class="number">0x0000</span>, version=<span class="number">0x0000</span>
+<span class="label">KeyLayoutFile:</span> /system/usr/keylayout/Generic<span class="preprocessor">.kl</span>
+<span class="label">KeyCharacterMapFile:</span> /system/usr/keychars/Generic<span class="preprocessor">.kcm</span>
+<span class="label">ConfigurationFile:</span> /system/usr/idc/Fts-touchscreen<span class="preprocessor">.idc</span>
+<span class="label">HaveKeyboardLayoutOverlay:</span> false</code></pre>
+<p>从上面可以看到“4: Fts-touchscreen”,这货就是我的触摸屏啦(ﾟ∀ﾟ )</p>
+<p>我们看下他的配置文件,就是这货“ConfigurationFile: /system/usr/idc/Fts-touchscreen.idc”</p>
+<p>提示下,如果配置文件那显示为空的话,你就直接用你触摸屏的名字就行了,比如我的就是这样!!!</p>
+<p>然后我们把官方包里面的/system/usr/idc/Fts-touchscreen.idc给替换过去就搞定了(≧∀≦)~欧耶!</p>
+<p>不过凡事都有例外,比如我的,官方包里面就没有这个文件,那你就去CM里面找一个吧~(/ω・＼)【【【别找俺,俺是不会发给你的~</p>
+<p>把Generic.idc改为Fts-touchscreen.idc然后放进usr里面就OK了!!!(/≧▽≦/)</p>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
+  </entry>
   <entry>
     <title type="html"><![CDATA[Android无法连接adb的解决方法]]></title>
     <link href="http://riloli.github.io/2013/10/05/android无法连接adb的解决方法/"/>

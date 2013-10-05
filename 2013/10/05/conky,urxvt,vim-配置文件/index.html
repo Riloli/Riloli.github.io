@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>conky,urxvt,vim 配置文件 | Riloli's Blog</title>
+  <meta name="author" content="Riloli">
+  
+  <meta name="description" content="写点Archlinux下的软件配置，以后直接复制就行了，懒得重新配置！">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="conky,urxvt,vim 配置文件"/>
+  <meta property="og:site_name" content="Riloli's Blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Riloli's Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Riloli's Blog</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-10-05T09:12:31.000Z"><a href="/2013/10/05/conky,urxvt,vim-配置文件/">10月 5 2013</a></time>
+      
+      
+  
+    <h1 class="title">conky,urxvt,vim 配置文件</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>写点Archlinux下的软件配置，以后直接复制就行了，懒得重新配置！</p>
+<p><img src="http://images.cnitblog.com/blog/557234/201308/13192046-0d3629080d124cf48a3f68bdf8e2ea8c.png" alt=""></p>
+<a id="more"></a>
+
+<p><img src="http://images.cnitblog.com/blog/557234/201308/13192059-0351d46bf6f14579b05e02f0ca07d518.png" alt=""></p>
+<p>需要配置的软件有dwm, conky, urxvt, vim, acpi</p>
+<p>DWM的配置请看这里:<a href="https://docs.google.com/file/d/0B6L_eKOtMWLVaFNXMk5DeHk0b28/edit" target="_blank">Archlinux 安装dwm</a></p>
+<p>首先我们需要安装好这些软件！</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>sudo pacman -<span class="constant">S</span> conky rxvt-unicode vim acpi</code></pre>
+<p>Conky配置文件($HOME/.conkyrc)</p>
+<pre><code><span class="title">own_window</span> <span class="built_in">yes</span>
+own_window_type override
+own_window_colour <span class="number">000000</span>
+own_window_transparent <span class="built_in">no</span>
+own_window_hints undecorated below sticky skip_taskbar skip_pager
+double_buffer <span class="built_in">yes</span>
+cpu_avg_samples <span class="number">2</span>
+net_avg_samples <span class="number">2</span>
+use_xft <span class="built_in">no</span>
+xftfont Terminus:size=<span class="number">8</span>
+update_interval <span class="number">0</span>.<span class="number">1</span>
+minimum_size <span class="number">1680</span> <span class="number">10</span>
+maximum_width <span class="number">1680</span>
+border_width <span class="number">1</span>
+draw_outline <span class="built_in">no</span>
+default_color white
+alignment bottom_left
+use_spacer right
+no_buffers <span class="built_in">yes</span>
+uppercase <span class="built_in">no</span>
+TEXT
+<span class="variable">${alignc}</span><span class="variable">$nodename</span> <span class="variable">${color #0100ff}</span>Uptime:<span class="variable">${color white}</span> <span class="variable">$uptime</span> <span class="variable">${color #0077ff}</span>| CPU:<span class="variable">${color #0077ff}</span> <span class="variable">${color white}</span><span class="variable">${cpu}</span>%<span class="variable">${color #0077ff}</span> | FS: <span class="variable">${color lightgrey}</span><span class="variable">${fs_used /}</span>/<span class="variable">${fs_size /}</span><span class="variable">${color #0077ff}</span> | /home: <span class="variable">${color lightgrey}</span><span class="variable">${fs_used /home}</span>/<span class="variable">${fs_size /home}</span><span class="variable">${color #0077ff}</span> | RAM: <span class="variable">${color white}</span><span class="variable">$mem</span> <span class="variable">${color #0077ff}</span>| Network:<span class="variable">${color white}</span> <span class="variable">${wireless_essid wlp16s0}</span> <span class="variable">${color #0077ff}</span>| Down: <span class="variable">${color white}</span><span class="variable">${downspeed wlp16s0}</span> <span class="variable">${color #0077ff}</span>| Up: <span class="variable">${color white}</span><span class="variable">${upspeed wlp16s0}</span> <span class="variable">${color #0077ff}</span>| Battery: <span class="variable">${color white}</span> <span class="variable">${exec acpi |cut -d " " -f4}</span> <span class="variable">${color #0077ff}</span>| Volume:<span class="variable">${color white}</span> <span class="variable">${exec amixer get Master | egrep -o "[0-9]+%" | head -1 | egrep -o "[0-9]*"}</span>%</code></pre>
+<p>urxvt配置文件($HOME/.Xdefaults)</p>
+<pre><code>!!<span class="char">$H</span>OME/.<span class="class">Xdefaults</span>
+<span class="class">URxvt</span>.<span class="method">preeditType:</span><span class="class">Root</span>
+!!调整此处设置输入法
+<span class="class">URxvt</span>.<span class="method">inputMethod:</span>ibus
+!!颜色设置
+<span class="class">URxvt</span>.<span class="method">depth:</span><span class="number">32</span>
+!!中括号内数表示透明度
+<span class="class">URxvt</span>.<span class="method">background:</span>[<span class="number">90</span>]#<span class="number">000000</span>
+<span class="class">URxvt</span>.<span class="method">foreground:</span><span class="symbol">#ffffff</span>
+<span class="class">URxvt</span>.<span class="method">colorBD:</span><span class="class">Gray95</span>
+<span class="class">URxvt</span>.<span class="method">colorUL:</span><span class="class">Green</span>
+<span class="class">URxvt</span>.<span class="method">color1:</span><span class="class">Red2</span>
+<span class="class">URxvt</span>.<span class="method">color4:</span><span class="class">RoyalBlue</span>
+<span class="class">URxvt</span>.<span class="method">color5:</span><span class="class">Magenta2</span>
+<span class="class">URxvt</span>.<span class="method">color8:</span><span class="class">Gray50</span>
+<span class="class">URxvt</span>.<span class="method">color10:</span><span class="class">Green2</span>
+<span class="class">URxvt</span>.<span class="method">color12:</span><span class="class">DodgerBlue</span>
+<span class="class">URxvt</span>.<span class="method">color14:</span><span class="class">Cyan2</span>
+<span class="class">URxvt</span>.<span class="method">color15:</span><span class="class">Gray95</span>
+!!<span class="class">URL</span>操作
+<span class="class">URxvt</span>.<span class="method">urlLauncher:</span>chromium
+<span class="class">URxvt</span>.matcher.<span class="method">button:</span><span class="number">1</span>
+<span class="class">Urxvt</span>.perl-ext-<span class="method">common:</span>matcher
+!!滚动条设置
+<span class="class">URxvt</span>.<span class="method">scrollBar:</span><span class="class">True</span>
+<span class="class">URxvt</span>.<span class="method">scrollBar_right:</span><span class="class">True</span>
+<span class="class">URxvt</span>.<span class="method">scrollBar_floating:</span><span class="class">False</span>
+<span class="class">URxvt</span>.<span class="method">scrollstyle:</span>plain
+!!滚屏设置
+<span class="class">URxvt</span>.<span class="method">mouseWheelScrollPage:</span><span class="class">True</span>
+<span class="class">URxvt</span>.<span class="method">scrollTtyOutput:</span><span class="class">False</span>
+<span class="class">URxvt</span>.<span class="method">scrollWithBuffer:</span><span class="class">True</span>
+<span class="class">URxvt</span>.<span class="method">scrollTtyKeypress:</span><span class="class">True</span>
+!!光标闪烁
+<span class="class">URxvt</span>.<span class="method">cursorBlink:</span><span class="class">True</span>
+<span class="class">URxvt</span>.<span class="method">saveLines:</span><span class="number">3000</span>
+!!边框
+<span class="class">URxvt</span>.<span class="method">borderLess:</span><span class="class">False</span>
+!!字体设置
+<span class="class">Xft</span>.<span class="method">dpi:</span><span class="number">96</span>
+<span class="class">URxvt</span>.<span class="method">font:</span><span class="method">xft:</span>文泉驿等宽微米黑:size=<span class="number">9</span>:style=<span class="class">Regular</span>:antialias=<span class="keyword">true</span>,<span class="method">xft:</span>文泉驿等宽微米黑:size=<span class="number">8</span>:style=<span class="class">Regular</span>:antialias=<span class="keyword">true</span>
+<span class="class">URxvt</span>.<span class="method">boldfont:</span><span class="method">xft:</span>文泉驿等宽微米黑:size=<span class="number">9</span>:style=<span class="class">BOld</span>:antialias=<span class="keyword">true</span>,<span class="method">xft:</span>文泉驿等宽微米黑:size=<span class="number">8</span>:style=<span class="class">Bold</span>:antialias=<span class="keyword">true</span></code></pre>
+<p>VIM配置文件($HOME/.vimrc)</p>
+<pre><code><span class="operator"><span class="keyword">set</span> fileencodings=utf-<span class="number">8</span>,ucs-bom,gb18030,gbk,gb2312,cp936
+<span class="keyword">set</span> bg=dark
+colorscheme lucius
+<span class="keyword">set</span> nu
+<span class="keyword">set</span> hlsearch
+<span class="keyword">set</span> backspace=<span class="number">2</span>
+<span class="keyword">set</span> autoindent
+<span class="keyword">set</span> ruler
+<span class="keyword">set</span> showmode
+syntax <span class="keyword">on</span>
+<span class="keyword">set</span> tabstop=<span class="number">4</span>
+<span class="keyword">set</span> history=<span class="number">50</span>
+<span class="keyword">set</span> nolinebreak
+<span class="keyword">set</span> backspace=indent,eol,<span class="keyword">start</span>
+<span class="keyword">set</span> t_Co=<span class="number">256</span></code></pre>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/Archlinux/">Archlinux</a>
+  </div>
+
+        <!-- Baidu Button BEGIN -->
+        <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare">
+        <a class="bds_tsina">新浪微博</a>
+        <a class="bds_qzone">QQ空间</a>
+        <a class="bds_tqq">腾讯微博</a>
+        <a class="bds_twi">Twitter</a>
+        <a class="bds_fbook">Facebook</a>
+        <span class="bds_more">更多</span>
+        </div>
+        <script type="text/javascript" id="bdshare_js" data="type=tools&amp;mini=1&amp;uid=6603412" ></script>
+        <script type="text/javascript" id="bdshell_js"></script>
+        <script type="text/javascript">
+        document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000);
+        </script>
+        <!-- Baidu Button END -->
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"riloli-blogs"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:riloli.github.io">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Archlinux/" style="font-size: 10.00px;">Archlinux</a>
+  </div>
+</div>
+
+
+  <div class="widget tag">
+<h3 class="title">友情链接</h3>
+<ul class="entry">
+<li><a href="http://flau.me/" target="_blank" title="蛋蛋的博客">芦苇丛的鹅蛋</a></li>
+</ul>
+</div>
+
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=2&isTitle=0&noborder=0&isWeibo=1&isFans=0&uid=3833642410&verifier=84bea53d&colors=d6f3f7,ffffff,666666,0082cb,ecfbfd&dpc=1"></iframe>
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 Riloli
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

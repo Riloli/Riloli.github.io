@@ -1,0 +1,206 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>编译android程序时DEX过程出现错误 | Riloli's Blog</title>
+  <meta name="author" content="Riloli">
+  
+  <meta name="description" content="今天编译高级设置时出现了错误,这好坑爹啊~
+于是我开始检查代码,发现代码没有错误啊,然后观察MAKE的步骤才发现是DEX时出现了问题!!
+下面是错误的LOG:">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="编译android程序时DEX过程出现错误"/>
+  <meta property="og:site_name" content="Riloli's Blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Riloli's Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Riloli's Blog</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-10-05T09:00:08.000Z"><a href="/2013/10/05/编译android程序时dex过程出现错误/">10月 5 2013</a></time>
+      
+      
+  
+    <h1 class="title">编译android程序时DEX过程出现错误</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>今天编译高级设置时出现了错误,这好坑爹啊~</p>
+<p>于是我开始检查代码,发现代码没有错误啊,然后观察MAKE的步骤才发现是DEX时出现了问题!!</p>
+<p>下面是错误的LOG:</p>
+<a id="more"></a>
+
+<pre><code><span class="label">Information:</span>Using javac <span class="number">1.7</span><span class="number">.0</span>_25 to compile java sources
+<span class="label">Information:</span>Module <span class="string">"AdvanceSettings"</span> was fully rebuilt due to project configuration/dependencies changes
+<span class="label">Information:</span>Compilation completed with <span class="number">22</span> errors <span class="keyword">and</span> <span class="number">0</span> warnings <span class="keyword">in</span> <span class="number">17</span> <span class="keyword">sec</span>
+<span class="label">Information:</span><span class="number">22</span> errors
+<span class="label">Information:</span><span class="number">0</span> warnings
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] UNEXPECTED TOP-LEVEL EXCEPTION:
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] java<span class="preprocessor">.lang</span><span class="preprocessor">.IllegalArgumentException</span>: already added: Landroid/support/v4/accessibilityservice/AccessibilityServiceInfoCompat<span class="comment">;</span>
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.dex</span><span class="preprocessor">.file</span><span class="preprocessor">.ClassDefsSection</span><span class="preprocessor">.add</span>(ClassDefsSection<span class="preprocessor">.java</span>:<span class="number">123</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.dex</span><span class="preprocessor">.file</span><span class="preprocessor">.DexFile</span><span class="preprocessor">.add</span>(DexFile<span class="preprocessor">.java</span>:<span class="number">163</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span><span class="preprocessor">.processClass</span>(Main<span class="preprocessor">.java</span>:<span class="number">490</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span><span class="preprocessor">.processFileBytes</span>(Main<span class="preprocessor">.java</span>:<span class="number">459</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span><span class="preprocessor">.access</span>$400(Main<span class="preprocessor">.java</span>:<span class="number">67</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span>$1<span class="preprocessor">.processFileBytes</span>(Main<span class="preprocessor">.java</span>:<span class="number">398</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.cf</span><span class="preprocessor">.direct</span><span class="preprocessor">.ClassPathOpener</span><span class="preprocessor">.processArchive</span>(ClassPathOpener<span class="preprocessor">.java</span>:<span class="number">245</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.cf</span><span class="preprocessor">.direct</span><span class="preprocessor">.ClassPathOpener</span><span class="preprocessor">.processOne</span>(ClassPathOpener<span class="preprocessor">.java</span>:<span class="number">131</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.cf</span><span class="preprocessor">.direct</span><span class="preprocessor">.ClassPathOpener</span><span class="preprocessor">.process</span>(ClassPathOpener<span class="preprocessor">.java</span>:<span class="number">109</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span><span class="preprocessor">.processOne</span>(Main<span class="preprocessor">.java</span>:<span class="number">422</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span><span class="preprocessor">.processAllFiles</span>(Main<span class="preprocessor">.java</span>:<span class="number">333</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.android</span><span class="preprocessor">.dx</span><span class="preprocessor">.command</span><span class="preprocessor">.dexer</span><span class="preprocessor">.Main</span><span class="preprocessor">.run</span>(Main<span class="preprocessor">.java</span>:<span class="number">209</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at sun<span class="preprocessor">.reflect</span><span class="preprocessor">.NativeMethodAccessorImpl</span><span class="preprocessor">.invoke</span>0(Native Method)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at sun<span class="preprocessor">.reflect</span><span class="preprocessor">.NativeMethodAccessorImpl</span><span class="preprocessor">.invoke</span>(NativeMethodAccessorImpl<span class="preprocessor">.java</span>:<span class="number">57</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at sun<span class="preprocessor">.reflect</span><span class="preprocessor">.DelegatingMethodAccessorImpl</span><span class="preprocessor">.invoke</span>(DelegatingMethodAccessorImpl<span class="preprocessor">.java</span>:<span class="number">43</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at java<span class="preprocessor">.lang</span><span class="preprocessor">.reflect</span><span class="preprocessor">.Method</span><span class="preprocessor">.invoke</span>(Method<span class="preprocessor">.java</span>:<span class="number">606</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at org<span class="preprocessor">.jetbrains</span><span class="preprocessor">.android</span><span class="preprocessor">.compiler</span><span class="preprocessor">.tools</span><span class="preprocessor">.AndroidDxRunner</span><span class="preprocessor">.runDex</span>(AndroidDxRunner<span class="preprocessor">.java</span>:<span class="number">139</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at org<span class="preprocessor">.jetbrains</span><span class="preprocessor">.android</span><span class="preprocessor">.compiler</span><span class="preprocessor">.tools</span><span class="preprocessor">.AndroidDxRunner</span><span class="preprocessor">.main</span>(AndroidDxRunner<span class="preprocessor">.java</span>:<span class="number">261</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] at <span class="keyword">com</span><span class="preprocessor">.intellij</span><span class="preprocessor">.rt</span><span class="preprocessor">.execution</span><span class="preprocessor">.CommandLineWrapper</span><span class="preprocessor">.main</span>(CommandLineWrapper<span class="preprocessor">.java</span>:<span class="number">121</span>)
+<span class="label">Error:</span>Android Dex: [AdvanceSettings] <span class="number">1</span> error<span class="comment">; aborting</span></code></pre>
+<p>于是我就去谷歌,得出:因为有重复的包添加了,只要把重复的包从BuildPath中移除就行了..</p>
+<p>我就去看了下BuildPath,发现有两个外部jar,一个是android-support-v13.jar,还有一个是android-support-v4.jar</p>
+<p>然后我把android-support-v4.jar给移除,重新编译!!!欧耶,一次通过~~~</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/Android/">Android</a>
+  </div>
+
+        <!-- Baidu Button BEGIN -->
+        <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare">
+        <a class="bds_tsina">新浪微博</a>
+        <a class="bds_qzone">QQ空间</a>
+        <a class="bds_tqq">腾讯微博</a>
+        <a class="bds_twi">Twitter</a>
+        <a class="bds_fbook">Facebook</a>
+        <span class="bds_more">更多</span>
+        </div>
+        <script type="text/javascript" id="bdshare_js" data="type=tools&amp;mini=1&amp;uid=6603412" ></script>
+        <script type="text/javascript" id="bdshell_js"></script>
+        <script type="text/javascript">
+        document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000);
+        </script>
+        <!-- Baidu Button END -->
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"riloli-blogs"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:riloli.github.io">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Archlinux/" style="font-size: 10.00px;">Archlinux</a>
+  </div>
+</div>
+
+
+  <div class="widget tag">
+<h3 class="title">友情链接</h3>
+<ul class="entry">
+<li><a href="http://flau.me/" target="_blank" title="蛋蛋的博客">芦苇丛的鹅蛋</a></li>
+</ul>
+</div>
+
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=2&isTitle=0&noborder=0&isWeibo=1&isFans=0&uid=3833642410&verifier=84bea53d&colors=d6f3f7,ffffff,666666,0082cb,ecfbfd&dpc=1"></iframe>
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 Riloli
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

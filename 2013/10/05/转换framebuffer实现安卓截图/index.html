@@ -3,16 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Android无法连接adb的解决方法 | Riloli's Blog</title>
+  <title>转换framebuffer实现安卓截图 | Riloli's Blog</title>
   <meta name="author" content="Riloli">
   
-  <meta name="description" content="今天在折腾乐蛙时发现无法链接ADB了,但是手机却显示USB调试模式!
-然后想起了大蛋曾经告诉我CM的解决方法,于是你懂得,俺差点就把菊花给卖了呢(/Д`)~ﾟ｡">
+  <meta name="description" content="编译出了RECOVERY肯定需要截图分享的啦,可是又不能通过DDMS截图~
+那就只好通过提取手机的fb0文件来实现截图.
+首先你需要ADB~ 嗯,这个都没有的话你就别看下去了…">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Android无法连接adb的解决方法"/>
+  <meta property="og:title" content="转换framebuffer实现安卓截图"/>
   <meta property="og:site_name" content="Riloli's Blog"/>
 
   
@@ -54,42 +55,29 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-10-04T16:07:58.000Z"><a href="/2013/10/05/android无法连接adb的解决方法/">10月 5 2013</a></time>
+        <time datetime="2013-10-05T08:58:19.000Z"><a href="/2013/10/05/转换framebuffer实现安卓截图/">10月 5 2013</a></time>
       
       
   
-    <h1 class="title">Android无法连接adb的解决方法</h1>
+    <h1 class="title">转换framebuffer实现安卓截图</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>今天在折腾乐蛙时发现无法链接ADB了,但是手机却显示USB调试模式!</p>
-<p>然后想起了大蛋曾经告诉我CM的解决方法,于是你懂得,俺差点就把菊花给卖了呢(/Д`)~ﾟ｡</p>
+        <p>编译出了RECOVERY肯定需要截图分享的啦,可是又不能通过DDMS截图~</p>
+<p>那就只好通过提取手机的fb0文件来实现截图.</p>
+<p>首先你需要ADB~ 嗯,这个都没有的话你就别看下去了…</p>
 <a id="more"></a>
 
-<pre><code><span class="title">adb</span> shell rm -r /<span class="typedef"><span class="keyword">data</span>/property</span></code></pre>
-<p>进REC干掉这个目录后,CM就可以正常连接了,可是尼玛我的乐蛙肿么还是不行啊!!!</p>
-<p>我的菊花白卖了啊!!!!魂淡!!!! （╯‵□′）╯︵┴─┴</p>
-<p>折腾的细节就不多说了,都是泪啊!!!</p>
-<p>经过俺不断的DEBUG…尼玛,终于给我找到了(;´༎ຶД༎ຶ`)</p>
-<p>原default.prop文件如下</p>
-<pre><code><span class="preprocessor">#</span>
-<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
-<span class="preprocessor">#</span>
-ro<span class="variable">.secure</span>=<span class="number">0</span>
-ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
-ro<span class="variable">.debuggable</span>=<span class="number">1</span>
-persist<span class="variable">.sys</span><span class="variable">.usb</span><span class="variable">.config</span>=mtp,diag,serial_smd,serial_tty,rmnet_smd,mass_storage,serial_smd,adb</code></pre>
-<p>妈蛋,直接干掉最后的那行就可以连接了!!!!!!!(ÒωÓױ)</p>
-<p>修改后的default.prop</p>
-<pre><code><span class="preprocessor">#</span>
-<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
-<span class="preprocessor">#</span>
-ro<span class="variable">.secure</span>=<span class="number">0</span>
-ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
-ro<span class="variable">.debuggable</span>=<span class="number">1</span></code></pre>
-<p>好吧,安卓是坑爹的,错了一个参数都要你的命啊!!!!!!!!!!!</p>
+<p>还需要ffmpeg,我们需要使用他进行转码,不转码你怎么看图片啊</p>
+<p>就犹如AV一样,不转码肿么放手机上看啊,魂淡!!!咳咳,扯远了</p>
+<p>首先我们把fb0文件提取出来先</p>
+<pre><code><span class="title">adb</span> pull /dev/graphics/fb0 fb0.raw</code></pre>
+<p>然后通过ffmpeg进行转码,那个“480x800”是你的手机分辨率,记得修改啊</p>
+<pre><code><span class="comment">ffmpeg</span> <span class="literal">-</span><span class="comment">vframes</span> <span class="comment">1</span> <span class="literal">-</span><span class="comment">vcodec</span> <span class="comment">rawvideo</span> <span class="literal">-</span><span class="comment">f</span> <span class="comment">rawvideo</span> <span class="literal">-</span><span class="comment">pix_fmt</span> <span class="comment">rgb565le</span> <span class="literal">-</span><span class="comment">s</span> <span class="comment">480x800</span> <span class="literal">-</span><span class="comment">i</span> <span class="comment">fb0</span>.<span class="comment">raw</span> <span class="literal">-</span><span class="comment">f</span> <span class="comment">image2</span> <span class="literal">-</span><span class="comment">vcodec</span> <span class="comment">png</span> <span class="comment">fb0</span>.<span class="comment">png</code></pre>
+<p>嗯,然后你会发现在当前目录下生产了一个fb0.png文件,那就是截图啦~</p>
+<p>此方法你也可以在开机状态下使用哦~</p>
 
       
     </div>

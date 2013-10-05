@@ -1,0 +1,305 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Archlinux 安装dwm | Riloli's Blog</title>
+  <meta name="author" content="Riloli">
+  
+  <meta name="description" content="用过KDE,Gnome,Lxde,但对我这种只需要终端和浏览器的人未免有点繁琐了！于是换了个平铺式WM，对我来说感觉非常棒！！
+DWM非常轻，整个WM一个就两个源码文件，而且自己修改源码定制也非常容易！
+Archlinux通过ABS来获取源码安装还是很简单的，我们先来安装ABS和dmenu(这货是X下的轻量菜单)">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Archlinux 安装dwm"/>
+  <meta property="og:site_name" content="Riloli's Blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Riloli's Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Riloli's Blog</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-10-05T09:08:10.000Z"><a href="/2013/10/05/archlinux-安装dwm/">10月 5 2013</a></time>
+      
+      
+  
+    <h1 class="title">Archlinux 安装dwm</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>用过KDE,Gnome,Lxde,但对我这种只需要终端和浏览器的人未免有点繁琐了！于是换了个平铺式WM，对我来说感觉非常棒！！</p>
+<p>DWM非常轻，整个WM一个就两个源码文件，而且自己修改源码定制也非常容易！</p>
+<p>Archlinux通过ABS来获取源码安装还是很简单的，我们先来安装ABS和dmenu(这货是X下的轻量菜单)</p>
+<a id="more"></a>
+
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>sudo pacman -<span class="constant">S</span> base-devel abs dmenu</code></pre>
+<p>准备好后就可以用ABS从仓库获取DWM最新的源码了</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>abs community/dwm</code></pre>
+<p>我们需要把源码拷贝的一个地方，方便修改，如$HOME目录</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>cp -r /var/abs/community/dwm ~<span class="regexp">/dwm</code></pre>
+<p>接下来就是修改了，我们要让他支持中文，所以需要打xft补丁</p>
+<pre><code>[michellgaby<span class="property">@K</span>-<span class="literal">on</span> ~]$ cd ~<span class="regexp">/dwm/src/</span>dwm-<span class="number">6.0</span>
+[michellgaby<span class="property">@K</span>-<span class="literal">on</span> ~]$ patch &lt;dwm-<span class="number">6.0</span>-xft.diff</code></pre>
+<p>这个补丁谷歌一下就能找到了！</p>
+<p>我打完补丁还需要修改一下config.mk，分别在INCS后面加上-I/usr/include/freetype2以及在LIBS后面加上-lfreetype -lXft</p>
+<p>我们打完补丁了，接下来就是定制自己的WM了，先回到源码目录</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>cd ~<span class="regexp">/dwm</code></pre>
+<p>然后再编辑config.h文件，下面是我的config.h文件(仅供参考)</p>
+<pre><code>/* See LICENSE file <span class="keyword">for</span> copyright <span class="keyword">and</span> license details. */
+/* appearance */
+static const char font[]            = <span class="string">"WenQuanYi Micro Hei"</span>;
+static const char normbordercolor[] = <span class="string">"#333333"</span>;
+static const char normbgcolor[]     = <span class="string">"#051121"</span>;
+static const char normfgcolor[]     = <span class="string">"#FFFFFF"</span>;
+static const char selbordercolor[]  = <span class="string">"#1793D1"</span>;
+static const char selbgcolor[]      = <span class="string">"#1793D1"</span>;
+static const char selfgcolor[]      = <span class="string">"#FFFFFF"</span>;
+static const unsigned int borderpx  = <span class="number">1</span>;        /* border pixel of windows */
+static const unsigned int snap      = <span class="number">32</span>;       /* snap pixel */
+static const Bool showbar           = True;     /* False means no bar */
+static const Bool topbar            = True;     /* False means bottom bar */
+/* tagging */
+static const char *tags[] = { <span class="string">"网络"</span>, <span class="string">"聊天"</span>, <span class="string">"工作"</span>, <span class="string">"系统"</span>, <span class="string">"杂项"</span> };
+static const Rule rules[] = {
+    /* class      instance    title       tags mask     isfloating   monitor */
+    { <span class="string">"Gimp"</span>,     NULL,       NULL,       <span class="number">0</span>,            True,        -<span class="number">1</span> },
+    { <span class="string">"Firefox"</span>,  NULL,       NULL,       <span class="number">1</span> &lt;&lt; <span class="number">8</span>,       False,       -<span class="number">1</span> },
+};
+/* layout(s) */
+static const float mfact      = <span class="number">0.55</span>; /* factor of master area size [<span class="number">0.05</span>.<span class="number">.0</span><span class="number">.95</span>] */
+static const int nmaster      = <span class="number">1</span>;    /* number of clients <span class="keyword">in</span> master area */
+static const Bool resizehints = True; /* True means respect size hints <span class="keyword">in</span> tiled resizals */
+static const Layout layouts[] = {
+    /* symbol     arrange <span class="function"><span class="keyword">function</span> */
+    { "[<span class="title">T</span>]",      <span class="title">tile</span> },    /* <span class="title">first</span> <span class="title">entry</span> <span class="title">is</span> <span class="title">default</span> */
+    { "[<span class="title">F</span>]",      <span class="title">NULL</span> },    /* <span class="title">no</span> <span class="title">layout</span> <span class="title">function</span> <span class="title">means</span> <span class="title">floating</span> <span class="title">behavior</span> */
+    { "[<span class="title">M</span>]",      <span class="title">monocle</span> },
+};
+/* <span class="title">key</span> <span class="title">definitions</span> */
+#<span class="title">define</span> <span class="title">MODKEY</span> <span class="title">Mod1Mask</span>
+#<span class="title">define</span> <span class="title">TAGKEYS</span><span class="params">(KEY,TAG)</span></span> \
+    { MODKEY,                       KEY,      view,           {.ui = <span class="number">1</span> &lt;&lt; TAG} }, \
+    { MODKEY|ControlMask,           KEY,      toggleview,     {.ui = <span class="number">1</span> &lt;&lt; TAG} }, \
+    { MODKEY|ShiftMask,             KEY,      tag,            {.ui = <span class="number">1</span> &lt;&lt; TAG} }, \
+    { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = <span class="number">1</span> &lt;&lt; TAG} },
+/* helper <span class="keyword">for</span> spawning shell commands <span class="keyword">in</span> the pre dwm-<span class="number">5.0</span> fashion */
+#define SHCMD(cmd) { .v = (const char*[]){ <span class="string">"/bin/sh"</span>, <span class="string">"-c"</span>, cmd, NULL } }
+/* commands */
+static const char *dmenucmd[] = { <span class="string">"dmenu_run"</span>, <span class="string">"-fn"</span>, font, <span class="string">"-nb"</span>, normbgcolor, <span class="string">"-nf"</span>, normfgcolor, <span class="string">"-sb"</span>, selbgcolor, <span class="string">"-sf"</span>, selfgcolor, NULL };
+static const char *termcmd[]  = { <span class="string">"urxvt"</span>, NULL };
+static Key keys[] = {
+    /* modifier                     key        <span class="function"><span class="keyword">function</span>        <span class="title">argument</span> */
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_p</span>,      <span class="title">spawn</span>,          {.<span class="title">v</span> = <span class="title">dmenucmd</span> } },
+    { <span class="title">MODKEY</span>|<span class="title">ShiftMask</span>,             <span class="title">XK_Return</span>, <span class="title">spawn</span>,          {.<span class="title">v</span> = <span class="title">termcmd</span> } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_b</span>,      <span class="title">togglebar</span>,      {0} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_j</span>,      <span class="title">focusstack</span>,     {.<span class="title">i</span> = +1 } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_k</span>,      <span class="title">focusstack</span>,     {.<span class="title">i</span> = -1 } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_i</span>,      <span class="title">incnmaster</span>,     {.<span class="title">i</span> = +1 } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_d</span>,      <span class="title">incnmaster</span>,     {.<span class="title">i</span> = -1 } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_h</span>,      <span class="title">setmfact</span>,       {.<span class="title">f</span> = -0.05} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_l</span>,      <span class="title">setmfact</span>,       {.<span class="title">f</span> = +0.05} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_Return</span>, <span class="title">zoom</span>,           {0} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_Tab</span>,    <span class="title">view</span>,           {0} },
+    { <span class="title">MODKEY</span>|<span class="title">ShiftMask</span>,             <span class="title">XK_c</span>,      <span class="title">killclient</span>,     {0} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_t</span>,      <span class="title">setlayout</span>,      {.<span class="title">v</span> = &amp;<span class="title">layouts</span>[0]} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_f</span>,      <span class="title">setlayout</span>,      {.<span class="title">v</span> = &amp;<span class="title">layouts</span>[1]} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_m</span>,      <span class="title">setlayout</span>,      {.<span class="title">v</span> = &amp;<span class="title">layouts</span>[2]} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_space</span>,  <span class="title">setlayout</span>,      {0} },
+    { <span class="title">MODKEY</span>|<span class="title">ShiftMask</span>,             <span class="title">XK_space</span>,  <span class="title">togglefloating</span>, {0} },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_0</span>,      <span class="title">view</span>,           {.<span class="title">ui</span> = ~0 } },
+    { <span class="title">MODKEY</span>|<span class="title">ShiftMask</span>,             <span class="title">XK_0</span>,      <span class="title">tag</span>,            {.<span class="title">ui</span> = ~0 } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_comma</span>,  <span class="title">focusmon</span>,       {.<span class="title">i</span> = -1 } },
+    { <span class="title">MODKEY</span>,                       <span class="title">XK_period</span>, <span class="title">focusmon</span>,       {.<span class="title">i</span> = +1 } },
+    { <span class="title">MODKEY</span>|<span class="title">ShiftMask</span>,             <span class="title">XK_comma</span>,  <span class="title">tagmon</span>,         {.<span class="title">i</span> = -1 } },
+    { <span class="title">MODKEY</span>|<span class="title">ShiftMask</span>,             <span class="title">XK_period</span>, <span class="title">tagmon</span>,         {.<span class="title">i</span> = +1 } },
+    <span class="title">TAGKEYS</span><span class="params">(                        XK_1,                      0)</span></span>
+    TAGKEYS(                        XK_2,                      <span class="number">1</span>)
+    TAGKEYS(                        XK_3,                      <span class="number">2</span>)
+    TAGKEYS(                        XK_4,                      <span class="number">3</span>)
+    TAGKEYS(                        XK_5,                      <span class="number">4</span>)
+    TAGKEYS(                        XK_6,                      <span class="number">5</span>)
+    TAGKEYS(                        XK_7,                      <span class="number">6</span>)
+    TAGKEYS(                        XK_8,                      <span class="number">7</span>)
+    TAGKEYS(                        XK_9,                      <span class="number">8</span>)
+    { MODKEY|ShiftMask,             XK_q,      quit,           {<span class="number">0</span>} },
+};
+/* button definitions */
+/* click can be ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, <span class="keyword">or</span> ClkRootWin */
+static Button buttons[] = {
+    /* click                event mask      button          <span class="function"><span class="keyword">function</span>        <span class="title">argument</span> */
+    { <span class="title">ClkLtSymbol</span>,          0,              <span class="title">Button1</span>,        <span class="title">setlayout</span>,      {0} },
+    { <span class="title">ClkLtSymbol</span>,          0,              <span class="title">Button3</span>,        <span class="title">setlayout</span>,      {.<span class="title">v</span> = &amp;<span class="title">layouts</span>[2]} },
+    { <span class="title">ClkWinTitle</span>,          0,              <span class="title">Button2</span>,        <span class="title">zoom</span>,           {0} },
+    { <span class="title">ClkStatusText</span>,        0,              <span class="title">Button2</span>,        <span class="title">spawn</span>,          {.<span class="title">v</span> = <span class="title">termcmd</span> } },
+    { <span class="title">ClkClientWin</span>,         <span class="title">MODKEY</span>,         <span class="title">Button1</span>,        <span class="title">movemouse</span>,      {0} },
+    { <span class="title">ClkClientWin</span>,         <span class="title">MODKEY</span>,         <span class="title">Button2</span>,        <span class="title">togglefloating</span>, {0} },
+    { <span class="title">ClkClientWin</span>,         <span class="title">MODKEY</span>,         <span class="title">Button3</span>,        <span class="title">resizemouse</span>,    {0} },
+    { <span class="title">ClkTagBar</span>,            0,              <span class="title">Button1</span>,        <span class="title">view</span>,           {0} },
+    { <span class="title">ClkTagBar</span>,            0,              <span class="title">Button3</span>,        <span class="title">toggleview</span>,     {0} },
+    { <span class="title">ClkTagBar</span>,            <span class="title">MODKEY</span>,         <span class="title">Button1</span>,        <span class="title">tag</span>,            {0} },
+    { <span class="title">ClkTagBar</span>,            <span class="title">MODKEY</span>,         <span class="title">Button3</span>,        <span class="title">toggletag</span>,      {0} },
+};</code></pre>
+<p>修改完成后那就开始编译吧</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>makepkg -g &gt;&gt;<span class="constant">PKGBUILD</span>
+[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>makepkg -efi</code></pre>
+<p>最后修改下X的配置文件($HOME/.xinitrc)就OK了</p>
+<pre><code><span class="shebang">#!/bin/sh</span>
+<span class="comment">#</span>
+<span class="comment"># ~/.xinitrc</span>
+<span class="comment">#</span>
+<span class="comment"># Executed by startx (run your window manager from here)</span>
+feh --bg-scale /home/michellgaby/img/arch.png
+conky -x 0 -y 0 -d
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=<span class="string">"@im=fcitx"</span>
+fcitx &amp;
+<span class="keyword">while</span> <span class="literal">true</span> 
+<span class="keyword">do</span>
+    xsetroot -name  <span class="string">"$(date -u +"</span>%a %b %d %r<span class="string">")"</span>
+    sleep 1s
+<span class="keyword">done</span> &amp;
+exec dwm</code></pre>
+<p>大功搞成，以后输出startx就是dwm了！</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/Archlinux/">Archlinux</a>
+  </div>
+
+        <!-- Baidu Button BEGIN -->
+        <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare">
+        <a class="bds_tsina">新浪微博</a>
+        <a class="bds_qzone">QQ空间</a>
+        <a class="bds_tqq">腾讯微博</a>
+        <a class="bds_twi">Twitter</a>
+        <a class="bds_fbook">Facebook</a>
+        <span class="bds_more">更多</span>
+        </div>
+        <script type="text/javascript" id="bdshare_js" data="type=tools&amp;mini=1&amp;uid=6603412" ></script>
+        <script type="text/javascript" id="bdshell_js"></script>
+        <script type="text/javascript">
+        document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000);
+        </script>
+        <!-- Baidu Button END -->
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"riloli-blogs"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:riloli.github.io">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Archlinux/" style="font-size: 10.00px;">Archlinux</a>
+  </div>
+</div>
+
+
+  <div class="widget tag">
+<h3 class="title">友情链接</h3>
+<ul class="entry">
+<li><a href="http://flau.me/" target="_blank" title="蛋蛋的博客">芦苇丛的鹅蛋</a></li>
+</ul>
+</div>
+
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=2&isTitle=0&noborder=0&isWeibo=1&isFans=0&uid=3833642410&verifier=84bea53d&colors=d6f3f7,ffffff,666666,0082cb,ecfbfd&dpc=1"></iframe>
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 Riloli
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

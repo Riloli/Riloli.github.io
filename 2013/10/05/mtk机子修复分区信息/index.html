@@ -3,16 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Android无法连接adb的解决方法 | Riloli's Blog</title>
+  <title>MTK机子修复分区信息 | Riloli's Blog</title>
   <meta name="author" content="Riloli">
   
-  <meta name="description" content="今天在折腾乐蛙时发现无法链接ADB了,但是手机却显示USB调试模式!
-然后想起了大蛋曾经告诉我CM的解决方法,于是你懂得,俺差点就把菊花给卖了呢(/Д`)~ﾟ｡">
+  <meta name="description" content="这是前一个星期的事了,最近一直懒得写博客~
+此事是由于我误刷了内核,然后导致分区信息出错…
+内置存储挂载不上,也找不到内置存储的分区!
+如果不是star的帮助.估计俺的爪机就要返厂了!!">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Android无法连接adb的解决方法"/>
+  <meta property="og:title" content="MTK机子修复分区信息"/>
   <meta property="og:site_name" content="Riloli's Blog"/>
 
   
@@ -54,42 +56,41 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-10-04T16:07:58.000Z"><a href="/2013/10/05/android无法连接adb的解决方法/">10月 5 2013</a></time>
+        <time datetime="2013-10-05T08:57:03.000Z"><a href="/2013/10/05/mtk机子修复分区信息/">10月 5 2013</a></time>
       
       
   
-    <h1 class="title">Android无法连接adb的解决方法</h1>
+    <h1 class="title">MTK机子修复分区信息</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>今天在折腾乐蛙时发现无法链接ADB了,但是手机却显示USB调试模式!</p>
-<p>然后想起了大蛋曾经告诉我CM的解决方法,于是你懂得,俺差点就把菊花给卖了呢(/Д`)~ﾟ｡</p>
+        <p>这是前一个星期的事了,最近一直懒得写博客~</p>
+<p>此事是由于我误刷了内核,然后导致分区信息出错…</p>
+<p>内置存储挂载不上,也找不到内置存储的分区!</p>
+<p>如果不是star的帮助.估计俺的爪机就要返厂了!!</p>
 <a id="more"></a>
 
-<pre><code><span class="title">adb</span> shell rm -r /<span class="typedef"><span class="keyword">data</span>/property</span></code></pre>
-<p>进REC干掉这个目录后,CM就可以正常连接了,可是尼玛我的乐蛙肿么还是不行啊!!!</p>
-<p>我的菊花白卖了啊!!!!魂淡!!!! （╯‵□′）╯︵┴─┴</p>
-<p>折腾的细节就不多说了,都是泪啊!!!</p>
-<p>经过俺不断的DEBUG…尼玛,终于给我找到了(;´༎ຶД༎ຶ`)</p>
-<p>原default.prop文件如下</p>
-<pre><code><span class="preprocessor">#</span>
-<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
-<span class="preprocessor">#</span>
-ro<span class="variable">.secure</span>=<span class="number">0</span>
-ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
-ro<span class="variable">.debuggable</span>=<span class="number">1</span>
-persist<span class="variable">.sys</span><span class="variable">.usb</span><span class="variable">.config</span>=mtp,diag,serial_smd,serial_tty,rmnet_smd,mass_storage,serial_smd,adb</code></pre>
-<p>妈蛋,直接干掉最后的那行就可以连接了!!!!!!!(ÒωÓױ)</p>
-<p>修改后的default.prop</p>
-<pre><code><span class="preprocessor">#</span>
-<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
-<span class="preprocessor">#</span>
-ro<span class="variable">.secure</span>=<span class="number">0</span>
-ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
-ro<span class="variable">.debuggable</span>=<span class="number">1</span></code></pre>
-<p>好吧,安卓是坑爹的,错了一个参数都要你的命啊!!!!!!!!!!!</p>
+<p>接下来说下我的修复方法,可能会对你们有帮助</p>
+<p>首先叫别人从没有问题的机子中提取ebr文件.</p>
+<p>提取命令(仅适用MTK机子,并且需要ROOT):</p>
+<pre><code><span class="variable">$ </span>adb shell
+<span class="variable">$ </span>su
+<span class="comment"># dd if=/dev/ebr1 /sdcard/ebr1</span>
+<span class="comment"># dd if=/dev/ebr2 /sdcard/ebr2</span>
+<span class="comment"># exit</span>
+<span class="variable">$ </span>exit
+<span class="variable">$ </span>adb pull /sdcard/ebr1
+<span class="variable">$ </span>adb pull /sdcard/ebr2</code></pre>
+<p>这样你的目录下就会出现两个文件,分别是ebr1和ebr2</p>
+<p>提取出来了,那该怎么刷回去呢??原理就是反过来!</p>
+<pre><code><span class="variable">$ </span>adb push ebr1 /data/local/tmp/
+<span class="variable">$ </span>adb push ebr2 /data/local/tmp/
+<span class="variable">$ </span>adb shell su -c <span class="string">"dd if=/data/local/tmp/ebr1 of=/dev/ebr1"</span>
+<span class="variable">$ </span>adb shell su -c <span class="string">"dd if=/data/local/tmp/ebr2 of=/dev/ebr2"</span>
+<span class="variable">$ </span>adb reboot</code></pre>
+<p>重启后内置存储就恢复了!如果你们分区有问题可以试试这个办法!</p>
 
       
     </div>

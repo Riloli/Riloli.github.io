@@ -3,16 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Android无法连接adb的解决方法 | Riloli's Blog</title>
+  <title>内核的mei模块出现问题 | Riloli's Blog</title>
   <meta name="author" content="Riloli">
   
-  <meta name="description" content="今天在折腾乐蛙时发现无法链接ADB了,但是手机却显示USB调试模式!
-然后想起了大蛋曾经告诉我CM的解决方法,于是你懂得,俺差点就把菊花给卖了呢(/Д`)~ﾟ｡">
+  <meta name="description" content="之前装完Archlinux就有了，一直没管，今天闲得也是闲，于是把他给解决了！
+[michellgaby@K-on ~]$ dmesg | grep -i mei
+看了下内核处mei模块的LOG">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Android无法连接adb的解决方法"/>
+  <meta property="og:title" content="内核的mei模块出现问题"/>
   <meta property="og:site_name" content="Riloli's Blog"/>
 
   
@@ -54,42 +55,36 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-10-04T16:07:58.000Z"><a href="/2013/10/05/android无法连接adb的解决方法/">10月 5 2013</a></time>
+        <time datetime="2013-10-05T09:07:12.000Z"><a href="/2013/10/05/内核的mei模块出现问题/">10月 5 2013</a></time>
       
       
   
-    <h1 class="title">Android无法连接adb的解决方法</h1>
+    <h1 class="title">内核的mei模块出现问题</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>今天在折腾乐蛙时发现无法链接ADB了,但是手机却显示USB调试模式!</p>
-<p>然后想起了大蛋曾经告诉我CM的解决方法,于是你懂得,俺差点就把菊花给卖了呢(/Д`)~ﾟ｡</p>
+        <p>之前装完Archlinux就有了，一直没管，今天闲得也是闲，于是把他给解决了！</p>
+<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>dmesg | grep -i mei</code></pre>
+<p>看了下内核处mei模块的LOG</p>
 <a id="more"></a>
 
-<pre><code><span class="title">adb</span> shell rm -r /<span class="typedef"><span class="keyword">data</span>/property</span></code></pre>
-<p>进REC干掉这个目录后,CM就可以正常连接了,可是尼玛我的乐蛙肿么还是不行啊!!!</p>
-<p>我的菊花白卖了啊!!!!魂淡!!!! （╯‵□′）╯︵┴─┴</p>
-<p>折腾的细节就不多说了,都是泪啊!!!</p>
-<p>经过俺不断的DEBUG…尼玛,终于给我找到了(;´༎ຶД༎ຶ`)</p>
-<p>原default.prop文件如下</p>
-<pre><code><span class="preprocessor">#</span>
-<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
-<span class="preprocessor">#</span>
-ro<span class="variable">.secure</span>=<span class="number">0</span>
-ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
-ro<span class="variable">.debuggable</span>=<span class="number">1</span>
-persist<span class="variable">.sys</span><span class="variable">.usb</span><span class="variable">.config</span>=mtp,diag,serial_smd,serial_tty,rmnet_smd,mass_storage,serial_smd,adb</code></pre>
-<p>妈蛋,直接干掉最后的那行就可以连接了!!!!!!!(ÒωÓױ)</p>
-<p>修改后的default.prop</p>
-<pre><code><span class="preprocessor">#</span>
-<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
-<span class="preprocessor">#</span>
-ro<span class="variable">.secure</span>=<span class="number">0</span>
-ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
-ro<span class="variable">.debuggable</span>=<span class="number">1</span></code></pre>
-<p>好吧,安卓是坑爹的,错了一个参数都要你的命啊!!!!!!!!!!!</p>
+<pre><code><span class="matrix">[    <span class="number">6.499247</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: setting latency timer to <span class="number">64</span>
+<span class="matrix">[    <span class="number">6.499305</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: irq <span class="number">46</span> <span class="keyword">for</span> MSI/MSI-X
+<span class="matrix">[   <span class="number">11.516758</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span>
+<span class="matrix">[   <span class="number">11.516861</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: unexpected reset: dev_state = RESETTING
+<span class="matrix">[   <span class="number">17.536765</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span>
+<span class="matrix">[   <span class="number">17.536866</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: unexpected reset: dev_state = RESETTING
+<span class="matrix">[   <span class="number">23.556767</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span>
+<span class="matrix">[   <span class="number">23.556867</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: unexpected reset: dev_state = RESETTING
+<span class="matrix">[   <span class="number">29.576765</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span></code></pre>
+<p>发现根本就起不来，一直在复位！！无路赛！！</p>
+<p>你起不来别在屏幕上打印消息啊！魂淡o(｀ω´*)o，我可是有强迫症啊！</p>
+<p>把心一忍，让kernel不加载这模块了！！</p>
+<pre><code>[michellgaby<span class="property">@K</span>-<span class="literal">on</span> ~]<span class="comment"># echo -e "blacklist mei\ninstall mei /bin/true" &gt; /etc/modprobe.d/mei.conf</span>
+[michellgaby<span class="property">@K</span>-<span class="literal">on</span> ~]<span class="comment"># reboot</span></code></pre>
+<p>搞定重启后发现世界原来是那么美～空气是如此的清新～</p>
 
       
     </div>
@@ -99,7 +94,7 @@ ro<span class="variable">.debuggable</span>=<span class="number">1</span></code>
         
   
   <div class="tags">
-    <a href="/tags/Android/">Android</a>
+    <a href="/tags/Archlinux/">Archlinux</a>
   </div>
 
         <!-- Baidu Button BEGIN -->
