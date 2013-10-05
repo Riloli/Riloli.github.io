@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://riloli.github.io/2013/10/05/python调用api发微博/</loc>
+    <lastmod>2013-10-05T09:22:28.000Z</lastmod>
+  </url>
+  <url>
     <loc>http://riloli.github.io/2013/10/05/conky,urxvt,vim-配置文件/</loc>
     <lastmod>2013-10-05T09:16:52.000Z</lastmod>
   </url>
