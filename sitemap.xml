@@ -1,12 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://riloli.github.io/2013/10/05/python调用api发微博/</loc>
-    <lastmod>2013-10-05T09:22:28.000Z</lastmod>
+    <loc>http://riloli.github.io/2013/10/05/挂载systemimg并提取文件/</loc>
+    <lastmod>2013-10-05T12:57:44.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/使checkbox禁用，不可选/</loc>
+    <lastmod>2013-10-05T12:53:58.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/用goagent代理git来同步代码/</loc>
+    <lastmod>2013-10-05T12:51:02.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/android显示网速的另一种方法/</loc>
+    <lastmod>2013-10-05T12:42:02.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/c语言-解压华为固件/</loc>
+    <lastmod>2013-10-05T12:36:50.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/perl-对比bootimg并修正/</loc>
+    <lastmod>2013-10-05T12:32:56.000Z</lastmod>
   </url>
   <url>
     <loc>http://riloli.github.io/2013/10/05/conky,urxvt,vim-配置文件/</loc>
-    <lastmod>2013-10-05T09:16:52.000Z</lastmod>
+    <lastmod>2013-10-05T12:23:34.000Z</lastmod>
+  </url>
+  <url>
+    <loc>http://riloli.github.io/2013/10/05/python调用api发微博/</loc>
+    <lastmod>2013-10-05T09:22:28.000Z</lastmod>
   </url>
   <url>
     <loc>http://riloli.github.io/2013/10/05/内核的mei模块出现问题/</loc>

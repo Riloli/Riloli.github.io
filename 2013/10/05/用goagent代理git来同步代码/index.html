@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>内核的mei模块出现问题 | Riloli's Blog</title>
+  <title>用Goagent代理git来同步代码 | Riloli's Blog</title>
   <meta name="author" content="Riloli">
   
-  <meta name="description" content="之前装完Archlinux就有了，一直没管，今天闲得也是闲，于是把他给解决了！
-[michellgaby@K-on ~]$ dmesg | grep -i mei
-看了下内核处mei模块的LOG">
+  <meta name="description" content="同步CM代码坑死爹了，生活在水深火热的天朝中，想同步个代码也不行啊
+Goagent我这里就不说怎么设置了，请自行谷歌！
+注意：使用goagent同步代码不能使用git:// 协议，请自行修改到https:// 协议">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="内核的mei模块出现问题"/>
+  <meta property="og:title" content="用Goagent代理git来同步代码"/>
   <meta property="og:site_name" content="Riloli's Blog"/>
 
   
@@ -55,36 +55,29 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-10-05T09:07:12.000Z"><a href="/2013/10/05/内核的mei模块出现问题/">10月 5 2013</a></time>
+        <time datetime="2013-10-05T12:45:35.000Z"><a href="/2013/10/05/用goagent代理git来同步代码/">10月 5 2013</a></time>
       
       
   
-    <h1 class="title">内核的mei模块出现问题</h1>
+    <h1 class="title">用Goagent代理git来同步代码</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>之前装完Archlinux就有了，一直没管，今天闲得也是闲，于是把他给解决了！</p>
-<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>dmesg | grep -i mei</code></pre>
-<p>看了下内核处mei模块的LOG</p>
+        <p>同步CM代码坑死爹了，生活在水深火热的天朝中，想同步个代码也不行啊</p>
+<p>Goagent我这里就不说怎么设置了，请自行谷歌！</p>
+<p>注意：使用goagent同步代码不能使用git:// 协议，请自行修改到https:// 协议</p>
 <a id="more"></a>
 
-<pre><code><span class="matrix">[    <span class="number">6.499247</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: setting latency timer to <span class="number">64</span>
-<span class="matrix">[    <span class="number">6.499305</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: irq <span class="number">46</span> <span class="keyword">for</span> MSI/MSI-X
-<span class="matrix">[   <span class="number">11.516758</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span>
-<span class="matrix">[   <span class="number">11.516861</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: unexpected reset: dev_state = RESETTING
-<span class="matrix">[   <span class="number">17.536765</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span>
-<span class="matrix">[   <span class="number">17.536866</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: unexpected reset: dev_state = RESETTING
-<span class="matrix">[   <span class="number">23.556767</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span>
-<span class="matrix">[   <span class="number">23.556867</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: unexpected reset: dev_state = RESETTING
-<span class="matrix">[   <span class="number">29.576765</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span></code></pre>
-<p>发现根本就起不来，一直在复位！！无路赛！！</p>
-<p>你起不来别在屏幕上打印消息啊！魂淡o(｀ω´*)o，我可是有强迫症啊！</p>
-<p>把心一忍，让kernel不加载这模块了！！</p>
-<pre><code>[michellgaby<span class="property">@K</span>-<span class="literal">on</span> ~]<span class="comment"># echo -e "blacklist mei\ninstall mei /bin/true" &gt; /etc/modprobe.d/mei.conf</span>
-[michellgaby<span class="property">@K</span>-<span class="literal">on</span> ~]<span class="comment"># reboot</span></code></pre>
-<p>搞定重启后发现世界原来是那么美～空气是如此的清新～</p>
+<p>首先设置HTTP PROXY</p>
+<pre><code><span class="keyword">export</span> http_proxy=<span class="string">"http://127.0.0.1:8087"</span>
+<span class="keyword">export</span> https_proxy=<span class="string">"http://127.0.0.1:8087"</span></code></pre>
+<p>然后就是证书了，我是直接关闭SSL证书校验的</p>
+<pre><code><span class="title">git</span> config --global http.sslVerify <span class="built_in">false</span></code></pre>
+<p>你也可以指定证书路径</p>
+<pre><code><span class="title">git</span> config --global http.sslCA<span class="built_in">info</span> /uar/share/goagent/local/CA.crt</code></pre>
+<p>然后就可以通过goagent来代理git了。。</p>
 
       
     </div>
@@ -94,7 +87,7 @@
         
   
   <div class="tags">
-    <a href="/tags/Archlinux/">Archlinux</a>
+    <a href="/tags/Github/">Github</a>
   </div>
 
         <!-- Baidu Button BEGIN -->

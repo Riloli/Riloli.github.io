@@ -3,17 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>内核的mei模块出现问题 | Riloli's Blog</title>
+  <title>使Checkbox禁用，不可选 | Riloli's Blog</title>
   <meta name="author" content="Riloli">
   
-  <meta name="description" content="之前装完Archlinux就有了，一直没管，今天闲得也是闲，于是把他给解决了！
-[michellgaby@K-on ~]$ dmesg | grep -i mei
-看了下内核处mei模块的LOG">
+  <meta name="description" content="不可选的状态就是那个选项变灰色！比如我们需要让某个选项满足一定条件才能用，那这个时候setEnabled就派上用场了
+setEnabled是什么，来看下手册就明白了。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="内核的mei模块出现问题"/>
+  <meta property="og:title" content="使Checkbox禁用，不可选"/>
   <meta property="og:site_name" content="Riloli's Blog"/>
 
   
@@ -55,36 +54,36 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-10-05T09:07:12.000Z"><a href="/2013/10/05/内核的mei模块出现问题/">10月 5 2013</a></time>
+        <time datetime="2013-10-05T12:53:16.000Z"><a href="/2013/10/05/使checkbox禁用，不可选/">10月 5 2013</a></time>
       
       
   
-    <h1 class="title">内核的mei模块出现问题</h1>
+    <h1 class="title">使Checkbox禁用，不可选</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>之前装完Archlinux就有了，一直没管，今天闲得也是闲，于是把他给解决了！</p>
-<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>dmesg | grep -i mei</code></pre>
-<p>看了下内核处mei模块的LOG</p>
+        <p>不可选的状态就是那个选项变灰色！比如我们需要让某个选项满足一定条件才能用，那这个时候setEnabled就派上用场了</p>
+<p>setEnabled是什么，来看下手册就明白了。</p>
 <a id="more"></a>
 
-<pre><code><span class="matrix">[    <span class="number">6.499247</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: setting latency timer to <span class="number">64</span>
-<span class="matrix">[    <span class="number">6.499305</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: irq <span class="number">46</span> <span class="keyword">for</span> MSI/MSI-X
-<span class="matrix">[   <span class="number">11.516758</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span>
-<span class="matrix">[   <span class="number">11.516861</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: unexpected reset: dev_state = RESETTING
-<span class="matrix">[   <span class="number">17.536765</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span>
-<span class="matrix">[   <span class="number">17.536866</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: unexpected reset: dev_state = RESETTING
-<span class="matrix">[   <span class="number">23.556767</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span>
-<span class="matrix">[   <span class="number">23.556867</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: unexpected reset: dev_state = RESETTING
-<span class="matrix">[   <span class="number">29.576765</span>]</span> mei_me <span class="number">0000</span>:<span class="number">00</span>:<span class="number">03.0</span>: reset: connect/disconnect <span class="transposed_variable">timeout.</span></code></pre>
-<p>发现根本就起不来，一直在复位！！无路赛！！</p>
-<p>你起不来别在屏幕上打印消息啊！魂淡o(｀ω´*)o，我可是有强迫症啊！</p>
-<p>把心一忍，让kernel不加载这模块了！！</p>
-<pre><code>[michellgaby<span class="property">@K</span>-<span class="literal">on</span> ~]<span class="comment"># echo -e "blacklist mei\ninstall mei /bin/true" &gt; /etc/modprobe.d/mei.conf</span>
-[michellgaby<span class="property">@K</span>-<span class="literal">on</span> ~]<span class="comment"># reboot</span></code></pre>
-<p>搞定重启后发现世界原来是那么美～空气是如此的清新～</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">void</span> setEnabled (<span class="keyword">boolean</span> enabled)
+Since: API Level <span class="number">14</span>
+Sets whether <span class="keyword">this</span> node is enabled.
+Note: Cannot be called from an AccessibilityService. This <span class="class"><span class="keyword">class</span> <span class="title">is</span> <span class="title">made</span> <span class="title">immutable</span> <span class="title">before</span> <span class="title">being</span> <span class="title">delivered</span> <span class="title">to</span> <span class="title">an</span> <span class="title">AccessibilityService</span>.
+<span class="title">Parameters</span>
+<span class="title">enabled</span>    <span class="title">True</span> <span class="title">if</span> <span class="title">the</span> <span class="title">node</span> <span class="title">is</span> <span class="title">enabled</span>.
+<span class="title">Throws</span>
+<span class="title">IllegalStateException</span>    <span class="title">If</span> <span class="title">called</span> <span class="title">from</span> <span class="title">an</span> <span class="title">AccessibilityService</span>.</code></pre>
+<p>这个函数如果设置为false，那这个Checkbox就是不可选(灰色)，点击选项是无效的！设置true就是可选，选项就可以正常使用！</p>
+<p>还有个setChecked函数是控制开关的，如果为true则选项是开着，false的话，选项就是关闭！下面是手册</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> setChecked (boolean <span class="keyword">checked</span>)
+Added <span class="keyword">in</span> API level <span class="number">1</span>
+Change the <span class="keyword">checked</span> state of the view
+Parameters
+<span class="keyword">checked</span>
+The <span class="keyword">new</span> <span class="keyword">checked</span> state</code></pre>
 
       
     </div>
@@ -94,7 +93,7 @@
         
   
   <div class="tags">
-    <a href="/tags/Archlinux/">Archlinux</a>
+    <a href="/tags/Android/">Android</a>
   </div>
 
         <!-- Baidu Button BEGIN -->

@@ -1,0 +1,303 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>挂载system.img并提取文件 | Riloli's Blog</title>
+  <meta name="author" content="Riloli">
+  
+  <meta name="description" content="今天提取线刷包的system.img出来，使用Mount命令挂载
+$ sudo mount -t ext4 -o loop system.img /mnt
+mount: 文件系统类型错误、选项错误、/dev/loop0 上有坏超级块、
+    缺少代码页或助手程序，或其他错误
+    有些情况下在 syslog 中可以找到一些有用信息- 请尝试
+    dmesg | tail  这样的命令看看。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="挂载system.img并提取文件"/>
+  <meta property="og:site_name" content="Riloli's Blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Riloli's Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Riloli's Blog</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-10-05T12:54:17.000Z"><a href="/2013/10/05/挂载systemimg并提取文件/">10月 5 2013</a></time>
+      
+      
+  
+    <h1 class="title">挂载system.img并提取文件</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>今天提取线刷包的system.img出来，使用Mount命令挂载</p>
+<pre><code><span class="comment">$</span> <span class="comment">sudo</span> <span class="comment">mount</span> <span class="literal">-</span><span class="comment">t</span> <span class="comment">ext4</span> <span class="literal">-</span><span class="comment">o</span> <span class="comment">loop</span> <span class="comment">system</span>.<span class="comment">img</span> <span class="comment">/mnt</span>
+<span class="comment">mount:</span> <span class="comment">文件系统类型错误、选项错误、/dev/loop0</span> <span class="comment">上有坏超级块、</span>
+    <span class="comment">缺少代码页或助手程序，或其他错误</span>
+    <span class="comment">有些情况下在</span> <span class="comment">syslog</span> <span class="comment">中可以找到一些有用信息</span>- <span class="comment">请尝试</span>
+    <span class="comment">dmesg</span> <span class="comment">|</span> <span class="comment">tail</span>  <span class="comment">这样的命令看看。</code></pre>
+<a id="more"></a>
+
+<p>这坑爹死了。。于是想了个办法把ext4转为yaffs2格式，使用simg2img.py，脚本在博文最下面</p>
+<pre><code><span class="variable">$ </span>.<span class="regexp">/simg2img.py system.img</code></pre>
+<p>等待转换完成，当前目录下就会出现一个tmp.img，然后我们就可以挂载了！</p>
+<pre><code><span class="variable">$ </span>mkdir tmp
+<span class="variable">$ </span>sudo mount tmp.img tmp</code></pre>
+<p>我需要提取system.img里面文件，所以复制一份出来，然后卸载tmp.img的挂载</p>
+<pre><code><span class="variable">$ </span>sudo cp -r tmp system
+<span class="variable">$ </span>sudo umount tmp</code></pre>
+<p>最后递归修改提取出来的文件用户就可以了！</p>
+<pre><code>$ su<span class="operator"><span class="keyword">do</span> chown -R michellgaby system</code></pre>
+<p>这样就大功告成了！！下面是ext4转换为yaffs2的脚本</p>
+<pre><code><span class="preprocessor">#!/usr/bin/env python</span>
+<span class="preprocessor">#encoding:utf8</span>
+<span class="preprocessor">#===============================================================================</span>
+<span class="preprocessor">#</span>
+<span class="preprocessor">#          FILE:  simg2img.py</span>
+<span class="preprocessor"># </span>
+<span class="preprocessor">#         USAGE:  ./simg2img.py system.img </span>
+<span class="preprocessor"># </span>
+<span class="preprocessor">#   DESCRIPTION:  </span>
+<span class="preprocessor"># </span>
+<span class="preprocessor">#        AUTHOR: Karl Zheng </span>
+<span class="preprocessor">#       COMPANY: Meizu</span>
+<span class="preprocessor">#       CREATED: 2011年10月18日 15时25分15秒 CST</span>
+<span class="preprocessor">#      REVISION:  ---</span>
+<span class="preprocessor">#===============================================================================</span>
+import sys
+import <span class="keyword">struct</span>
+<span class="class"><span class="keyword">class</span> <span class="title">ext4_file_header</span>:
+    <span class="title">def</span> <span class="title">__init__</span>(<span class="title">self</span>, <span class="title">buf</span>):
+        <span class="title">self</span>.<span class="title">magic</span>, \
+                <span class="title">self</span>.<span class="title">major</span>, \
+                <span class="title">self</span>.<span class="title">minor</span>, \
+                <span class="title">self</span>.<span class="title">file_header_size</span>, \
+                <span class="title">self</span>.<span class="title">chunk_header_size</span>, \
+                <span class="title">self</span>.<span class="title">block_size</span>, \
+                <span class="title">self</span>.<span class="title">total_blocks</span>, \
+                <span class="title">self</span>.<span class="title">total_chunks</span>, \
+                <span class="title">self</span>.<span class="title">crc32</span>, \
+                = <span class="title">struct</span>.<span class="title">unpack</span>('&lt;<span class="title">IHHHHIIII</span>', <span class="title">buf</span>)
+<span class="title">class</span> <span class="title">ext4_chunk_header</span>:
+    <span class="title">def</span> <span class="title">__init__</span>(<span class="title">self</span>, <span class="title">buf</span>):
+        <span class="title">self</span>.<span class="title">type</span>,\
+                <span class="title">self</span>.<span class="title">reserved</span>,\
+                <span class="title">self</span>.<span class="title">chunk_size</span>,\
+                <span class="title">self</span>.<span class="title">total_size</span>,\
+                = <span class="title">struct</span>.<span class="title">unpack</span>('&lt;<span class="title">HHII</span>', <span class="title">buf</span>)
+<span class="title">if</span> <span class="title">len</span>(<span class="title">sys</span>.<span class="title">argv</span>) &gt; 1:
+    <span class="title">filename</span> = <span class="title">sys</span>.<span class="title">argv</span>[1]
+<span class="title">else</span>:
+    <span class="title">print</span> "<span class="title">No</span> <span class="title">file</span> <span class="title">is</span> <span class="title">designated</span>!!"
+    <span class="title">sys</span>.<span class="title">exit</span>(1)
+<span class="title">ifd</span> = <span class="title">open</span>(<span class="title">filename</span>, "<span class="title">rb</span>")
+<span class="title">buf</span>=""
+# <span class="title">get</span> <span class="title">filelen</span>
+<span class="title">ifd</span>.<span class="title">seek</span>(0, 2)
+<span class="title">file_len</span> = <span class="title">ifd</span>.<span class="title">tell</span>()
+<span class="title">print</span> <span class="title">file_len</span>
+<span class="title">ifd</span>.<span class="title">seek</span>(0, 0)
+<span class="title">buf</span> = <span class="title">ifd</span>.<span class="title">read</span>(28)
+#<span class="title">print</span> <span class="title">repr</span>(<span class="title">buf</span>)
+<span class="title">file_header</span> = <span class="title">ext4_file_header</span>(<span class="title">buf</span>)
+<span class="title">EXT4_FILE_HEADER_MAGIC</span> = 0<span class="title">xED26FF3A</span>
+<span class="title">EXT4_CHUNK_HEADER_SIZE</span> = 12
+<span class="title">if</span> <span class="title">file_header</span>.<span class="title">magic</span> != <span class="title">EXT4_FILE_HEADER_MAGIC</span>:
+    <span class="title">print</span> "<span class="title">Not</span> <span class="title">a</span> <span class="title">compressed</span> <span class="title">ext4</span> <span class="title">file</span>!!"
+    <span class="title">sys</span>.<span class="title">exit</span>(1)
+<span class="title">print</span> "<span class="title">file_header</span> <span class="title">chunks</span>:%<span class="title">X</span>"%(<span class="title">file_header</span>.<span class="title">total_chunks</span>)
+<span class="title">total_chunks</span> = <span class="title">file_header</span>.<span class="title">total_chunks</span>
+<span class="title">print</span>("<span class="title">total</span> <span class="title">chunk</span> = %<span class="title">d</span> "%(<span class="title">total_chunks</span>))
+<span class="title">ofd</span> = <span class="title">open</span>("<span class="title">tmp</span>.<span class="title">img</span>", "<span class="title">wb</span>")
+<span class="title">sector_base</span> = 82528
+<span class="title">output_len</span> = 0
+<span class="title">while</span> <span class="title">total_chunks</span> &gt; 0:
+    <span class="title">buf</span> = <span class="title">ifd</span>.<span class="title">read</span>(<span class="title">EXT4_CHUNK_HEADER_SIZE</span>)
+    <span class="title">chunk_header</span> = <span class="title">ext4_chunk_header</span>(<span class="title">buf</span>)
+    <span class="title">sector_size</span> = (<span class="title">chunk_header</span>.<span class="title">chunk_size</span> * <span class="title">file_header</span>.<span class="title">block_size</span>) &gt;&gt; 9;
+    #<span class="title">print</span> "<span class="title">ct</span>:%<span class="title">X</span>, <span class="title">cs</span>:%<span class="title">X</span>, <span class="title">ts</span>:%<span class="title">X</span>, <span class="title">ss</span>:%<span class="title">X</span>"%(<span class="title">chunk_header</span>.<span class="title">type</span>, <span class="title">chunk_header</span>.<span class="title">chunk_size</span>, <span class="title">chunk_header</span>.<span class="title">total_size</span>, <span class="title">sector_size</span>)
+    <span class="title">data</span> = ""
+    <span class="title">if</span> <span class="title">chunk_header</span>.<span class="title">type</span> == 0<span class="title">xCAC1</span>:  # <span class="title">raw</span> <span class="title">type</span> 
+        <span class="title">data</span> = <span class="title">ifd</span>.<span class="title">read</span>(<span class="title">chunk_header</span>.<span class="title">total_size</span> - <span class="title">EXT4_CHUNK_HEADER_SIZE</span>)
+        <span class="title">if</span> <span class="title">len</span>(<span class="title">data</span>) != (<span class="title">sector_size</span> &lt;&lt; 9):
+            <span class="title">print</span>("<span class="title">len</span> <span class="title">data</span>:%<span class="title">d</span>, <span class="title">sector_size</span>:%<span class="title">d</span>"%(<span class="title">len</span>(<span class="title">data</span>), (<span class="title">sector_size</span> &lt;&lt; 9)))
+            <span class="title">sys</span>.<span class="title">exit</span>(1)
+        <span class="title">else</span>:
+            <span class="title">print</span> ("<span class="title">len</span> <span class="title">data</span>:%<span class="title">d</span>, <span class="title">sector_size</span>:%<span class="title">d</span>"%(<span class="title">len</span>(<span class="title">data</span>), <span class="title">sector_size</span> &lt;&lt; 9))
+            <span class="title">ofd</span>.<span class="title">write</span>(<span class="title">data</span>)
+            <span class="title">output_len</span> += <span class="title">len</span>(<span class="title">data</span>)
+            <span class="title">print</span>("<span class="title">raw_chunk</span> ")
+            <span class="title">print</span>("<span class="title">write</span> <span class="title">raw</span> <span class="title">data</span> <span class="title">in</span> %<span class="title">d</span> <span class="title">size</span> %<span class="title">d</span> \<span class="title">n</span>"%(<span class="title">sector_base</span>, <span class="title">sector_size</span>))
+            <span class="title">print</span>("<span class="title">output</span> <span class="title">len</span>:%<span class="title">x</span>"%(<span class="title">output_len</span>))
+            <span class="title">sector_base</span> += <span class="title">sector_size</span>
+    <span class="title">else</span>:    
+        <span class="title">if</span> <span class="title">chunk_header</span>.<span class="title">type</span> == 0<span class="title">xCAC2</span>:  # <span class="title">TYPE_FILL</span>
+            <span class="title">data</span> = '\0' * (<span class="title">sector_size</span> &lt;&lt; 9);
+            <span class="title">ofd</span>.<span class="title">write</span>(<span class="title">data</span>) 
+            <span class="title">output_len</span> += <span class="title">len</span>(<span class="title">data</span>)
+            <span class="title">print</span>("<span class="title">fill_chunk</span> \<span class="title">n</span>")
+            <span class="title">print</span>("<span class="title">chunk_size</span>:%<span class="title">x</span>"%(<span class="title">chunk_header</span>.<span class="title">chunk_size</span>))
+            <span class="title">print</span>("<span class="title">output</span> <span class="title">len</span>:%<span class="title">x</span>"%(<span class="title">output_len</span>))
+            <span class="title">sector_base</span> += <span class="title">sector_size</span>
+        <span class="title">else</span>:
+            <span class="title">if</span> <span class="title">chunk_header</span>.<span class="title">type</span> == 0<span class="title">xCAC3</span>:  # <span class="title">TYPE_DONT_CARE</span>
+                <span class="title">print</span> "<span class="title">none</span> <span class="title">chunk</span> <span class="title">at</span> <span class="title">chunk</span>:%<span class="title">d</span>"%(<span class="title">file_header</span>.<span class="title">total_chunks</span> - <span class="title">total_chunks</span>)
+                <span class="title">print</span>("<span class="title">data_size</span>:0<span class="title">x</span>%<span class="title">x</span>, <span class="title">chunk_size</span>:%<span class="title">d</span>, <span class="title">block_size</span>:%<span class="title">d</span>"%(<span class="title">sector_size</span> &lt;&lt; 9, <span class="title">chunk_header</span>.<span class="title">chunk_size</span>, <span class="title">file_header</span>.<span class="title">block_size</span>))
+                <span class="title">data</span> = '\0' * (<span class="title">sector_size</span> &lt;&lt; 9);
+                <span class="title">ofd</span>.<span class="title">write</span>(<span class="title">data</span>) 
+                <span class="title">output_len</span> += <span class="title">len</span>(<span class="title">data</span>)
+                <span class="title">sector_base</span> += <span class="title">sector_size</span>
+            <span class="title">else</span>:
+                <span class="title">data</span> = '\0' * (<span class="title">sector_size</span> &lt;&lt; 9);
+                <span class="title">ofd</span>.<span class="title">write</span>(<span class="title">data</span>)
+                <span class="title">print</span> "<span class="title">unknown</span> <span class="title">type</span>!!"
+                <span class="title">output_len</span> += <span class="title">len</span>(<span class="title">data</span>)
+                <span class="title">print</span>("<span class="title">output</span> <span class="title">len</span>:%<span class="title">x</span>"%(<span class="title">output_len</span>))
+                <span class="title">sector_base</span> += <span class="title">sector_size</span>
+    <span class="title">total_chunks</span> -= 1 
+    <span class="title">print</span>("<span class="title">remain</span> <span class="title">chunks</span> = %<span class="title">d</span> "%(<span class="title">total_chunks</span>));
+<span class="title">print</span> "<span class="title">write</span> <span class="title">done</span>"
+<span class="title">ifd</span>.<span class="title">close</span>()
+<span class="title">ofd</span>.<span class="title">close</span>()</code></pre>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/Archlinux/">Archlinux</a>
+  </div>
+
+        <!-- Baidu Button BEGIN -->
+        <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare">
+        <a class="bds_tsina">新浪微博</a>
+        <a class="bds_qzone">QQ空间</a>
+        <a class="bds_tqq">腾讯微博</a>
+        <a class="bds_twi">Twitter</a>
+        <a class="bds_fbook">Facebook</a>
+        <span class="bds_more">更多</span>
+        </div>
+        <script type="text/javascript" id="bdshare_js" data="type=tools&amp;mini=1&amp;uid=6603412" ></script>
+        <script type="text/javascript" id="bdshell_js"></script>
+        <script type="text/javascript">
+        document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000);
+        </script>
+        <!-- Baidu Button END -->
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"riloli-blogs"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:riloli.github.io">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Archlinux/" style="font-size: 15.00px;">Archlinux</a><a href="/tags/C语言/" style="font-size: 10.00px;">C语言</a><a href="/tags/Github/" style="font-size: 10.00px;">Github</a><a href="/tags/Perl/" style="font-size: 10.00px;">Perl</a><a href="/tags/Python/" style="font-size: 10.00px;">Python</a>
+  </div>
+</div>
+
+
+  <div class="widget tag">
+<h3 class="title">友情链接</h3>
+<ul class="entry">
+<li><a href="http://flau.me/" target="_blank" title="蛋蛋的博客">芦苇丛的鹅蛋</a></li>
+</ul>
+</div>
+
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=2&isTitle=0&noborder=0&isWeibo=1&isFans=0&uid=3833642410&verifier=84bea53d&colors=d6f3f7,ffffff,666666,0082cb,ecfbfd&dpc=1"></iframe>
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 Riloli
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

@@ -3,13 +3,534 @@
   <title><![CDATA[Riloli's Blog]]></title>
   <link href="http://riloli.github.io/atom.xml" rel="self"/>
   <link href="http://riloli.github.io"/>
-  <updated>2013-10-05T09:25:39.678Z</updated>
+  <updated>2013-10-05T13:27:23.137Z</updated>
   <id>http://riloli.github.io/</id>
   <author>
     <name><![CDATA[Riloli]]></name>
     <email><![CDATA[Riloli@mail.com]]></email>
   </author>
   <generator uri="http://zespia.tw/hexo">Hexo</generator>
+  <entry>
+    <title type="html"><![CDATA[挂载system.img并提取文件]]></title>
+    <link href="http://riloli.github.io/2013/10/05/挂载systemimg并提取文件/"/>
+    <id>http://riloli.github.io/2013/10/05/挂载systemimg并提取文件/</id>
+    <published>2013-10-05T12:54:17.000Z</published>
+    <updated>2013-10-05T12:57:44.000Z</updated>
+    <content type="html"><![CDATA[<p>今天提取线刷包的system.img出来，使用Mount命令挂载</p>
+<pre><code><span class="comment">$</span> <span class="comment">sudo</span> <span class="comment">mount</span> <span class="literal">-</span><span class="comment">t</span> <span class="comment">ext4</span> <span class="literal">-</span><span class="comment">o</span> <span class="comment">loop</span> <span class="comment">system</span>.<span class="comment">img</span> <span class="comment">/mnt</span>
+<span class="comment">mount:</span> <span class="comment">文件系统类型错误、选项错误、/dev/loop0</span> <span class="comment">上有坏超级块、</span>
+    <span class="comment">缺少代码页或助手程序，或其他错误</span>
+    <span class="comment">有些情况下在</span> <span class="comment">syslog</span> <span class="comment">中可以找到一些有用信息</span>- <span class="comment">请尝试</span>
+    <span class="comment">dmesg</span> <span class="comment">|</span> <span class="comment">tail</span>  <span class="comment">这样的命令看看。</code></pre>
+<a id="more"></a>
+
+<p>这坑爹死了。。于是想了个办法把ext4转为yaffs2格式，使用simg2img.py，脚本在博文最下面</p>
+<pre><code><span class="variable">$ </span>.<span class="regexp">/simg2img.py system.img</code></pre>
+<p>等待转换完成，当前目录下就会出现一个tmp.img，然后我们就可以挂载了！</p>
+<pre><code><span class="variable">$ </span>mkdir tmp
+<span class="variable">$ </span>sudo mount tmp.img tmp</code></pre>
+<p>我需要提取system.img里面文件，所以复制一份出来，然后卸载tmp.img的挂载</p>
+<pre><code><span class="variable">$ </span>sudo cp -r tmp system
+<span class="variable">$ </span>sudo umount tmp</code></pre>
+<p>最后递归修改提取出来的文件用户就可以了！</p>
+<pre><code>$ su<span class="operator"><span class="keyword">do</span> chown -R michellgaby system</code></pre>
+<p>这样就大功告成了！！下面是ext4转换为yaffs2的脚本</p>
+<pre><code><span class="preprocessor">#!/usr/bin/env python</span>
+<span class="preprocessor">#encoding:utf8</span>
+<span class="preprocessor">#===============================================================================</span>
+<span class="preprocessor">#</span>
+<span class="preprocessor">#          FILE:  simg2img.py</span>
+<span class="preprocessor"># </span>
+<span class="preprocessor">#         USAGE:  ./simg2img.py system.img </span>
+<span class="preprocessor"># </span>
+<span class="preprocessor">#   DESCRIPTION:  </span>
+<span class="preprocessor"># </span>
+<span class="preprocessor">#        AUTHOR: Karl Zheng </span>
+<span class="preprocessor">#       COMPANY: Meizu</span>
+<span class="preprocessor">#       CREATED: 2011年10月18日 15时25分15秒 CST</span>
+<span class="preprocessor">#      REVISION:  ---</span>
+<span class="preprocessor">#===============================================================================</span>
+import sys
+import <span class="keyword">struct</span>
+<span class="class"><span class="keyword">class</span> <span class="title">ext4_file_header</span>:
+    <span class="title">def</span> <span class="title">__init__</span>(<span class="title">self</span>, <span class="title">buf</span>):
+        <span class="title">self</span>.<span class="title">magic</span>, \
+                <span class="title">self</span>.<span class="title">major</span>, \
+                <span class="title">self</span>.<span class="title">minor</span>, \
+                <span class="title">self</span>.<span class="title">file_header_size</span>, \
+                <span class="title">self</span>.<span class="title">chunk_header_size</span>, \
+                <span class="title">self</span>.<span class="title">block_size</span>, \
+                <span class="title">self</span>.<span class="title">total_blocks</span>, \
+                <span class="title">self</span>.<span class="title">total_chunks</span>, \
+                <span class="title">self</span>.<span class="title">crc32</span>, \
+                = <span class="title">struct</span>.<span class="title">unpack</span>('&lt;<span class="title">IHHHHIIII</span>', <span class="title">buf</span>)
+<span class="title">class</span> <span class="title">ext4_chunk_header</span>:
+    <span class="title">def</span> <span class="title">__init__</span>(<span class="title">self</span>, <span class="title">buf</span>):
+        <span class="title">self</span>.<span class="title">type</span>,\
+                <span class="title">self</span>.<span class="title">reserved</span>,\
+                <span class="title">self</span>.<span class="title">chunk_size</span>,\
+                <span class="title">self</span>.<span class="title">total_size</span>,\
+                = <span class="title">struct</span>.<span class="title">unpack</span>('&lt;<span class="title">HHII</span>', <span class="title">buf</span>)
+<span class="title">if</span> <span class="title">len</span>(<span class="title">sys</span>.<span class="title">argv</span>) &gt; 1:
+    <span class="title">filename</span> = <span class="title">sys</span>.<span class="title">argv</span>[1]
+<span class="title">else</span>:
+    <span class="title">print</span> "<span class="title">No</span> <span class="title">file</span> <span class="title">is</span> <span class="title">designated</span>!!"
+    <span class="title">sys</span>.<span class="title">exit</span>(1)
+<span class="title">ifd</span> = <span class="title">open</span>(<span class="title">filename</span>, "<span class="title">rb</span>")
+<span class="title">buf</span>=""
+# <span class="title">get</span> <span class="title">filelen</span>
+<span class="title">ifd</span>.<span class="title">seek</span>(0, 2)
+<span class="title">file_len</span> = <span class="title">ifd</span>.<span class="title">tell</span>()
+<span class="title">print</span> <span class="title">file_len</span>
+<span class="title">ifd</span>.<span class="title">seek</span>(0, 0)
+<span class="title">buf</span> = <span class="title">ifd</span>.<span class="title">read</span>(28)
+#<span class="title">print</span> <span class="title">repr</span>(<span class="title">buf</span>)
+<span class="title">file_header</span> = <span class="title">ext4_file_header</span>(<span class="title">buf</span>)
+<span class="title">EXT4_FILE_HEADER_MAGIC</span> = 0<span class="title">xED26FF3A</span>
+<span class="title">EXT4_CHUNK_HEADER_SIZE</span> = 12
+<span class="title">if</span> <span class="title">file_header</span>.<span class="title">magic</span> != <span class="title">EXT4_FILE_HEADER_MAGIC</span>:
+    <span class="title">print</span> "<span class="title">Not</span> <span class="title">a</span> <span class="title">compressed</span> <span class="title">ext4</span> <span class="title">file</span>!!"
+    <span class="title">sys</span>.<span class="title">exit</span>(1)
+<span class="title">print</span> "<span class="title">file_header</span> <span class="title">chunks</span>:%<span class="title">X</span>"%(<span class="title">file_header</span>.<span class="title">total_chunks</span>)
+<span class="title">total_chunks</span> = <span class="title">file_header</span>.<span class="title">total_chunks</span>
+<span class="title">print</span>("<span class="title">total</span> <span class="title">chunk</span> = %<span class="title">d</span> "%(<span class="title">total_chunks</span>))
+<span class="title">ofd</span> = <span class="title">open</span>("<span class="title">tmp</span>.<span class="title">img</span>", "<span class="title">wb</span>")
+<span class="title">sector_base</span> = 82528
+<span class="title">output_len</span> = 0
+<span class="title">while</span> <span class="title">total_chunks</span> &gt; 0:
+    <span class="title">buf</span> = <span class="title">ifd</span>.<span class="title">read</span>(<span class="title">EXT4_CHUNK_HEADER_SIZE</span>)
+    <span class="title">chunk_header</span> = <span class="title">ext4_chunk_header</span>(<span class="title">buf</span>)
+    <span class="title">sector_size</span> = (<span class="title">chunk_header</span>.<span class="title">chunk_size</span> * <span class="title">file_header</span>.<span class="title">block_size</span>) &gt;&gt; 9;
+    #<span class="title">print</span> "<span class="title">ct</span>:%<span class="title">X</span>, <span class="title">cs</span>:%<span class="title">X</span>, <span class="title">ts</span>:%<span class="title">X</span>, <span class="title">ss</span>:%<span class="title">X</span>"%(<span class="title">chunk_header</span>.<span class="title">type</span>, <span class="title">chunk_header</span>.<span class="title">chunk_size</span>, <span class="title">chunk_header</span>.<span class="title">total_size</span>, <span class="title">sector_size</span>)
+    <span class="title">data</span> = ""
+    <span class="title">if</span> <span class="title">chunk_header</span>.<span class="title">type</span> == 0<span class="title">xCAC1</span>:  # <span class="title">raw</span> <span class="title">type</span> 
+        <span class="title">data</span> = <span class="title">ifd</span>.<span class="title">read</span>(<span class="title">chunk_header</span>.<span class="title">total_size</span> - <span class="title">EXT4_CHUNK_HEADER_SIZE</span>)
+        <span class="title">if</span> <span class="title">len</span>(<span class="title">data</span>) != (<span class="title">sector_size</span> &lt;&lt; 9):
+            <span class="title">print</span>("<span class="title">len</span> <span class="title">data</span>:%<span class="title">d</span>, <span class="title">sector_size</span>:%<span class="title">d</span>"%(<span class="title">len</span>(<span class="title">data</span>), (<span class="title">sector_size</span> &lt;&lt; 9)))
+            <span class="title">sys</span>.<span class="title">exit</span>(1)
+        <span class="title">else</span>:
+            <span class="title">print</span> ("<span class="title">len</span> <span class="title">data</span>:%<span class="title">d</span>, <span class="title">sector_size</span>:%<span class="title">d</span>"%(<span class="title">len</span>(<span class="title">data</span>), <span class="title">sector_size</span> &lt;&lt; 9))
+            <span class="title">ofd</span>.<span class="title">write</span>(<span class="title">data</span>)
+            <span class="title">output_len</span> += <span class="title">len</span>(<span class="title">data</span>)
+            <span class="title">print</span>("<span class="title">raw_chunk</span> ")
+            <span class="title">print</span>("<span class="title">write</span> <span class="title">raw</span> <span class="title">data</span> <span class="title">in</span> %<span class="title">d</span> <span class="title">size</span> %<span class="title">d</span> \<span class="title">n</span>"%(<span class="title">sector_base</span>, <span class="title">sector_size</span>))
+            <span class="title">print</span>("<span class="title">output</span> <span class="title">len</span>:%<span class="title">x</span>"%(<span class="title">output_len</span>))
+            <span class="title">sector_base</span> += <span class="title">sector_size</span>
+    <span class="title">else</span>:    
+        <span class="title">if</span> <span class="title">chunk_header</span>.<span class="title">type</span> == 0<span class="title">xCAC2</span>:  # <span class="title">TYPE_FILL</span>
+            <span class="title">data</span> = '\0' * (<span class="title">sector_size</span> &lt;&lt; 9);
+            <span class="title">ofd</span>.<span class="title">write</span>(<span class="title">data</span>) 
+            <span class="title">output_len</span> += <span class="title">len</span>(<span class="title">data</span>)
+            <span class="title">print</span>("<span class="title">fill_chunk</span> \<span class="title">n</span>")
+            <span class="title">print</span>("<span class="title">chunk_size</span>:%<span class="title">x</span>"%(<span class="title">chunk_header</span>.<span class="title">chunk_size</span>))
+            <span class="title">print</span>("<span class="title">output</span> <span class="title">len</span>:%<span class="title">x</span>"%(<span class="title">output_len</span>))
+            <span class="title">sector_base</span> += <span class="title">sector_size</span>
+        <span class="title">else</span>:
+            <span class="title">if</span> <span class="title">chunk_header</span>.<span class="title">type</span> == 0<span class="title">xCAC3</span>:  # <span class="title">TYPE_DONT_CARE</span>
+                <span class="title">print</span> "<span class="title">none</span> <span class="title">chunk</span> <span class="title">at</span> <span class="title">chunk</span>:%<span class="title">d</span>"%(<span class="title">file_header</span>.<span class="title">total_chunks</span> - <span class="title">total_chunks</span>)
+                <span class="title">print</span>("<span class="title">data_size</span>:0<span class="title">x</span>%<span class="title">x</span>, <span class="title">chunk_size</span>:%<span class="title">d</span>, <span class="title">block_size</span>:%<span class="title">d</span>"%(<span class="title">sector_size</span> &lt;&lt; 9, <span class="title">chunk_header</span>.<span class="title">chunk_size</span>, <span class="title">file_header</span>.<span class="title">block_size</span>))
+                <span class="title">data</span> = '\0' * (<span class="title">sector_size</span> &lt;&lt; 9);
+                <span class="title">ofd</span>.<span class="title">write</span>(<span class="title">data</span>) 
+                <span class="title">output_len</span> += <span class="title">len</span>(<span class="title">data</span>)
+                <span class="title">sector_base</span> += <span class="title">sector_size</span>
+            <span class="title">else</span>:
+                <span class="title">data</span> = '\0' * (<span class="title">sector_size</span> &lt;&lt; 9);
+                <span class="title">ofd</span>.<span class="title">write</span>(<span class="title">data</span>)
+                <span class="title">print</span> "<span class="title">unknown</span> <span class="title">type</span>!!"
+                <span class="title">output_len</span> += <span class="title">len</span>(<span class="title">data</span>)
+                <span class="title">print</span>("<span class="title">output</span> <span class="title">len</span>:%<span class="title">x</span>"%(<span class="title">output_len</span>))
+                <span class="title">sector_base</span> += <span class="title">sector_size</span>
+    <span class="title">total_chunks</span> -= 1 
+    <span class="title">print</span>("<span class="title">remain</span> <span class="title">chunks</span> = %<span class="title">d</span> "%(<span class="title">total_chunks</span>));
+<span class="title">print</span> "<span class="title">write</span> <span class="title">done</span>"
+<span class="title">ifd</span>.<span class="title">close</span>()
+<span class="title">ofd</span>.<span class="title">close</span>()</code></pre>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Archlinux/" term="Archlinux"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[使Checkbox禁用，不可选]]></title>
+    <link href="http://riloli.github.io/2013/10/05/使checkbox禁用，不可选/"/>
+    <id>http://riloli.github.io/2013/10/05/使checkbox禁用，不可选/</id>
+    <published>2013-10-05T12:53:16.000Z</published>
+    <updated>2013-10-05T12:53:58.000Z</updated>
+    <content type="html"><![CDATA[<p>不可选的状态就是那个选项变灰色！比如我们需要让某个选项满足一定条件才能用，那这个时候setEnabled就派上用场了</p>
+<p>setEnabled是什么，来看下手册就明白了。</p>
+<a id="more"></a>
+
+<pre><code><span class="keyword">public</span> <span class="keyword">void</span> setEnabled (<span class="keyword">boolean</span> enabled)
+Since: API Level <span class="number">14</span>
+Sets whether <span class="keyword">this</span> node is enabled.
+Note: Cannot be called from an AccessibilityService. This <span class="class"><span class="keyword">class</span> <span class="title">is</span> <span class="title">made</span> <span class="title">immutable</span> <span class="title">before</span> <span class="title">being</span> <span class="title">delivered</span> <span class="title">to</span> <span class="title">an</span> <span class="title">AccessibilityService</span>.
+<span class="title">Parameters</span>
+<span class="title">enabled</span>    <span class="title">True</span> <span class="title">if</span> <span class="title">the</span> <span class="title">node</span> <span class="title">is</span> <span class="title">enabled</span>.
+<span class="title">Throws</span>
+<span class="title">IllegalStateException</span>    <span class="title">If</span> <span class="title">called</span> <span class="title">from</span> <span class="title">an</span> <span class="title">AccessibilityService</span>.</code></pre>
+<p>这个函数如果设置为false，那这个Checkbox就是不可选(灰色)，点击选项是无效的！设置true就是可选，选项就可以正常使用！</p>
+<p>还有个setChecked函数是控制开关的，如果为true则选项是开着，false的话，选项就是关闭！下面是手册</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> setChecked (boolean <span class="keyword">checked</span>)
+Added <span class="keyword">in</span> API level <span class="number">1</span>
+Change the <span class="keyword">checked</span> state of the view
+Parameters
+<span class="keyword">checked</span>
+The <span class="keyword">new</span> <span class="keyword">checked</span> state</code></pre>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[用Goagent代理git来同步代码]]></title>
+    <link href="http://riloli.github.io/2013/10/05/用goagent代理git来同步代码/"/>
+    <id>http://riloli.github.io/2013/10/05/用goagent代理git来同步代码/</id>
+    <published>2013-10-05T12:45:35.000Z</published>
+    <updated>2013-10-05T12:51:02.000Z</updated>
+    <content type="html"><![CDATA[<p>同步CM代码坑死爹了，生活在水深火热的天朝中，想同步个代码也不行啊</p>
+<p>Goagent我这里就不说怎么设置了，请自行谷歌！</p>
+<p>注意：使用goagent同步代码不能使用git:// 协议，请自行修改到https:// 协议</p>
+<a id="more"></a>
+
+<p>首先设置HTTP PROXY</p>
+<pre><code><span class="keyword">export</span> http_proxy=<span class="string">"http://127.0.0.1:8087"</span>
+<span class="keyword">export</span> https_proxy=<span class="string">"http://127.0.0.1:8087"</span></code></pre>
+<p>然后就是证书了，我是直接关闭SSL证书校验的</p>
+<pre><code><span class="title">git</span> config --global http.sslVerify <span class="built_in">false</span></code></pre>
+<p>你也可以指定证书路径</p>
+<pre><code><span class="title">git</span> config --global http.sslCA<span class="built_in">info</span> /uar/share/goagent/local/CA.crt</code></pre>
+<p>然后就可以通过goagent来代理git了。。</p>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Github/" term="Github"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[Android显示网速的另一种方法]]></title>
+    <link href="http://riloli.github.io/2013/10/05/android显示网速的另一种方法/"/>
+    <id>http://riloli.github.io/2013/10/05/android显示网速的另一种方法/</id>
+    <published>2013-10-05T12:38:42.000Z</published>
+    <updated>2013-10-05T12:42:02.000Z</updated>
+    <content type="html"><![CDATA[<p>今天我又来重复造轮子了，上/下行数据是从/proc/net/dev读取数据而来，而不是用Android的API来实现的。</p>
+<p>话说之前我居然在主线程使用while，导致状态栏出来不了。如果不是大蛋～我如今还是一头迷途的羔羊！！</p>
+<p>信大蛋，得永生！！信大蛋，得永生！！信大蛋，得永生！！信大蛋，得永生！！</p>
+<p>下面贴出代码，你们自己看吧。。。</p>
+<a id="more"></a>
+
+<pre><code><span class="keyword">package</span> com.michellgaby.traffic;
+<span class="keyword">import</span> android.content.Context;
+<span class="keyword">import</span> android.os.Handler;
+<span class="keyword">import</span> android.util.AttributeSet;
+<span class="keyword">import</span> android.widget.TextView;
+<span class="keyword">import</span> java.io.*;
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Traffic</span> <span class="keyword">extends</span> <span class="title">TextView</span> {</span>
+    <span class="comment">// 线程等待时间</span>
+    <span class="keyword">private</span> <span class="keyword">int</span> mDelaytime = <span class="number">3000</span>;
+    <span class="keyword">private</span> Handler mHandler = <span class="keyword">new</span> Handler();
+    <span class="keyword">private</span> <span class="keyword">int</span> mLastReceive = <span class="number">0</span>;
+    <span class="keyword">private</span> <span class="keyword">int</span> mLastTransmit = <span class="number">0</span>;
+    <span class="keyword">private</span> <span class="keyword">int</span> mRxTxRate = <span class="number">0</span>;
+    File traffic = <span class="keyword">new</span> File(<span class="string">"/data/.traffic"</span>);
+    <span class="comment">// 一个新的线程</span>
+    <span class="keyword">private</span> Runnable task = <span class="keyword">new</span> Runnable() {
+        <span class="keyword">public</span> <span class="keyword">void</span> run() {
+            <span class="keyword">if</span> (!traffic.exists() || mLastReceive == getTotalDataBytes(<span class="keyword">true</span>) &amp;&amp; mLastTransmit == getTotalDataBytes(<span class="keyword">false</span>)){
+                Traffic.<span class="keyword">this</span>.setText(<span class="string">""</span>);
+            } <span class="keyword">else</span> {
+                mRxTxRate = (getTotalDataBytes(<span class="keyword">true</span>) - mLastReceive) + (getTotalDataBytes(<span class="keyword">false</span>) - mLastTransmit);
+                mLastReceive = getTotalDataBytes(<span class="keyword">true</span>);
+                mLastTransmit = getTotalDataBytes(<span class="keyword">false</span>);
+                <span class="keyword">if</span> (mRxTxRate &gt; <span class="number">0</span>)
+                    Traffic.<span class="keyword">this</span>.setText(formatSize(mRxTxRate/<span class="number">3</span>));
+                <span class="keyword">else</span>
+                    Traffic.<span class="keyword">this</span>.setText(<span class="string">""</span>);
+            }
+            mHandler.postDelayed(task, mDelaytime);
+        }
+    };
+    <span class="comment">// 获取网络传输总数据</span>
+    <span class="keyword">private</span> <span class="keyword">int</span> getTotalDataBytes(<span class="keyword">boolean</span> Transmit) {
+        String readLine;
+        String[] DataPart;
+        <span class="keyword">int</span> line = <span class="number">0</span>;
+        <span class="keyword">int</span> Data = <span class="number">0</span>;
+        <span class="keyword">try</span> {
+            <span class="comment">// 使用BufferedReader打开文件</span>
+            FileReader fr = <span class="keyword">new</span> FileReader(<span class="string">"/proc/net/dev"</span>);
+            BufferedReader br = <span class="keyword">new</span> BufferedReader(fr);
+            <span class="comment">// 按行读取数据并相加</span>
+            <span class="keyword">while</span>((readLine = br.readLine()) != <span class="keyword">null</span>) {
+                <span class="comment">// 跳过文件头两行</span>
+                line++;
+                <span class="keyword">if</span> (line &lt;= <span class="number">2</span>) <span class="keyword">continue</span>;
+                <span class="comment">// 使用split分割字符串</span>
+                DataPart = readLine.split(<span class="string">":"</span>);
+                DataPart = DataPart[<span class="number">1</span>].split(<span class="string">"\\s+"</span>);
+                <span class="keyword">if</span> (Transmit) {
+                    <span class="comment">// 获取接收的总流量</span>
+                    Data += Integer.parseInt(DataPart[<span class="number">1</span>]);
+                } <span class="keyword">else</span> {
+                    <span class="comment">// 获取上传的总流量</span>
+                    Data += Integer.parseInt(DataPart[<span class="number">9</span>]);
+                }
+            }
+            <span class="comment">// 关闭文件</span>
+            fr.close();
+            br.close();
+        } <span class="keyword">catch</span> (IOException e) {
+            <span class="comment">// 获取失败则返回-1</span>
+            <span class="keyword">return</span> -<span class="number">1</span>;
+        }
+        <span class="comment">// 返回数据的总字节</span>
+        <span class="keyword">return</span> Data;
+    }
+    <span class="keyword">public</span> Traffic(Context context) {
+        <span class="keyword">this</span>(context, <span class="keyword">null</span>);
+    }
+    <span class="keyword">public</span> Traffic(Context context, AttributeSet attrs) {
+        <span class="keyword">this</span>(context, attrs, <span class="number">0</span>);
+    }
+    <span class="keyword">public</span> Traffic(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyle) {
+        <span class="keyword">super</span>(context, attrs, defStyle);
+    }
+
+    <span class="comment">// 初始化工作</span>
+    <span class="annotation">@Override</span>
+    <span class="keyword">protected</span> <span class="keyword">void</span> onAttachedToWindow() {
+        <span class="keyword">super</span>.onAttachedToWindow();
+        <span class="comment">// 延迟Call线程</span>
+        mHandler.postDelayed(task, mDelaytime);
+    }
+    <span class="comment">// 销毁工作</span>
+    <span class="annotation">@Override</span>
+    <span class="keyword">protected</span> <span class="keyword">void</span> onDetachedFromWindow() {
+        <span class="keyword">super</span>.onDetachedFromWindow();
+        <span class="comment">// 移除线程</span>
+        mHandler.removeCallbacks(task);
+    }
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String BYTES = <span class="string">"B/s"</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String MEGABYTES = <span class="string">"MB/s"</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String KILOBYTES = <span class="string">"KB/s"</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String GIGABYTES = <span class="string">"GB/s"</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> KILO = <span class="number">1024</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> MEGA = KILO * <span class="number">1024</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> GIGA = MEGA * <span class="number">1024</span>;
+
+    <span class="comment">// 格式化数据</span>
+    <span class="keyword">static</span> String formatSize(<span class="keyword">final</span> <span class="keyword">long</span> pBytes) {
+        <span class="keyword">if</span> (pBytes &lt; KILO) {
+            <span class="keyword">return</span> pBytes + BYTES;
+        } <span class="keyword">else</span> <span class="keyword">if</span> (pBytes &lt; MEGA) {
+            <span class="keyword">return</span> (<span class="keyword">int</span>) (<span class="number">0.5</span> + (pBytes / (<span class="keyword">double</span>) KILO)) + KILOBYTES;
+        } <span class="keyword">else</span> <span class="keyword">if</span> (pBytes &lt; GIGA) {
+            <span class="keyword">return</span> (<span class="keyword">int</span>) (<span class="number">0.5</span> + (pBytes / (<span class="keyword">double</span>) MEGA)) + MEGABYTES;
+        } <span class="keyword">else</span> {
+            <span class="keyword">return</span> (<span class="keyword">int</span>) (<span class="number">0.5</span> + (pBytes / (<span class="keyword">double</span>) GIGA)) + GIGABYTES;
+        }
+    }
+}</code></pre>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[C语言 解压华为固件]]></title>
+    <link href="http://riloli.github.io/2013/10/05/c语言-解压华为固件/"/>
+    <id>http://riloli.github.io/2013/10/05/c语言-解压华为固件/</id>
+    <published>2013-10-05T12:33:09.000Z</published>
+    <updated>2013-10-05T12:36:50.000Z</updated>
+    <content type="html"><![CDATA[<p>这是解压华为固件(update.app)的C语言。。其实这也是我翻115翻出来的。。。</p>
+<a id="more"></a>
+
+<pre><code>/*<span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">###
+#
+#   文件          : unpack_update.c
+#   作者          : Michellgaby(vincent.18023962826@gmail.com)
+#   说明          : 解压缩华为的'UPDATA.APP'官方系统包.
+#
+#   创建时间      : 2013年1月22号 -Michellgaby
+#
+###</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span><span class="comment">######</span>*/
+<span class="comment">#include&lt;stdio.h&gt;</span>
+<span class="comment">#include&lt;stdlib.h&gt;</span>
+<span class="comment">#include&lt;string.h&gt;</span>
+<span class="comment">#define MAXLEN 10240</span>
+<span class="reserved">void</span> usage();
+int main(int argc,char *argv[])
+{
+    int count,packetLength,dataLength,olddataLength,datasum,line,remainder,*Length;
+    char *FILENAME,*OUTNAME;
+    char int2char[<span class="number">10</span>];
+    unsigned char buffer[MAXLEN];
+    FILE *INFILE,*OUTFILE;
+    <span class="regexp">//</span>获取输入的参数
+    <span class="keyword">if</span>(argc == <span class="number">1</span>)
+        FILENAME=<span class="string">"UPDATE.APP"</span>;
+    <span class="keyword">else</span>
+        FILENAME=argv[<span class="number">1</span>];
+    <span class="regexp">//</span>用二进制打开输入文件
+    <span class="keyword">if</span>((INFILE = fopen(FILENAME, <span class="string">"rb"</span>)) == NULL) usage();
+    <span class="regexp">//</span>创建文件夹并进入目录
+    mkdir(<span class="string">"output"</span>);
+    chdir(<span class="string">"output"</span>);
+    <span class="regexp">//</span>跳过<span class="number">92</span>空字节
+    fseek(INFILE, <span class="number">92</span>, <span class="number">0</span>);
+    <span class="keyword">for</span>(count=<span class="number">1</span>;INFILE != NULL;count++)
+    {
+        <span class="regexp">//</span>判断是否为华为固件索引头
+        fread(buffer, <span class="number">4</span>, <span class="number">1</span>, INFILE);
+        <span class="keyword">if</span>(buffer[<span class="number">0</span>] != <span class="number">0x55</span>) <span class="keyword">break</span>;
+        <span class="keyword">if</span>(buffer[<span class="number">1</span>] != <span class="number">0XAA</span>) <span class="keyword">break</span>;
+        <span class="keyword">if</span>(buffer[<span class="number">2</span>] != <span class="number">0x5A</span>) <span class="keyword">break</span>;
+        <span class="keyword">if</span>(buffer[<span class="number">3</span>] != <span class="number">0xA5</span>) <span class="keyword">break</span>;
+        <span class="regexp">//</span>获取头文件长度
+        fread(buffer, <span class="number">4</span>, <span class="number">1</span>, INFILE);
+        Length = (int *)buffer;
+        packetLength=*Length;
+        <span class="regexp">//</span>跳过<span class="number">16</span>字节
+        fseek(INFILE, <span class="number">16</span>, <span class="number">1</span>);
+        <span class="regexp">//</span>获取内容长度
+        fread(buffer, <span class="number">4</span>, <span class="number">1</span>, INFILE);
+        Length = (int *) buffer;
+        dataLength=*Length;
+        <span class="regexp">//</span>把整数和字符串连接并复制给文件名
+        itoa(count, int2char, <span class="number">10</span>);
+        OUTNAME=strcat(int2char, <span class="string">".img"</span>);
+        <span class="regexp">//</span>跳到头文件末尾
+        fseek(INFILE, packetLength-<span class="number">28</span>, <span class="number">1</span>);
+        <span class="regexp">//</span>创建文件
+        <span class="keyword">if</span>((OUTFILE = fopen(OUTNAME, <span class="string">"wb"</span>)) == NULL)
+        {
+            printf(<span class="string">"Unrecognised file format. Wrong identifier.\n"</span>);
+            <span class="keyword">return</span> -<span class="number">1</span>;
+        } <span class="keyword">else</span> printf(<span class="string">"Extracted output/%s\n"</span>,OUTNAME);
+        <span class="regexp">//</span>把内容数据分成多个部分
+        datasum=dataLength/MAXLEN;
+        <span class="keyword">for</span>(line=<span class="number">0</span>;line &lt;= datasum;line++)
+        {
+            <span class="regexp">//</span>获取内容数据
+            <span class="keyword">if</span>(datasum == line)
+                fread(buffer, dataLength % MAXLEN, <span class="number">1</span>, INFILE);
+            <span class="keyword">else</span>
+            fread(buffer, MAXLEN, <span class="number">1</span>, INFILE);
+            <span class="regexp">//</span>输出文件
+            <span class="keyword">if</span>(datasum == line)
+                fwrite(buffer, dataLength % MAXLEN, <span class="number">1</span>, OUTFILE);
+            <span class="keyword">else</span>
+            fwrite(buffer, MAXLEN, <span class="number">1</span>, OUTFILE);
+        }
+        <span class="regexp">//</span>关闭输出文件
+        fclose(OUTFILE);
+        <span class="regexp">//</span>指针取整，<span class="number">4</span>的倍数
+        remainder = <span class="number">4</span> - (ftell(INFILE) % <span class="number">4</span>);
+        <span class="keyword">if</span> (remainder &lt; <span class="number">4</span>)
+        {
+            <span class="regexp">//</span>进行填充剩余的字节
+            fseek(INFILE, remainder, <span class="number">1</span>);
+        }
+    }
+    <span class="regexp">//</span>关闭输入文件
+    fclose(INFILE);
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+<span class="reserved">void</span> usage()
+{
+    <span class="regexp">//</span>帮助函数
+    printf(<span class="string">"uasge: unpack_update.exe [UPDATE.APP|UPDATA.APP]\n"</span>);
+    exit(<span class="number">0</span>);
+}</code></pre>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/C语言/" term="C语言"/>
+  </entry>
+  <entry>
+    <title type="html"><![CDATA[Perl 对比boot.img并修正]]></title>
+    <link href="http://riloli.github.io/2013/10/05/perl-对比bootimg并修正/"/>
+    <id>http://riloli.github.io/2013/10/05/perl-对比bootimg并修正/</id>
+    <published>2013-10-05T12:29:13.000Z</published>
+    <updated>2013-10-05T12:32:56.000Z</updated>
+    <content type="html"><![CDATA[<p>今天翻了翻115网盘。。发现半年前写的东西居然在那，于是顺便放这里当个存档</p>
+<p>今天看了下，发现有点看不懂了。。毕竟半年没写了。。</p>
+<a id="more"></a>
+
+<pre><code><span class="comment">#!/usr/bin/perl</span>
+<span class="comment">######################################################################</span>
+<span class="comment">#</span>
+<span class="comment">#   文件      : diffboot.pl</span>
+<span class="comment">#   作者      : Michellgaby(vincent.18023962826@gmail.com)</span>
+<span class="comment">#   说明      : 对比boot.img的参数并进行修正,输出check_boot.blk文件;</span>
+<span class="comment">#</span>
+<span class="comment">#   致谢      : 感谢&amp;ROMDIYing老师，他对人类的工具化革命付出了伟大的贡献，</span>
+<span class="comment">#               鄙人的本工具参考了他的代码，使本工具蓬荜生辉，实在令我感激</span>
+<span class="comment">#               不尽，他乃一位功法大成者，对安卓的ROOT历史划上了崭新的一笔，</span>
+<span class="comment">#               他所写的【batROMdiy】工具箱造福广大机油，使他们免受定制软件</span>
+<span class="comment">#               的煎熬，让我们给&amp;ROMDIYing掌声；(http://weibo.com/romdiying)</span>
+<span class="comment">#</span>
+<span class="comment">#   创建时间  : 2013年01月16日 -Michellgaby</span>
+<span class="comment">#   使用方法  : diffboot.pl [boot.img] [flash.blk]</span>
+<span class="comment">#</span>
+<span class="comment">######################################################################</span>
+<span class="comment">############################## 定义变量 ##############################</span>
+<span class="keyword">use</span> strict;
+<span class="keyword">use</span> warnings;
+<span class="keyword">my</span> (<span class="variable">$boot_file</span>,<span class="variable">$flash_file</span>,<span class="variable">$buffer</span>,<span class="variable">$ramdisk_size</span>,<span class="variable">$flash_correct</span>,<span class="variable">$count</span>,<span class="variable">$YN</span>,<span class="variable">$edit</span>) = (<span class="keyword">undef</span>,<span class="keyword">undef</span>,<span class="keyword">undef</span>,<span class="keyword">undef</span>,<span class="keyword">undef</span>,<span class="keyword">undef</span>,<span class="keyword">undef</span>,<span class="number">0</span>);
+<span class="keyword">my</span> <span class="variable">@boot</span>  = (<span class="string">"boot_kernel_size"</span>, <span class="string">"boot_kernel_addr"</span>, <span class="string">"boot_ramdisk_addr"</span>, <span class="string">"boot_second_size"</span>, <span class="string">"boot_second_addr"</span>, <span class="string">"boot_tags_addr"</span>, <span class="string">"boot_page_size"</span>, <span class="string">"boot_unkown"</span>, <span class="string">"boot_name"</span>, <span class="string">"boot_cmdline"</span>);
+<span class="keyword">my</span> <span class="variable">@flash</span> = (<span class="string">"flash_kernel_size"</span>, <span class="string">"flash_kernel_addr"</span>, <span class="string">"flash_ramdisk_addr"</span>, <span class="string">"flash_second_size"</span>, <span class="string">"flash_second_addr"</span>, <span class="string">"flash_tags_addr"</span>, <span class="string">"flash_page_size"</span>, <span class="string">"flash_unkown"</span>, <span class="string">"flash_name"</span>, <span class="string">"flash_cmdline"</span>);
+<span class="keyword">my</span> <span class="variable">@about</span> = (<span class="string">"kernel  [size]"</span>, <span class="string">"kernel  [addr]"</span>, <span class="string">"ramdisk [addr]"</span>, <span class="string">"second  [size]"</span>, <span class="string">"second  [addr]"</span>, <span class="string">"tags    [addr]"</span>, <span class="string">"page    [size]"</span>,<span class="string">"unkown  [addr]"</span>, <span class="string">"name    [char]"</span>, <span class="string">"cmdline [char]"</span>);
+<span class="keyword">my</span> <span class="variable">@check</span> = (<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);
+<span class="keyword">my</span> <span class="variable">@unkown</span>= (<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">128</span>);
+<span class="comment">########################### 检查输入的参数 ############################</span>
+<span class="keyword">if</span> (<span class="variable">$#ARGV</span> == -<span class="number">1</span>) { <span class="keyword">die</span> <span class="string">"usage: diffboot.pl [boot.img] [flash.blk]\n"</span>; }
+<span class="keyword">if</span> (<span class="variable">$#ARGV</span> == <span class="number">0</span>)  { <span class="keyword">die</span> <span class="string">"usage: diffboot.pl [boot.img] [flash.blk]\n"</span>; }
+<span class="keyword">else</span> { <span class="variable">$boot_file</span> = <span class="variable">$ARGV</span>[<span class="number">0</span>]; <span class="variable">$flash_file</span> = <span class="variable">$ARGV</span>[<span class="number">1</span>]; }
+<span class="comment">############################ boot.img #################################</span>
+<span class="comment">#以只读模式打开文件,然后以二进制读取文件</span>
+<span class="keyword">open</span>(INFILE, <span class="variable">$boot_file</span>) <span class="keyword">or</span> <span class="keyword">die</span> <span class="string">"Cannot open <span class="variable">$boot_file</span>: <span class="variable">$!</span>\n"</span>;
+<span class="keyword">binmode</span> INFILE;
+<span class="comment">#检测是否为boot.img文件</span>
+<span class="keyword">read</span>(INFILE, <span class="variable">$buffer</span>, <span class="number">8</span>);
+<span class="keyword">unless</span> (<span class="variable">$buffer</span> eq <span class="string">"\x41\x4E\x44\x52\x4F\x49\x44\x21"</span>) { <span class="keyword">die</span> <span class="string">"Unrecognised file format. Wrong identifier\n"</span>; }
+<span class="comment">#获取boot信息</span>
+<span class="keyword">for</span> (<span class="variable">$count</span>=<span class="number">0</span>; <span class="variable">$count</span> &lt; <span class="number">10</span>; <span class="variable">$count</span>++) {
+<span class="keyword">seek</span>(INFILE, <span class="number">4</span>, <span class="number">1</span>) <span class="keyword">if</span> (<span class="variable">$count</span> eq <span class="number">2</span>);
+<span class="keyword">read</span>(INFILE, <span class="variable">$boot</span>[<span class="variable">$count</span>], <span class="variable">$unkown</span>[<span class="variable">$count</span>] * <span class="number">4</span>);
+}
+<span class="keyword">close</span> INFILE;
+<span class="comment">############################ flash.blk ################################</span>
+<span class="comment">#以只读模式打开文件,然后以二进制读取文件</span>
+<span class="keyword">open</span>(INFILE, <span class="variable">$flash_file</span>) <span class="keyword">or</span> <span class="keyword">die</span> <span class="string">"Cannot open <span class="variable">$flash_file</span>: <span class="variable">$!</span>\n"</span>;
+<span class="keyword">binmode</span> INFILE;
+<span class="comment">#检测是否为boot.img文件</span>
+<span class="keyword">read</span>(INFILE, <span class="variable">$buffer</span>, <span class="number">8</span>);
+<span class="keyword">unless</span> (<span class="variable">$buffer</span> eq <span class="string">"\x41\x4E\x44\x52\x4F\x49\x44\x21"</span>) { <span class="keyword">die</span> <span class="string">"Unrecognised file format. Wrong identifier\n"</span>; }
+<span class="comment">#获取flash信息</span>
+<span class="keyword">for</span> (<span class="variable">$count</span>=<span class="number">0</span>; <span class="variable">$count</span> &lt; <span class="number">10</span>; <span class="variable">$count</span>++) {
+<span class="keyword">read</span>(INFILE, <span class="variable">$ramdisk_size</span>, <span class="number">4</span>) <span class="keyword">if</span> (<span class="variable">$count</span> eq <span class="number">2</span>);
+<span class="keyword">read</span>(INFILE, <span class="variable">$flash</span>[<span class="variable">$count</span>], <span class="variable">$unkown</span>[<span class="variable">$count</span>] * <span class="number">4</span>);
+}
+<span class="variable">$flash_correct</span> = <span class="keyword">do</span> { <span class="keyword">local</span> <span class="variable">$/</span>; &lt;INFILE&gt; };
+<span class="keyword">close</span> INFILE;
+<span class="comment">############################## DIFF ###################################</span>
+<span class="comment">#输出比较信息</span>
+<span class="keyword">unless</span> (<span class="variable">$boot</span>[<span class="number">0</span>] eq <span class="variable">$flash</span>[<span class="number">0</span>]) { <span class="keyword">die</span> <span class="string">"kernel size not the same\n"</span> }
+<span class="keyword">for</span> (<span class="variable">$count</span>=<span class="number">1</span>; <span class="variable">$count</span> &lt; <span class="number">10</span>; <span class="variable">$count</span>++) { <span class="keyword">if</span> (<span class="variable">$boot</span>[<span class="variable">$count</span>] eq <span class="variable">$flash</span>[<span class="variable">$count</span>] ) { <span class="variable">$check</span>[<span class="variable">$count</span>] = <span class="number">1</span>; } }
+<span class="keyword">printf</span>(<span class="string">"<span class="variable">%s</span>[name]<span class="variable">%s</span>[boot]<span class="variable">%s</span>[flash]<span class="variable">%s</span>[Y/N]\n"</span>,<span class="string">"-"</span>x4,<span class="string">"-"</span>x17,<span class="string">"-"</span>x17,<span class="string">"-"</span>x17);
+<span class="keyword">for</span> (<span class="variable">$count</span>=<span class="number">0</span>; <span class="variable">$count</span> &lt; <span class="number">10</span>; <span class="variable">$count</span>++) {
+<span class="keyword">if</span> (<span class="variable">$check</span>[<span class="variable">$count</span>] eq <span class="number">1</span>) { <span class="variable">$YN</span> = <span class="string">"Yes"</span>; } <span class="keyword">else</span> { <span class="variable">$YN</span> = <span class="string">"No"</span>; <span class="variable">$edit</span> = <span class="number">1</span>;}
+<span class="keyword">printf</span>(<span class="string">"<span class="variable">%-</span>15s <span class="variable">%s</span> 0x<span class="variable">%08x</span> <span class="variable">%s</span> 0x<span class="variable">%08x</span> <span class="variable">%s</span> [<span class="variable">%s</span>]\n"</span>,<span class="variable">$about</span>[<span class="variable">$count</span>],<span class="string">" "</span>x8,<span class="keyword">unpack</span>(<span class="string">"V"</span>,<span class="variable">$boot</span>[<span class="variable">$count</span>]),<span class="string">" "</span>x12,<span class="keyword">unpack</span>(<span class="string">"V"</span>,<span class="variable">$flash</span>[<span class="variable">$count</span>]),<span class="string">" "</span>x13,<span class="variable">$YN</span>);
+}
+<span class="keyword">printf</span>(<span class="string">"<span class="variable">%s</span>\n"</span>,<span class="string">"-"</span>x79);
+<span class="keyword">unless</span> (<span class="variable">$edit</span> eq <span class="number">1</span>) { <span class="keyword">die</span> <span class="string">"Check for the correct done!\n"</span>; }
+<span class="comment">############################## EDIT ###################################</span>
+<span class="comment">#修改boot参数</span>
+<span class="keyword">printf</span>(<span class="string">"<span class="variable">%s</span> and <span class="variable">%s</span> diff: press ENTER to continue..."</span>,<span class="variable">$boot_file</span>,<span class="variable">$flash_file</span>  );
+<span class="variable">$edit</span>=&lt;STDIN&gt;;
+<span class="keyword">open</span>(OUTFILE, <span class="string">"&gt;check_flash.blk"</span>) <span class="keyword">or</span> <span class="keyword">die</span> <span class="string">"Cannot open check_flash.blk: <span class="variable">$!</span>\n"</span>;
+<span class="keyword">binmode</span> OUTFILE;
+<span class="keyword">printf</span> OUTFILE <span class="string">"\x41\x4E\x44\x52\x4F\x49\x44\x21"</span>;
+<span class="keyword">for</span> (<span class="variable">$count</span>=<span class="number">0</span>; <span class="variable">$count</span> &lt; <span class="number">10</span>; <span class="variable">$count</span>++) {
+<span class="keyword">print</span> OUTFILE <span class="variable">$ramdisk_size</span> <span class="keyword">if</span> (<span class="variable">$count</span> eq <span class="number">2</span>);
+<span class="keyword">print</span> OUTFILE <span class="variable">$boot</span>[<span class="variable">$count</span>];
+}
+<span class="keyword">print</span> OUTFILE <span class="variable">$flash_correct</span>;
+<span class="keyword">close</span> OUTFILE;
+<span class="keyword">printf</span>(<span class="string">"<span class="variable">%s</span> and <span class="variable">%s</span> diff: recreate check_flash.blk done!\n"</span>,<span class="variable">$boot_file</span>,<span class="variable">$flash_file</span>);</code></pre>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Perl/" term="Perl"/>
+  </entry>
   <entry>
     <title type="html"><![CDATA[Python调用API发微博]]></title>
     <link href="http://riloli.github.io/2013/10/05/python调用api发微博/"/>
@@ -110,14 +631,14 @@ weibo_pic(<span class="string">'测试发布图片微博'</span>, <span class="s
     <link href="http://riloli.github.io/2013/10/05/conky,urxvt,vim-配置文件/"/>
     <id>http://riloli.github.io/2013/10/05/conky,urxvt,vim-配置文件/</id>
     <published>2013-10-05T09:12:31.000Z</published>
-    <updated>2013-10-05T09:16:52.000Z</updated>
+    <updated>2013-10-05T12:23:34.000Z</updated>
     <content type="html"><![CDATA[<p>写点Archlinux下的软件配置，以后直接复制就行了，懒得重新配置！</p>
 <p><img src="http://images.cnitblog.com/blog/557234/201308/13192046-0d3629080d124cf48a3f68bdf8e2ea8c.png" alt=""></p>
 <a id="more"></a>
 
 <p><img src="http://images.cnitblog.com/blog/557234/201308/13192059-0351d46bf6f14579b05e02f0ca07d518.png" alt=""></p>
 <p>需要配置的软件有dwm, conky, urxvt, vim, acpi</p>
-<p>DWM的配置请看这里:<a href="https://docs.google.com/file/d/0B6L_eKOtMWLVaFNXMk5DeHk0b28/edit" target="_blank">Archlinux 安装dwm</a></p>
+<p>DWM的配置请看这里:<a href="http://riloli.github.io/2013/10/05/archlinux-%E5%AE%89%E8%A3%85dwm/" target="_blank">Archlinux 安装dwm</a></p>
 <p>首先我们需要安装好这些软件！</p>
 <pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>sudo pacman -<span class="constant">S</span> conky rxvt-unicode vim acpi</code></pre>
 <p>Conky配置文件($HOME/.conkyrc)</p>
@@ -875,59 +1396,5 @@ ro<span class="variable">.debuggable</span>=<span class="number">1</span></code>
 <p>好吧,安卓是坑爹的,错了一个参数都要你的命啊!!!!!!!!!!!</p>
 ]]></content>
     <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
-  </entry>
-  <entry>
-    <title type="html"><![CDATA[Archlinux 64位安装bcompare]]></title>
-    <link href="http://riloli.github.io/2013/10/04/archlinux-64位安装bcompare/"/>
-    <id>http://riloli.github.io/2013/10/04/archlinux-64位安装bcompare/</id>
-    <published>2013-10-04T14:43:16.000Z</published>
-    <updated>2013-10-04T14:50:08.000Z</updated>
-    <content type="html"><![CDATA[<p>之前用Hexo搭建的Github博客没有备份博文的源文件。。</p>
-<p>结果悲剧了，编辑/更新不了，于是转战博客园ヽ(≧Д≦)ノ</p>
-<p>先说下如何安装bcompare(Beyond Compare)</p>
-<a id="more"></a>
-
-<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>sudo yaourt -<span class="constant">S</span> bcompare</code></pre>
-<p>我们使用yaourt从强大的AUR仓库中安装packages，官方仓库没有收录</p>
-<p>安装好后却启动不了(因为我是64位)，还需要安装32位的库</p>
-<pre><code>[michellgaby@K-on ~]$ bcompare 
-Some Shared Libraries were not found
-    linux-gate<span class="preprocessor">.so</span><span class="number">.1</span> (<span class="number">0xf774e000</span>)
-    libz<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; /usr/lib32/libz<span class="preprocessor">.so</span><span class="number">.1</span> (<span class="number">0xf7722000</span>)
-    libqtc<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; /usr/lib32/beyondcompare/libqtc<span class="preprocessor">.so</span><span class="number">.1</span> (<span class="number">0xf720c000</span>)
-    libX11<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
-    librt<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; /usr/lib32/librt<span class="preprocessor">.so</span><span class="number">.1</span> (<span class="number">0xf7203000</span>)
-    libpthread<span class="preprocessor">.so</span><span class="number">.0</span> =&gt; /usr/lib32/libpthread<span class="preprocessor">.so</span><span class="number">.0</span> (<span class="number">0xf71e7000</span>)
-    libdl<span class="preprocessor">.so</span><span class="number">.2</span> =&gt; /usr/lib32/libdl<span class="preprocessor">.so</span><span class="number">.2</span> (<span class="number">0xf71e2000</span>)
-    libc<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; /usr/lib32/libc<span class="preprocessor">.so</span><span class="number">.6</span> (<span class="number">0xf7033000</span>)
-    libqt-mt<span class="preprocessor">.so</span><span class="number">.3</span> =&gt; /usr/lib32/beyondcompare/libqt-mt<span class="preprocessor">.so</span><span class="number">.3</span> (<span class="number">0xf6920000</span>)
-    libXext<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
-    libX11<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
-    libstdc++<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; /usr/lib32/libstdc++<span class="preprocessor">.so</span><span class="number">.6</span> (<span class="number">0xf6836000</span>)
-    libm<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; /usr/lib32/libm<span class="preprocessor">.so</span><span class="number">.6</span> (<span class="number">0xf67f3000</span>)
-    libgcc_s<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; /usr/lib32/libgcc_s<span class="preprocessor">.so</span><span class="number">.1</span> (<span class="number">0xf67d9000</span>)
-    /lib/<span class="keyword">ld</span>-linux<span class="preprocessor">.so</span><span class="number">.2</span> (<span class="number">0xf774f000</span>)
-    libXrender<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; not found
-    libXrandr<span class="preprocessor">.so</span><span class="number">.2</span> =&gt; not found
-    libXcursor<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; not found
-    libXinerama<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; not found
-    libXft<span class="preprocessor">.so</span><span class="number">.2</span> =&gt; not found
-    libfreetype<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
-    libfontconfig<span class="preprocessor">.so</span><span class="number">.1</span> =&gt; not found
-    libXext<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
-    libX11<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
-    libSM<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found
-    libICE<span class="preprocessor">.so</span><span class="number">.6</span> =&gt; not found</code></pre>
-<p>这时要在/etc/pacman.conf开启multilib</p>
-<pre><code><span class="preprocessor">#[multilib]</span>
-<span class="preprocessor">#Include = /etc/pacman.d/mirrorlist</span></code></pre>
-<p>取消掉上面这两行的注释然后再强制更新所有软件包列表</p>
-<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>sudo pacman -<span class="constant">Syy</span></code></pre>
-<p>接着安装上所缺少的库就行了</p>
-<pre><code>[michellgaby<span class="variable">@K</span>-on ~]<span class="variable">$ </span>sudo pacman -<span class="constant">S</span> lib32-libx11  lib32-libxext lib32-libxrender lib32-libxrandr lib32-libice lib32-libsm lib32-libxft lib32-libxinerama lib32-libxcursor</code></pre>
-<p>这样就可以运行Beyond Compare了，最后附上一枚key</p>
-<pre><code><span class="attribute">jp1e8CgYjJ4zf0KhAe8QTR25SFOyWGshdxeqq1esijXleGGAT-Sr0LeFQTvBkeMSRfqNx32mm8oiqLyaoaV5R+</code></pre>
-]]></content>
-    <category scheme="http://riloli.github.io/tags/Archlinux/" term="Archlinux"/>
   </entry>
 </feed>

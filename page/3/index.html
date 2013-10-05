@@ -52,19 +52,19 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-10-05T08:49:46.000Z"><a href="/2013/10/05/qualcomm-device使用ion-memory-manager取代pmem/">10月 5 2013</a></time>
+        <time datetime="2013-10-05T09:02:36.000Z"><a href="/2013/10/05/任务管理界面添加显示ram信息/">10月 5 2013</a></time>
       
       
   
-    <h1 class="title"><a href="/2013/10/05/qualcomm-device使用ion-memory-manager取代pmem/">Qualcomm device使用ION memory manager取代PMEM</a></h1>
+    <h1 class="title"><a href="/2013/10/05/任务管理界面添加显示ram信息/">任务管理界面添加显示RAM信息</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>今天写好device,成功编译出CM,接下来肯定是调戏啦(你什么都没看到)~</p>
-<p>BUG肯定也是一堆堆的!一开机,果然一堆error~可是尼玛,大蛋一放假就不见人了!!!</p>
-<p>我自己折腾几个小时容易么我,我谷歌了几个小时容易么我ヽ(｀д´)ﾉ</p>
+        <p>显示RAM信息的核心代码是大蛋的,我只不过是整理下教程而已!</p>
+<p>大蛋应该不会介意的吧,首先你需要apktool和SystemUI.apk,framework-res.apk</p>
+<p>然后开始加载框架和反编译…</p>
 
       
     </div>
@@ -72,7 +72,7 @@
       
         
           <div class="alignleft">
-            <a href="/2013/10/05/qualcomm-device使用ion-memory-manager取代pmem/#more" class="more-link">阅读全文</a>
+            <a href="/2013/10/05/任务管理界面添加显示ram信息/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -90,23 +90,19 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-10-05T08:39:27.000Z"><a href="/2013/10/05/修改自动亮度下背光和按键的亮度/">10月 5 2013</a></time>
+        <time datetime="2013-10-05T09:00:08.000Z"><a href="/2013/10/05/编译android程序时dex过程出现错误/">10月 5 2013</a></time>
       
       
   
-    <h1 class="title"><a href="/2013/10/05/修改自动亮度下背光和按键的亮度/">修改自动亮度下背光和按键的亮度</a></h1>
+    <h1 class="title"><a href="/2013/10/05/编译android程序时dex过程出现错误/">编译android程序时DEX过程出现错误</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>乐蛙又出现BUG了,高通拼包的BUG就是多!设置自动亮度后,按住光感器,屏幕会一片黑..</p>
-<p>第一感觉就是去看Log….Log如下~</p>
-<pre><code>E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">34</span>
-E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">33</span>
-E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">32</span>
-E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">31</span>
-E/lights ( <span class="number">399</span>): set_light_backlight <span class="keyword">state</span> = <span class="number">1408253004</span>, brightness = <span class="number">32</span></code></pre>
+        <p>今天编译高级设置时出现了错误,这好坑爹啊~</p>
+<p>于是我开始检查代码,发现代码没有错误啊,然后观察MAKE的步骤才发现是DEX时出现了问题!!</p>
+<p>下面是错误的LOG:</p>
 
       
     </div>
@@ -114,7 +110,7 @@ E/lights ( <span class="number">399</span>): set_light_backlight <span class="ke
       
         
           <div class="alignleft">
-            <a href="/2013/10/05/修改自动亮度下背光和按键的亮度/#more" class="more-link">阅读全文</a>
+            <a href="/2013/10/05/编译android程序时dex过程出现错误/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -132,20 +128,19 @@ E/lights ( <span class="number">399</span>): set_light_backlight <span class="ke
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-10-05T08:35:41.000Z"><a href="/2013/10/05/android触摸屏配置调试/">10月 5 2013</a></time>
+        <time datetime="2013-10-05T08:59:06.000Z"><a href="/2013/10/05/解决unable-to-resolve-superclass的问题/">10月 5 2013</a></time>
       
       
   
-    <h1 class="title"><a href="/2013/10/05/android触摸屏配置调试/">Android触摸屏配置调试</a></h1>
+    <h1 class="title"><a href="/2013/10/05/解决unable-to-resolve-superclass的问题/">解决Unable to resolve superclass的问题</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>前几天搞乐蛙时,进入后是鼠标模式,好坑爹的模式有木有~~</p>
-<p>但是大蛋给出了解决方法,我不怕不怕啦~让我们向大牛致敬!!!</p>
-<p>首先输入Command查看你的input配置~</p>
-<pre><code><span class="title">adb</span> shell dumpsys input</code></pre>
+        <p>之前在GITHUB上看到大蛋的高级设置,昨晚于是就拿来编译..</p>
+<p>结果真是个悲伤的故事,放手机上居然运行不了,这种时候只能看LOG了!</p>
+<p>看LOG得出的信息如下:</p>
 
       
     </div>
@@ -153,7 +148,7 @@ E/lights ( <span class="number">399</span>): set_light_backlight <span class="ke
       
         
           <div class="alignleft">
-            <a href="/2013/10/05/android触摸屏配置调试/#more" class="more-link">阅读全文</a>
+            <a href="/2013/10/05/解决unable-to-resolve-superclass的问题/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -171,18 +166,19 @@ E/lights ( <span class="number">399</span>): set_light_backlight <span class="ke
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-10-04T16:07:58.000Z"><a href="/2013/10/05/android无法连接adb的解决方法/">10月 5 2013</a></time>
+        <time datetime="2013-10-05T08:58:19.000Z"><a href="/2013/10/05/转换framebuffer实现安卓截图/">10月 5 2013</a></time>
       
       
   
-    <h1 class="title"><a href="/2013/10/05/android无法连接adb的解决方法/">Android无法连接adb的解决方法</a></h1>
+    <h1 class="title"><a href="/2013/10/05/转换framebuffer实现安卓截图/">转换framebuffer实现安卓截图</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>今天在折腾乐蛙时发现无法链接ADB了,但是手机却显示USB调试模式!</p>
-<p>然后想起了大蛋曾经告诉我CM的解决方法,于是你懂得,俺差点就把菊花给卖了呢(/Д`)~ﾟ｡</p>
+        <p>编译出了RECOVERY肯定需要截图分享的啦,可是又不能通过DDMS截图~</p>
+<p>那就只好通过提取手机的fb0文件来实现截图.</p>
+<p>首先你需要ADB~ 嗯,这个都没有的话你就别看下去了…</p>
 
       
     </div>
@@ -190,7 +186,7 @@ E/lights ( <span class="number">399</span>): set_light_backlight <span class="ke
       
         
           <div class="alignleft">
-            <a href="/2013/10/05/android无法连接adb的解决方法/#more" class="more-link">阅读全文</a>
+            <a href="/2013/10/05/转换framebuffer实现安卓截图/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -208,19 +204,20 @@ E/lights ( <span class="number">399</span>): set_light_backlight <span class="ke
     <header>
       
         <div class="icon"></div>
-        <time datetime="2013-10-04T14:43:16.000Z"><a href="/2013/10/04/archlinux-64位安装bcompare/">10月 4 2013</a></time>
+        <time datetime="2013-10-05T08:57:03.000Z"><a href="/2013/10/05/mtk机子修复分区信息/">10月 5 2013</a></time>
       
       
   
-    <h1 class="title"><a href="/2013/10/04/archlinux-64位安装bcompare/">Archlinux 64位安装bcompare</a></h1>
+    <h1 class="title"><a href="/2013/10/05/mtk机子修复分区信息/">MTK机子修复分区信息</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>之前用Hexo搭建的Github博客没有备份博文的源文件。。</p>
-<p>结果悲剧了，编辑/更新不了，于是转战博客园ヽ(≧Д≦)ノ</p>
-<p>先说下如何安装bcompare(Beyond Compare)</p>
+        <p>这是前一个星期的事了,最近一直懒得写博客~</p>
+<p>此事是由于我误刷了内核,然后导致分区信息出错…</p>
+<p>内置存储挂载不上,也找不到内置存储的分区!</p>
+<p>如果不是star的帮助.估计俺的爪机就要返厂了!!</p>
 
       
     </div>
@@ -228,7 +225,7 @@ E/lights ( <span class="number">399</span>): set_light_backlight <span class="ke
       
         
           <div class="alignleft">
-            <a href="/2013/10/04/archlinux-64位安装bcompare/#more" class="more-link">阅读全文</a>
+            <a href="/2013/10/05/mtk机子修复分区信息/#more" class="more-link">阅读全文</a>
           </div>
         
         
@@ -246,6 +243,8 @@ E/lights ( <span class="number">399</span>): set_light_backlight <span class="ke
     <a href="/page/2/" class="alignleft prev">上一页</a>
   
   
+    <a href="/page/4/" class="alignright next">下一页</a>
+  
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
@@ -262,7 +261,7 @@ E/lights ( <span class="number">399</span>): set_light_backlight <span class="ke
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Archlinux/" style="font-size: 15.00px;">Archlinux</a><a href="/tags/Python/" style="font-size: 10.00px;">Python</a>
+    <a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Archlinux/" style="font-size: 15.00px;">Archlinux</a><a href="/tags/C语言/" style="font-size: 10.00px;">C语言</a><a href="/tags/Github/" style="font-size: 10.00px;">Github</a><a href="/tags/Perl/" style="font-size: 10.00px;">Perl</a><a href="/tags/Python/" style="font-size: 10.00px;">Python</a>
   </div>
 </div>
 
