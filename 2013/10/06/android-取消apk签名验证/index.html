@@ -1,0 +1,275 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android 取消APK签名验证 | Riloli's Blog</title>
+  <meta name="author" content="Riloli">
+  
+  <meta name="description" content="今天写点有用的教程，本教程可以跳过APK签名验证
+也就是你可以把与系统不同签名的APK以system身份运行
+废话不多说，下面开始教程，首先把你的services.jar提取出来">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Android 取消APK签名验证"/>
+  <meta property="og:site_name" content="Riloli's Blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Riloli's Blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script type="text/javascript" src="http://api.hitokoto.us/rand?encode=js&charset=utf-8"></script>
+  
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Riloli's Blog</a></h1>
+  <h2><div id="hitokoto"><script>hitokoto()</script></div></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">归档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+      <li><a href="/atom.xml">RSS</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-10-06T07:49:04.000Z"><a href="/2013/10/06/android-取消apk签名验证/">10月 6 2013</a></time>
+      
+      
+  
+    <h1 class="title">Android 取消APK签名验证</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>今天写点有用的教程，本教程可以跳过APK签名验证</p>
+<p>也就是你可以把与系统不同签名的APK以system身份运行</p>
+<p>废话不多说，下面开始教程，首先把你的services.jar提取出来</p>
+<a id="more"></a>
+
+<p>反编译后找到\com\android\server\pm里面的PackageManagerService.smali，打开搜索</p>
+<pre><code><span class="variable">.method</span> <span class="keyword">static</span> compareSignatures([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)I</code></pre>
+<p>在</p>
+<pre><code>    <span class="string">.</span><span class="comment">registers</span> <span class="comment">9</span>
+    <span class="string">.</span><span class="comment">parameter</span> <span class="comment">"s1"</span>
+    <span class="string">.</span><span class="comment">parameter</span> <span class="comment">"s2</code></pre>
+<p>下面添加：</p>
+<pre><code>    .prologue
+    <span class="keyword">const</span>/<span class="number">4</span> v6, <span class="number">0x0</span>
+    <span class="keyword">const</span>-<span class="built_in">string</span> v3, <span class="string">"Riloli: PackageManager"</span>
+    <span class="keyword">const</span>-<span class="built_in">string</span> v4, <span class="string">"Skip signature check."</span>
+    invoke-static {v3, v4}, Landroid/util/Slog;-&gt;e(Ljava/lang/<span class="built_in">String</span>;Ljava/lang/<span class="built_in">String</span>;)I
+    return v6
+.<span class="keyword">end</span> method</code></pre>
+<p>删除后面的：</p>
+<pre><code>    <span class="variable">.line</span> <span class="number">3448</span>
+    <span class="keyword">if</span>-nez p0, :cond_8
+    <span class="variable">.line</span> <span class="number">3449</span>
+    <span class="keyword">if</span>-nez p1, :cond_6
+    <span class="keyword">const</span>/<span class="number">4</span> v6, <span class="number">0x1</span>
+    <span class="variable">.line</span> <span class="number">3468</span>
+    :goto_5
+    <span class="keyword">return</span> v6
+    <span class="variable">.line</span> <span class="number">3449</span>
+    :cond_6
+    <span class="keyword">const</span>/<span class="number">4</span> v6, -<span class="number">0x1</span>
+    <span class="keyword">goto</span> :goto_5
+    <span class="variable">.line</span> <span class="number">3453</span>
+    :cond_8
+    <span class="keyword">if</span>-nez p1, :cond_c
+    <span class="variable">.line</span> <span class="number">3454</span>
+    <span class="keyword">const</span>/<span class="number">4</span> v6, -<span class="number">0x2</span>
+    <span class="keyword">goto</span> :goto_5
+    <span class="variable">.line</span> <span class="number">3456</span>
+    :cond_c
+    new-instance v3, Ljava/util/HashSet;
+    invoke-direct {v3}, Ljava/util/HashSet;-&gt;&lt;init&gt;()V
+    <span class="variable">.line</span> <span class="number">3457</span>
+    <span class="variable">.local</span> v3, set1:Ljava/util/HashSet;,<span class="string">"Ljava/util/HashSet&lt;Landroid/content/pm/Signature;&gt;;"</span>
+    move-object v0, p0
+    <span class="variable">.local</span> v0, arr$:[Landroid/content/pm/Signature;
+    array-length v2, v0
+    <span class="variable">.local</span> v2, len$:I
+    <span class="keyword">const</span>/<span class="number">4</span> v1, <span class="number">0x0</span>
+    <span class="variable">.local</span> v1, i$:I
+    :goto_14
+    <span class="keyword">if</span>-ge v1, v2, :cond_1e
+    aget-object v5, v0, v1
+    <span class="variable">.line</span> <span class="number">3458</span>
+    <span class="variable">.local</span> v5, sig:Landroid/content/pm/Signature;
+    invoke-virtual {v3, v5}, Ljava/util/HashSet;-&gt;add(Ljava/lang/Object;)Z
+    <span class="variable">.line</span> <span class="number">3457</span>
+    add-<span class="keyword">int</span>/lit8 v1, v1, <span class="number">0x1</span>
+    <span class="keyword">goto</span> :goto_14
+    <span class="variable">.line</span> <span class="number">3460</span>
+    <span class="variable">.end</span> local v5           <span class="preprocessor">#sig:Landroid/content/pm/Signature;</span>
+    :cond_1e
+    new-instance v4, Ljava/util/HashSet;
+    invoke-direct {v4}, Ljava/util/HashSet;-&gt;&lt;init&gt;()V
+    <span class="variable">.line</span> <span class="number">3461</span>
+    <span class="variable">.local</span> v4, set2:Ljava/util/HashSet;,<span class="string">"Ljava/util/HashSet&lt;Landroid/content/pm/Signature;&gt;;"</span>
+    move-object v0, p1
+    array-length v2, v0
+    <span class="keyword">const</span>/<span class="number">4</span> v1, <span class="number">0x0</span>
+    :goto_26
+    <span class="keyword">if</span>-ge v1, v2, :cond_30
+    aget-object v5, v0, v1
+    <span class="variable">.line</span> <span class="number">3462</span>
+    <span class="variable">.restart</span> local v5       <span class="preprocessor">#sig:Landroid/content/pm/Signature;</span>
+    invoke-virtual {v4, v5}, Ljava/util/HashSet;-&gt;add(Ljava/lang/Object;)Z
+    <span class="variable">.line</span> <span class="number">3461</span>
+    add-<span class="keyword">int</span>/lit8 v1, v1, <span class="number">0x1</span>
+    <span class="keyword">goto</span> :goto_26
+    <span class="variable">.line</span> <span class="number">3465</span>
+    <span class="variable">.end</span> local v5           <span class="preprocessor">#sig:Landroid/content/pm/Signature;</span>
+    :cond_30
+    invoke-virtual {v3, v4}, Ljava/util/HashSet;-&gt;equals(Ljava/lang/Object;)Z
+    move-result v6
+    <span class="keyword">if</span>-eqz v6, :cond_38
+    <span class="variable">.line</span> <span class="number">3466</span>
+    <span class="keyword">const</span>/<span class="number">4</span> v6, <span class="number">0x0</span>
+    <span class="keyword">goto</span> :goto_5
+    <span class="variable">.line</span> <span class="number">3468</span>
+    :cond_38
+    <span class="keyword">const</span>/<span class="number">4</span> v6, -<span class="number">0x3</span>
+    <span class="keyword">goto</span> :goto_5
+<span class="variable">.end</span> method</code></pre>
+<p>不删除回编译会出错，因为加入的代码里已经有了END语句</p>
+<p>最后回编译替换push到手机，测试就完事了！</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/Android/">Android</a>
+  </div>
+
+        <!-- Baidu Button BEGIN -->
+        <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare">
+        <a class="bds_tsina">新浪微博</a>
+        <a class="bds_qzone">QQ空间</a>
+        <a class="bds_tqq">腾讯微博</a>
+        <a class="bds_twi">Twitter</a>
+        <a class="bds_fbook">Facebook</a>
+        <span class="bds_more">更多</span>
+        </div>
+        <script type="text/javascript" id="bdshare_js" data="type=tools&amp;mini=1&amp;uid=6603412" ></script>
+        <script type="text/javascript" id="bdshell_js"></script>
+        <script type="text/javascript">
+        document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000);
+        </script>
+        <!-- Baidu Button END -->
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"riloli-blogs"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:riloli.github.io">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Android/" style="font-size: 20.00px;">Android</a><a href="/tags/Archlinux/" style="font-size: 15.00px;">Archlinux</a><a href="/tags/C语言/" style="font-size: 10.00px;">C语言</a><a href="/tags/Github/" style="font-size: 10.00px;">Github</a><a href="/tags/Perl/" style="font-size: 10.00px;">Perl</a><a href="/tags/Python/" style="font-size: 10.00px;">Python</a>
+  </div>
+</div>
+
+
+  <div class="widget tag">
+  <h3 class="title">友情链接</h3>
+  <ul class="entry">
+    <li>
+	  <a href="http://flau.me/" target="_blank" title="蛋蛋的博客">芦苇丛的鹅蛋</a>
+	</li>
+  </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">简介</h3>
+  <ul class="entry">
+	<li>还没想好写什么</li>
+  </ul>
+</div>
+
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=2&isTitle=0&noborder=0&isWeibo=1&isFans=0&uid=3833642410&verifier=84bea53d&colors=d6f3f7,ffffff,666666,0082cb,ecfbfd&dpc=1"></iframe>
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 Riloli
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

@@ -20,6 +20,7 @@
   <link rel="alternate" href="/atom.xml" title="Riloli's Blog" type="application/atom+xml">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script type="text/javascript" src="http://api.hitokoto.us/rand?encode=js&charset=utf-8"></script>
   
 </head>
 
@@ -27,7 +28,7 @@
 <body>
   <header id="header" class="inner"><div class="alignleft">
   <h1><a href="/">Riloli's Blog</a></h1>
-  <h2><a href="/"></a></h2>
+  <h2><div id="hitokoto"><script>hitokoto()</script></div></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -46,6 +47,44 @@
 <div class="clearfix"></div></header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-10-06T07:49:04.000Z"><a href="/2013/10/06/android-取消apk签名验证/">10月 6 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/10/06/android-取消apk签名验证/">Android 取消APK签名验证</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>今天写点有用的教程，本教程可以跳过APK签名验证</p>
+<p>也就是你可以把与系统不同签名的APK以system身份运行</p>
+<p>废话不多说，下面开始教程，首先把你的services.jar提取出来</p>
+
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2013/10/06/android-取消apk签名验证/#more" class="more-link">阅读全文</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
   <article class="post">
   
   <div class="post-content">
@@ -201,42 +240,6 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2013-10-05T12:33:09.000Z"><a href="/2013/10/05/c语言-解压华为固件/">10月 5 2013</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2013/10/05/c语言-解压华为固件/">C语言 解压华为固件</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>这是解压华为固件(update.app)的C语言。。其实这也是我翻115翻出来的。。。</p>
-
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2013/10/05/c语言-解压华为固件/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
 
 <nav id="pagination">
   
@@ -265,10 +268,19 @@
 
 
   <div class="widget tag">
-<h3 class="title">友情链接</h3>
-<ul class="entry">
-<li><a href="http://flau.me/" target="_blank" title="蛋蛋的博客">芦苇丛的鹅蛋</a></li>
-</ul>
+  <h3 class="title">友情链接</h3>
+  <ul class="entry">
+    <li>
+	  <a href="http://flau.me/" target="_blank" title="蛋蛋的博客">芦苇丛的鹅蛋</a>
+	</li>
+  </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">简介</h3>
+  <ul class="entry">
+	<li>还没想好写什么</li>
+  </ul>
 </div>
 
   <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=2&isTitle=0&noborder=0&isWeibo=1&isFans=0&uid=3833642410&verifier=84bea53d&colors=d6f3f7,ffffff,666666,0082cb,ecfbfd&dpc=1"></iframe>

@@ -3,13 +3,116 @@
   <title><![CDATA[Riloli's Blog]]></title>
   <link href="http://riloli.github.io/atom.xml" rel="self"/>
   <link href="http://riloli.github.io"/>
-  <updated>2013-10-05T13:27:23.137Z</updated>
+  <updated>2013-10-06T08:40:00.965Z</updated>
   <id>http://riloli.github.io/</id>
   <author>
     <name><![CDATA[Riloli]]></name>
     <email><![CDATA[Riloli@mail.com]]></email>
   </author>
   <generator uri="http://zespia.tw/hexo">Hexo</generator>
+  <entry>
+    <title type="html"><![CDATA[Android 取消APK签名验证]]></title>
+    <link href="http://riloli.github.io/2013/10/06/android-取消apk签名验证/"/>
+    <id>http://riloli.github.io/2013/10/06/android-取消apk签名验证/</id>
+    <published>2013-10-06T07:49:04.000Z</published>
+    <updated>2013-10-06T07:56:56.000Z</updated>
+    <content type="html"><![CDATA[<p>今天写点有用的教程，本教程可以跳过APK签名验证</p>
+<p>也就是你可以把与系统不同签名的APK以system身份运行</p>
+<p>废话不多说，下面开始教程，首先把你的services.jar提取出来</p>
+<a id="more"></a>
+
+<p>反编译后找到\com\android\server\pm里面的PackageManagerService.smali，打开搜索</p>
+<pre><code><span class="variable">.method</span> <span class="keyword">static</span> compareSignatures([Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)I</code></pre>
+<p>在</p>
+<pre><code>    <span class="string">.</span><span class="comment">registers</span> <span class="comment">9</span>
+    <span class="string">.</span><span class="comment">parameter</span> <span class="comment">"s1"</span>
+    <span class="string">.</span><span class="comment">parameter</span> <span class="comment">"s2</code></pre>
+<p>下面添加：</p>
+<pre><code>    .prologue
+    <span class="keyword">const</span>/<span class="number">4</span> v6, <span class="number">0x0</span>
+    <span class="keyword">const</span>-<span class="built_in">string</span> v3, <span class="string">"Riloli: PackageManager"</span>
+    <span class="keyword">const</span>-<span class="built_in">string</span> v4, <span class="string">"Skip signature check."</span>
+    invoke-static {v3, v4}, Landroid/util/Slog;-&gt;e(Ljava/lang/<span class="built_in">String</span>;Ljava/lang/<span class="built_in">String</span>;)I
+    return v6
+.<span class="keyword">end</span> method</code></pre>
+<p>删除后面的：</p>
+<pre><code>    <span class="variable">.line</span> <span class="number">3448</span>
+    <span class="keyword">if</span>-nez p0, :cond_8
+    <span class="variable">.line</span> <span class="number">3449</span>
+    <span class="keyword">if</span>-nez p1, :cond_6
+    <span class="keyword">const</span>/<span class="number">4</span> v6, <span class="number">0x1</span>
+    <span class="variable">.line</span> <span class="number">3468</span>
+    :goto_5
+    <span class="keyword">return</span> v6
+    <span class="variable">.line</span> <span class="number">3449</span>
+    :cond_6
+    <span class="keyword">const</span>/<span class="number">4</span> v6, -<span class="number">0x1</span>
+    <span class="keyword">goto</span> :goto_5
+    <span class="variable">.line</span> <span class="number">3453</span>
+    :cond_8
+    <span class="keyword">if</span>-nez p1, :cond_c
+    <span class="variable">.line</span> <span class="number">3454</span>
+    <span class="keyword">const</span>/<span class="number">4</span> v6, -<span class="number">0x2</span>
+    <span class="keyword">goto</span> :goto_5
+    <span class="variable">.line</span> <span class="number">3456</span>
+    :cond_c
+    new-instance v3, Ljava/util/HashSet;
+    invoke-direct {v3}, Ljava/util/HashSet;-&gt;&lt;init&gt;()V
+    <span class="variable">.line</span> <span class="number">3457</span>
+    <span class="variable">.local</span> v3, set1:Ljava/util/HashSet;,<span class="string">"Ljava/util/HashSet&lt;Landroid/content/pm/Signature;&gt;;"</span>
+    move-object v0, p0
+    <span class="variable">.local</span> v0, arr$:[Landroid/content/pm/Signature;
+    array-length v2, v0
+    <span class="variable">.local</span> v2, len$:I
+    <span class="keyword">const</span>/<span class="number">4</span> v1, <span class="number">0x0</span>
+    <span class="variable">.local</span> v1, i$:I
+    :goto_14
+    <span class="keyword">if</span>-ge v1, v2, :cond_1e
+    aget-object v5, v0, v1
+    <span class="variable">.line</span> <span class="number">3458</span>
+    <span class="variable">.local</span> v5, sig:Landroid/content/pm/Signature;
+    invoke-virtual {v3, v5}, Ljava/util/HashSet;-&gt;add(Ljava/lang/Object;)Z
+    <span class="variable">.line</span> <span class="number">3457</span>
+    add-<span class="keyword">int</span>/lit8 v1, v1, <span class="number">0x1</span>
+    <span class="keyword">goto</span> :goto_14
+    <span class="variable">.line</span> <span class="number">3460</span>
+    <span class="variable">.end</span> local v5           <span class="preprocessor">#sig:Landroid/content/pm/Signature;</span>
+    :cond_1e
+    new-instance v4, Ljava/util/HashSet;
+    invoke-direct {v4}, Ljava/util/HashSet;-&gt;&lt;init&gt;()V
+    <span class="variable">.line</span> <span class="number">3461</span>
+    <span class="variable">.local</span> v4, set2:Ljava/util/HashSet;,<span class="string">"Ljava/util/HashSet&lt;Landroid/content/pm/Signature;&gt;;"</span>
+    move-object v0, p1
+    array-length v2, v0
+    <span class="keyword">const</span>/<span class="number">4</span> v1, <span class="number">0x0</span>
+    :goto_26
+    <span class="keyword">if</span>-ge v1, v2, :cond_30
+    aget-object v5, v0, v1
+    <span class="variable">.line</span> <span class="number">3462</span>
+    <span class="variable">.restart</span> local v5       <span class="preprocessor">#sig:Landroid/content/pm/Signature;</span>
+    invoke-virtual {v4, v5}, Ljava/util/HashSet;-&gt;add(Ljava/lang/Object;)Z
+    <span class="variable">.line</span> <span class="number">3461</span>
+    add-<span class="keyword">int</span>/lit8 v1, v1, <span class="number">0x1</span>
+    <span class="keyword">goto</span> :goto_26
+    <span class="variable">.line</span> <span class="number">3465</span>
+    <span class="variable">.end</span> local v5           <span class="preprocessor">#sig:Landroid/content/pm/Signature;</span>
+    :cond_30
+    invoke-virtual {v3, v4}, Ljava/util/HashSet;-&gt;equals(Ljava/lang/Object;)Z
+    move-result v6
+    <span class="keyword">if</span>-eqz v6, :cond_38
+    <span class="variable">.line</span> <span class="number">3466</span>
+    <span class="keyword">const</span>/<span class="number">4</span> v6, <span class="number">0x0</span>
+    <span class="keyword">goto</span> :goto_5
+    <span class="variable">.line</span> <span class="number">3468</span>
+    :cond_38
+    <span class="keyword">const</span>/<span class="number">4</span> v6, -<span class="number">0x3</span>
+    <span class="keyword">goto</span> :goto_5
+<span class="variable">.end</span> method</code></pre>
+<p>不删除回编译会出错，因为加入的代码里已经有了END语句</p>
+<p>最后回编译替换push到手机，测试就完事了！</p>
+]]></content>
+    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
+  </entry>
   <entry>
     <title type="html"><![CDATA[挂载system.img并提取文件]]></title>
     <link href="http://riloli.github.io/2013/10/05/挂载systemimg并提取文件/"/>
@@ -1359,41 +1462,6 @@ Event Hub State:
 <p>然后我们把官方包里面的/system/usr/idc/Fts-touchscreen.idc给替换过去就搞定了(≧∀≦)~欧耶!</p>
 <p>不过凡事都有例外,比如我的,官方包里面就没有这个文件,那你就去CM里面找一个吧~(/ω・＼)【【【别找俺,俺是不会发给你的~</p>
 <p>把Generic.idc改为Fts-touchscreen.idc然后放进usr里面就OK了!!!(/≧▽≦/)</p>
-]]></content>
-    <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
-  </entry>
-  <entry>
-    <title type="html"><![CDATA[Android无法连接adb的解决方法]]></title>
-    <link href="http://riloli.github.io/2013/10/05/android无法连接adb的解决方法/"/>
-    <id>http://riloli.github.io/2013/10/05/android无法连接adb的解决方法/</id>
-    <published>2013-10-04T16:07:58.000Z</published>
-    <updated>2013-10-04T16:11:56.000Z</updated>
-    <content type="html"><![CDATA[<p>今天在折腾乐蛙时发现无法链接ADB了,但是手机却显示USB调试模式!</p>
-<p>然后想起了大蛋曾经告诉我CM的解决方法,于是你懂得,俺差点就把菊花给卖了呢(/Д`)~ﾟ｡</p>
-<a id="more"></a>
-
-<pre><code><span class="title">adb</span> shell rm -r /<span class="typedef"><span class="keyword">data</span>/property</span></code></pre>
-<p>进REC干掉这个目录后,CM就可以正常连接了,可是尼玛我的乐蛙肿么还是不行啊!!!</p>
-<p>我的菊花白卖了啊!!!!魂淡!!!! （╯‵□′）╯︵┴─┴</p>
-<p>折腾的细节就不多说了,都是泪啊!!!</p>
-<p>经过俺不断的DEBUG…尼玛,终于给我找到了(;´༎ຶД༎ຶ`)</p>
-<p>原default.prop文件如下</p>
-<pre><code><span class="preprocessor">#</span>
-<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
-<span class="preprocessor">#</span>
-ro<span class="variable">.secure</span>=<span class="number">0</span>
-ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
-ro<span class="variable">.debuggable</span>=<span class="number">1</span>
-persist<span class="variable">.sys</span><span class="variable">.usb</span><span class="variable">.config</span>=mtp,diag,serial_smd,serial_tty,rmnet_smd,mass_storage,serial_smd,adb</code></pre>
-<p>妈蛋,直接干掉最后的那行就可以连接了!!!!!!!(ÒωÓױ)</p>
-<p>修改后的default.prop</p>
-<pre><code><span class="preprocessor">#</span>
-<span class="preprocessor"># ADDITIONAL_DEFAULT_PROPERTIES</span>
-<span class="preprocessor">#</span>
-ro<span class="variable">.secure</span>=<span class="number">0</span>
-ro<span class="variable">.allow</span><span class="variable">.mock</span><span class="variable">.location</span>=<span class="number">1</span>
-ro<span class="variable">.debuggable</span>=<span class="number">1</span></code></pre>
-<p>好吧,安卓是坑爹的,错了一个参数都要你的命啊!!!!!!!!!!!</p>
 ]]></content>
     <category scheme="http://riloli.github.io/tags/Android/" term="Android"/>
   </entry>

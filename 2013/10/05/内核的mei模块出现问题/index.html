@@ -24,6 +24,7 @@
   <link rel="alternate" href="/atom.xml" title="Riloli's Blog" type="application/atom+xml">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script type="text/javascript" src="http://api.hitokoto.us/rand?encode=js&charset=utf-8"></script>
   
 </head>
 
@@ -31,7 +32,7 @@
 <body>
   <header id="header" class="inner"><div class="alignleft">
   <h1><a href="/">Riloli's Blog</a></h1>
-  <h2><a href="/"></a></h2>
+  <h2><div id="hitokoto"><script>hitokoto()</script></div></h2>
 </div>
 <nav id="main-nav" class="alignright">
   <ul>
@@ -156,10 +157,19 @@ var duoshuoQuery = {short_name:"riloli-blogs"};
 
 
   <div class="widget tag">
-<h3 class="title">友情链接</h3>
-<ul class="entry">
-<li><a href="http://flau.me/" target="_blank" title="蛋蛋的博客">芦苇丛的鹅蛋</a></li>
-</ul>
+  <h3 class="title">友情链接</h3>
+  <ul class="entry">
+    <li>
+	  <a href="http://flau.me/" target="_blank" title="蛋蛋的博客">芦苇丛的鹅蛋</a>
+	</li>
+  </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">简介</h3>
+  <ul class="entry">
+	<li>还没想好写什么</li>
+  </ul>
 </div>
 
   <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=2&isTitle=0&noborder=0&isWeibo=1&isFans=0&uid=3833642410&verifier=84bea53d&colors=d6f3f7,ffffff,666666,0082cb,ecfbfd&dpc=1"></iframe>

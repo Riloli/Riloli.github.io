@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://riloli.github.io/2013/10/06/android-取消apk签名验证/</loc>
+    <lastmod>2013-10-06T07:56:56.000Z</lastmod>
+  </url>
+  <url>
     <loc>http://riloli.github.io/2013/10/05/挂载systemimg并提取文件/</loc>
     <lastmod>2013-10-05T12:57:44.000Z</lastmod>
   </url>
